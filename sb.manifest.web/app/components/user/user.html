@@ -1,0 +1,89 @@
+<div class="container d-flex" style="padding-top: 7%;"> <div class="row no-gutters align-self-center w-100">
+    <div class="col-12 mx-auto">
+        <div class="card card-prijava mx-auto">
+            <div class="card-header bg-hit">
+                <div class="row no-gutters">
+                    <div style="width: 80%; text-align: left;">
+                        <h3 class="hit-c-white"> 
+                            <span id="hit-app-txt">Sprememba gesla</span></h3>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <form name="form">
+
+                    <md-input-container class="md-icon-float md-block" style="width: 100%;">
+                        <label>Ime.Priimek (@hit.si)</label>
+                        <md-icon class="name"><i class="fas fa-user"></i></md-icon>
+                        <input required type="text" ng-model="user.UporabniskoIme" name="username" autocomplete="off"
+                            onfocus="this.removeAttribute('readonly');" readonly />
+                        <div ng-messages="form.username.$error" role="alert">
+                            <div ng-message="required">Polje je obvezno.</div>
+                        </div>
+                    </md-input-container>
+
+
+                    <md-input-container class="md-icon-float md-block" style="width: 100%;">
+                        <label>SMS &#382;eton</label>
+                        <md-icon class="name"><i class="hitblue fas fa-phone"></i></md-icon>
+                        <input required type="text" ng-model="user.Geslo" name="token" autocomplete="off"
+                            onfocus="this.removeAttribute('readonly');" readonly />
+                        <div ng-messages="form.token.$error" role="alert">
+                            <div ng-message="required">Polje je obvezno.</div>
+                        </div>
+                    </md-input-container>
+
+                    <md-input-container class="md-icon-float md-block" style="width: 100%;">
+                        <label>Novo geslo</label>
+                        <md-icon class="name"><i class="fas fa-key"></i></md-icon>
+                        <input required minlength="10" my-password type="password" ng-model="user.NovoGeslo1" name="newpassword" autocomplete="off"
+                            onfocus="this.removeAttribute('readonly');" readonly>
+                        <div ng-messages="form.newpassword.$error" role="alert">
+                            <div ng-message="required">Polje je obvezno.</div>
+                            <div ng-message="minlength">Geslo mora vsebovati vsaj 10 znakov.</div>
+                            <div ng-message="pass">Geslo mora vsebovati vsaj en znak, &#353;tevilko in veliko &#269;rko.</div>
+                        </div>
+                        <p class="caps-lock-alert" style="color:green" ng-show='isCapsLockOn'>Vklopljene velike &#269;rke</p>
+                    </md-input-container>
+
+                    <md-input-container class="md-icon-float md-block" style="width: 100%;">
+                        <label>Potrdi novo geslo</label>
+                        <md-icon class="name"><i class="fas fa-key"></i></md-icon>
+                        <input required type="password" ng-model="user.NovoGeslo2" name="verifynewpassword"
+                            autocomplete="off" compare-to="user.NovoGeslo1" onfocus="this.removeAttribute('readonly');" readonly>
+                        <div ng-messages="form.verifynewpassword.$error" role="alert">
+                            <div ng-message="required">Polje je obvezno.</div>
+                            <div ng-message="compareTo">Geslo se mora ujemati</div>
+                        </div>
+                        <p class="caps-lock-alert" style="color:green" ng-show='isCapsLockOn'>Vklopljene velike &#269;rke</p>
+                    </md-input-container>
+
+
+                    <div ng-show="response" class="alert alert-danger" role="alert">
+                        {{response}}
+                    </div>
+
+                    <div id="blank" class="row align-items-center">
+                        <label>&nbsp;</label>
+                    </div>
+
+                    <div>
+                        <label>
+                            Va&#353;e geslo mora vsebovati vsaj 10 znakov in naslednje kriterije: </br>
+                            • Velike &#269;rke (na primer A, B, C) </br>
+                            • Male &#269;rke (na primer a, b, c) </br>
+                            • Vsaj eno &#353;tevilko.
+                        </label>
+                    </div>
+
+                    <div class="row align-items-center">                 
+                        <md-button class="md-raised md-primary" style="width: 100%;font-size: 16px;padding:2px" 
+                        ng-disabled="(working || form.$invalid)" ng-click="ChangePass()">{{label}}</md-button>
+                    </div>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

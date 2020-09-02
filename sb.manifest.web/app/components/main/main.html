@@ -1,0 +1,96 @@
+<!-- Bootstrap NavBar -->
+<nav class="navbar navbar-expand-md navbar-dark hit-navbar fixed-top">
+    <button id="toggle-sidebar" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+        data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-brand">
+        <span class="menu-collapsed">
+            <div id="hit-logo">
+                <a ui-sref="page">
+                    <span id="app-txt">Skydive Bovec </span>
+                    <span id="logo-txt"> Manifest</span>
+                </a>
+            </div>
+        </span>
+    </div>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    </div>
+</nav><!-- NavBar END -->
+
+<div class="page-wrapper legacy-theme sidebar-bg toggled">
+    <nav id="sidebar" class="sidebar-wrapper">
+        <div class="sidebar-content">
+            <!-- sidebar-brand  -->
+            <div class="sidebar-brand">
+            </div>
+
+            <!-- sidebar-menu  -->
+            <div class="sidebar-menu">
+                <ul>
+                    <li>
+                        <a ui-sref="home" class="menu-link">
+                            <i class="fa fa-home"></i>
+                            <span class="menu-text">Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a ui-sref="load" class="menu-link">
+                            <i class="fas fa-plane-departure"></i>
+                            <span class="menu-text">Loads</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a ui-sref="skydiver" class="menu-link">
+                            <i class="fas fa-users"></i>
+                            <span class="menu-text">Skydivers</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a ui-sref="settings" class="menu-link">
+                            <i class="fas fa-cog"></i>
+                            <span class="menu-text">Settings</span>
+                        </a>
+                    </li>
+                    <li class="bottom-meni-item">
+                        <a href="#" class="menu-link" ng-click="logout()">
+                            <i class="fa fa-power-off"></i>
+                            <span class="menu-text">Logoff</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- sidebar-menu  -->
+        </div>
+        <!-- sidebar-footer  -->
+        <div class="sidebar-footer">
+            <div class="dropdown"></div>
+            <div class="dropdown"></div>
+            <!--
+            <div>
+                <a href="#">
+                    <i class="fa fa-power-off" ng-click="logout()"></i>
+                </a>
+            </div>
+            -->
+            <div class="dropdown">
+                <a id="pin-sidebar" href=" #">
+                    <i id="pin-icon" class="fas fa-angle-double-left"></i>
+                </a>
+            </div>
+            <div class="pinned-footer">
+                <a href="#">
+                    <i class="fas fa-ellipsis-h"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+    <!-- page-content  -->
+    <main class="page-content pt-2">
+        <div style="margin: 70px 0 0 10px;padding-bottom: 35px;">
+            <ui-view id="main"></ui-view>
+        </div>
+    </main>
+</div>
+<!-- page-wrapper -->

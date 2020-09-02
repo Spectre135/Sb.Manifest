@@ -1,0 +1,98 @@
+@font-face {
+    font-family: 'hit_logo_font';
+    src: url('../font/hit/hit_logo_font.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'hit_app_font';
+    src: url('../font/hit/hit_app_font.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('../font/Roboto-Regular.ttf') format('truetype'),
+        url('../font/Roboto-Bold.ttf') format('truetype'),
+        url('../font/Roboto-Thin.ttf') format('truetype'),
+        url('../font/Roboto-Medium.ttf') format('truetype'),
+        url('../font/Roboto-Light.ttf') format('truetype');
+}
+
+/*s HIT LOGOTIP */
+#logo>a {
+    padding-left: 12px;
+    padding-right: 12px;
+    letter-spacing: normal;
+    color: white;
+    /* background: rgba(0, 102, 188, 1);
+    color: white; */
+}
+
+/* #hit-logo>a:hover {
+    background: transparent;
+    color: rgba(0, 102, 188, 1);
+} */
+
+#logo-txt {
+    font-family: 'hit_logo_font' !important;
+    font-size: 38px !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    font-weight: 300 !important;
+}
+
+#app-txt {
+    font-family: 'hit_app_font' !important;
+    font-size: 38px !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    font-weight: 300 !important;
+    margin-left: -3px;
+}
+
+.c-white {
+    color: #ffffff;
+}
+
+.c-light-blue {
+    color: #16c7ff;
+}
+
+.c-gray {
+    color: #272c36;
+}
+
+.bg-c-gray {
+    background-color: #272c36;
+}
+
+.c-light-gray {
+    color: #6c757d;
+}
+
+.bg-c-light-gray {
+    background-color: #6c757d;
+}
+
+
+.logo-letter {
+    height: 30px;
+    width: 30px;
+    background-color: #a6ce39;
+    border-radius: 5px;
+    float: left;
+    text-align: center;
+    font-weight: 900;
+    margin: 5px 2px 0px 0px;
+}
+
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #bdc2c8;
+    outline: 0;
+    box-shadow: 0 0 0 .2rem rgba(200, 200, 200, .25)
+}

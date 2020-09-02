@@ -1,0 +1,58 @@
+<div>
+    <md-card style="padding:20px;margin-right:20px;">
+        <md-toolbar class="md-table-toolbar md-default">
+            <md-card-title-text style="padding-bottom: 15px;">
+                <span class="md-title">Skydivers</span>
+            </md-card-title-text>
+            <md-divider></md-divider>
+            <div flex-gt-xs style="padding:15px 0px 0px 0px;">
+                <md-input-container style="margin: 0px;">
+                    <md-datepicker md-min-date="minDateFrom" md-date-locale="monthFormat"
+                        md-mode="month" ng-change="dateChanged()" ng-model="fromDate" md-placeholder="Date from">
+                    </md-datepicker>
+                    <div ng-if="alertFromDate" class="alert-md-datepicker">Chose date</div>
+                </md-input-container>
+
+                <md-input-container style="margin: 0px;">
+                    <md-datepicker md-min-date="minDateTo" md-date-locale="monthFormat"
+                        md-mode="month" ng-change="dateChanged()" ng-model="toDate" md-placeholder="Date to">
+                    </md-datepicker>
+                    <div ng-if="alertToDate" class="alert-md-datepicker">Chose date</div>
+                </md-input-container>
+            </div>
+        </md-toolbar>
+        <!--[if IE]> <div style="margin-top:20px;"> <![endif]-->
+        <md-table-container style="padding-top: 15px;">
+            <table md-table>
+                <thead md-head md-order="myOrder">
+                    <tr md-row>
+                        <th md-column md-order-by="Id"><span>Id</span></th>
+                        <th md-column md-order-by="FirstName"><span>First name</span></th>
+                        <th md-column md-order-by="LastName"><span>Last name</span></th>
+                        <th md-column md-order-by="UserName"><span>UserName</span></th>
+                        <th md-column md-order-by="Email"><span>Email</span></th>
+                        <th md-column md-numeric right md-order-by="Balance"><span>Balance</span></th>
+                    </tr>
+                </thead>
+                <tbody md-body>
+                    <tr md-row md-select-id="lista" md-auto-select
+                        ng-repeat="p in list | orderBy: myOrder | limitTo: myLimit: (myPage - 1) * myLimit"
+                        class="md-row" style="cursor: pointer;">
+                        <td md-cell>{{p.Id}}</td>
+                        <td md-cell>{{p.FirstName}}</td>
+                        <td md-cell>{{p.LastName}}</td>
+                        <td md-cell>{{p.UserName}}</td>
+                        <td md-cell>{{p.Email}}</td>
+                        <td md-cell right ng-style="p.Balance >= 0 && {'color':'green'} || {'color': 'red'}">{{p.Balance | currency}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </md-table-container>
+        <!--[if IE]> </div> <![endif]-->
+        <md-table-pagination md-label="{page: 'Stran:', rowsPerPage: 'Vrstic na strani:', of: 'od'}" md-page="myPage"
+            md-limit="myLimit" md-limit-options="[5, 10, 15]" md-total="{{rows}}"></md-table-pagination>
+    </md-card>
+</div>
+
+<div ng-init="init()"></div>
+</div>

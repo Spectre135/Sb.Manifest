@@ -1,0 +1,87 @@
+.legacy-theme .sidebar-wrapper {
+  background-color: #1e2229; }
+  .legacy-theme .sidebar-wrapper .sidebar-item {
+    border-top: 1px solid #2e333c; }
+    .legacy-theme .sidebar-wrapper .sidebar-item:first-child {
+      border-top: none; }
+  .legacy-theme .sidebar-wrapper a:not(.dropdown-item),
+  .legacy-theme .sidebar-wrapper .sidebar-header,
+  .legacy-theme .sidebar-wrapper .sidebar-search input,
+  .legacy-theme .sidebar-wrapper .sidebar-search i {
+    color: #818896; }
+  .legacy-theme .sidebar-wrapper a:not(.dropdown-item):hover,
+  .legacy-theme .sidebar-wrapper .sidebar-menu li.active > a {
+    color: #b8bfce; }
+  .legacy-theme .sidebar-wrapper .sidebar-search input.search-menu,
+  .legacy-theme .sidebar-wrapper .sidebar-search .input-group-text {
+    background-color: #2e333c;
+    border: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    margin-left: 1px; }
+  .legacy-theme .sidebar-wrapper .sidebar-menu a:hover i,
+  .legacy-theme .sidebar-wrapper .sidebar-menu a:hover:before,
+  .legacy-theme .sidebar-wrapper .sidebar-menu li.active a i {
+    color:#ffff }
+  .legacy-theme .sidebar-wrapper .sidebar-menu ul li a i {
+    background-color: #2e333c; }
+  .legacy-theme .sidebar-wrapper .sidebar-menu .sidebar-dropdown div {
+    background-color: #2e333c; }
+  .legacy-theme .sidebar-wrapper .sidebar-menu .header-menu span {
+    color: #646e80; }
+  .legacy-theme .sidebar-wrapper .sidebar-footer {
+    background-color: #22262d;
+    -webkit-box-shadow: 0px -1px 5px #16191f;
+    box-shadow: 0px -1px 5px #16191f;
+    border-top: 1px solid #2e333c; }
+  .legacy-theme .sidebar-wrapper .sidebar-footer > div:first-child {
+    border-left: none; }
+  .legacy-theme .sidebar-wrapper .sidebar-footer > div:last-child {
+    border-right: none; }
+
+.legacy-theme.toggled #close-sidebar {
+  color: #818896; }
+
+.legacy-theme.toggled #close-sidebar:hover {
+  color: #b8bfce; }
+
+.legacy-theme .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar,
+.legacy-theme .mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar,
+.legacy-theme .mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar {
+  background-color: #525965;
+  border-radius: 0; }
+
+.legacy-theme .mCSB_scrollTools .mCSB_draggerRail {
+  background-color: transparent; }
+
+.legacy-theme.sidebar-bg .sidebar-wrapper:before {
+  background-color: rgba(41, 46, 56, 0.9); }
+
+.legacy-theme.sidebar-bg .sidebar-wrapper a:not(.dropdown-item),
+.legacy-theme.sidebar-bg .sidebar-wrapper .sidebar-header,
+.legacy-theme.sidebar-bg .sidebar-wrapper .sidebar-search input,
+.legacy-theme.sidebar-bg .sidebar-wrapper .sidebar-search i {
+  color: #9da2ad; }
+
+.legacy-theme.sidebar-bg .sidebar-wrapper a:not(.dropdown-item):hover,
+.legacy-theme.sidebar-bg .sidebar-wrapper .sidebar-menu li.active > a {
+  color: #fff; }
+
+.legacy-theme.sidebar-bg .sidebar-wrapper .sidebar-item {
+  border-color: #444c59; }
+
+.legacy-theme.sidebar-bg .sidebar-wrapper .sidebar-search input.search-menu,
+.legacy-theme.sidebar-bg .sidebar-wrapper .sidebar-search .input-group-text {
+  background-color: rgba(79, 88, 103, 0.5); }
+
+.legacy-theme.sidebar-bg .sidebar-wrapper .sidebar-menu .sidebar-dropdown div {
+  background-color: rgba(79, 88, 103, 0.5); }
+
+.legacy-theme.sidebar-bg .sidebar-wrapper .sidebar-menu ul li a i {
+  background-color: rgba(79, 88, 103, 0.5); }
+
+.legacy-theme.sidebar-bg .sidebar-wrapper .sidebar-footer {
+  background-color: rgba(45, 50, 60, 0.5);
+  webkit-box-shadow: 0px -1px 5px rgba(22, 25, 31, 0.8);
+  box-shadow: 0px -1px 5px rgba(22, 25, 31, 0.8);
+  border-top: 1px solid #393f4a; }
