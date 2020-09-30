@@ -127,5 +127,4 @@ app.controller('mainCtrl', function ($rootScope, $scope, $state, config) {
         }); 
 
     });
- 
 });

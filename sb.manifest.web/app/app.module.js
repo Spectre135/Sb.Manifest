@@ -5,6 +5,7 @@ var app = angular.module('SbManifest', [
     'ui.router',
     'ngMaterial',
     'md.data.table',
+    'md.time.picker',
     'ngMessages',
     'ui.bootstrap',
     'ngSanitize',
@@ -12,9 +13,15 @@ var app = angular.module('SbManifest', [
     'ngCapsLock'
 ]);
 
-app.run(function ($state, $rootScope,$mdDialog) {
+app.run(function ($state, $rootScope, $mdDialog, apiService) {
 
     window.myAppErrorLog = [];
+
+    //load messages for app
+    apiService.getData('./messages/messages.json', null, false)
+        .then(function (data) {
+            $rootScope.messages = data;
+        });
 
     $state.defaultErrorHandler(function (error) {
         // This is a naive example of how to silence the default error handler.
@@ -26,36 +33,24 @@ app.run(function ($state, $rootScope,$mdDialog) {
         $state.go('prijava'); // go to login
     }
 
-    //watch for IDLE  10minutes after that logout user
-    var lastDigestRun = new Date();
-    setInterval(function () {
-        var now = Date.now();
-        if (now - lastDigestRun > 10 * 60 * 1000) {
-            console.log('Logout');
-            $rootScope.logout();
-        }
-    }, 50 * 1000);
-
-    $rootScope.$watch(function () {
-        lastDigestRun = new Date();
-    });
-
     //alert dialog
-    $rootScope.showDialog = function(title, message){                         
+    $rootScope.showDialog = function (title, message) {
         $mdDialog.show(
             $mdDialog.alert()
-              .parent(angular.element(document.querySelector('#main')))
-              .clickOutsideToClose(true)
-              .title(title)
-              .textContent(message)
-              .ariaLabel('Alert Dialog')
-              .ok('Zapri!')
-          );
+            .parent(angular.element(document.querySelector('#main')))
+            .clickOutsideToClose(true)
+            .title(title)
+            .textContent(message)
+            .ariaLabel('Alert Dialog')
+            .ok('Zapri!')
+        );
     };
 
 });
 
-app.config(function ($mdDateLocaleProvider) {
+app.config(function ($mdDateLocaleProvider, $mdThemingProvider) {
+    //themes
+    //$mdThemingProvider.theme('dark-blue').backgroundPalette('blue').dark();
 
     // Example of a French localization.
     var myShortMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Avg', 'Sep', 'Okt', 'Nov', 'Dec'];
@@ -97,7 +92,7 @@ app.config(function ($mdDateLocaleProvider) {
 
 });
 
-app.config(function (ngIntlTelInputProvider){
+app.config(function (ngIntlTelInputProvider) {
     ngIntlTelInputProvider.set({
         initialCountry: 'si',
         onlyCountries: ["si", "it", "at", "by", "be", "ba", "bg", "hr", "cz", "dk",
@@ -108,7 +103,7 @@ app.config(function (ngIntlTelInputProvider){
     });
 });
 
-app.config( function ($mdProgressCircularProvider) {
+app.config(function ($mdProgressCircularProvider) {
     $mdProgressCircularProvider.configure({
         strokeWidth: 5
     });

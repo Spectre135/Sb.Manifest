@@ -1,0 +1,85 @@
+<md-dialog>
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <span><i class="fas fa-edit"></i></span>
+      <h2>&nbsp;&nbsp;{{label}}</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="ctrl.cancel()">
+        <i class="fas fa-times"></i>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-dialog-content ng-cloak >
+
+    <div class="md-dialog-content">
+
+      <form name="form" ng-submit="$event.preventDefault()">
+
+        <div layout-gt-xs="row">
+
+          <md-input-container class="md-icon-float md-block">
+            <label>Registration</label>
+            <input required type="text" ng-model="dto.Registration" name="registration" />
+            <div ng-messages="form.registration.$error" role="alert">
+              <div ng-message="required">Registration is required.</div>
+            </div>
+          </md-input-container>
+
+          <md-input-container class="md-icon-float md-block">
+            <label>Type</label>
+            <input required type="text" ng-model="dto.Type" name="type" />
+            <div ng-messages="form.type.$error" role="alert">
+              <div ng-message="required">Type is required.</div>
+            </div>
+          </md-input-container>
+
+        </div>
+
+       <div layout-gt-xs="row">
+
+          <md-input-container class="md-icon-float md-block">
+            <label>Maximum slots</label>
+            <input required type="number" step="any" name="maxslots" ng-model="dto.MaxSlots" ng-pattern="/^[0-9]/" />
+            <div ng-messages="form.maxslots.$error" role="alert">
+              <div ng-message="required">Maximum slots is required.</div>
+            </div>
+          </md-input-container>
+
+          <md-input-container class="md-icon-float md-block">
+            <label>Minumum slots</label>
+            <input required type="number" step="any" name="minslots" ng-model="dto.MinSlots" ng-pattern="/^[0-9]/" />
+            <div ng-messages="form.minslots.$error" role="alert">
+              <div ng-message="required">Minimum slots is required.</div>
+            </div>
+          </md-input-container>
+
+          <md-input-container class="md-icon-float md-block">
+            <label>Rotation time</label>
+            <input type="number" step="any" name="rotation" ng-model="dto.RotationTime" ng-pattern="/^[0-9]/" />
+            <div ng-messages="form.rotation.$error" role="alert">
+              <div ng-message="required">Rotation time is required.</div>
+            </div>
+          </md-input-container>
+
+        </div>
+
+        <md-input-container class="md-icon-float md-block">
+          <label style="padding-bottom: 20px;">Active</label>
+          <md-checkbox name="active" ng-model="dto.Active" class="blue">
+          </md-checkbox>
+        </md-input-container>
+
+        <div class="alert">{{warning}}</div>
+
+      </form>
+    </div>
+
+  </md-dialog-content>
+
+  <md-dialog-actions>
+    <md-button aria-label="Finished" ng-disabled="form.$invalid" class="md-primary" ng-click="ctrl.save($event)">Save
+    </md-button>
+  </md-dialog-actions>
+
+</md-dialog>

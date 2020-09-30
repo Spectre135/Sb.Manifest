@@ -1,0 +1,66 @@
+<div class="page">
+    <md-card style="padding:20px;margin-right:20px;">
+        <md-toolbar class="md-table-toolbar md-default">
+            <md-card-title-text style="padding-bottom: 15px;">
+                <span class="md-title">Payments</span>
+            </md-card-title-text>
+            <md-divider></md-divider>
+        </md-toolbar>
+
+
+        <div layout="row" layout-align="end end">
+            <md-input-container class="md-icon-float md-block" style="width:30%;z-index: 1;">
+                <md-icon class="name" style="margin-left: 15px;"><i class="fas fa-search"></i></md-icon>
+                <label style="padding-left: 36px;">Search</label>
+                <input ng-model="search" name="search" />
+            </md-input-container>
+        </div>
+
+
+        <!--[if IE]> <div style="margin-top:20px;"> <![endif]-->
+        <md-table-container style="padding-top: 15px;">
+            <table md-table>
+                <thead md-head md-order="myOrder">
+                    <tr md-row>
+                        <th md-column></th>
+                        <th md-column md-order-by="IdTransaction"><span>Id</span></th>
+                        <th md-column md-order-by="Account"><span>Account</span></th>
+                        <th md-column md-order-by="AccountDescription"><span>Account Description</span></th>
+                        <th md-column md-order-by="Compay"><span>Compay</span></th>
+                        <th md-column md-order-by="Customer"><span>Customer</span></th>
+                        <th md-column md-order-by="Description"><span>Description</span></th>
+                        <th md-column md-order-by="Date"><span>Date</span></th>
+                        <th md-column md-numeric right md-order-by="Debit"><span>Debit</span></th>
+                        <th md-column md-numeric right md-order-by="Credit"><span>Credit</span></th>
+                        <th md-column md-numeric right md-order-by="Status"><span>Status</span></th>
+                    </tr>
+                </thead>
+                <tbody md-body>
+                    <tr md-row md-select-id="lista" md-auto-select
+                        ng-repeat="p in list | filter: search | orderBy: myOrder | limitTo: myLimit: (myPage - 1) * myLimit"
+                        class="md-row" style="cursor: pointer;" ng-click="getInvoice($event,p)">
+                        <td md-cell><md-checkbox class="blue" ng-model="p.selected" aria-label="Select"></md-checkbox></td>
+                        <td md-cell>{{p.IdTransaction}}</td>
+                        <td md-cell>{{p.Account}}</td>
+                        <td md-cell>{{p.AccountDescription}}</td>
+                        <td md-cell>{{p.Company}}</td>
+                        <td md-cell>{{p.Customer}}</td>
+                        <td md-cell>{{p.Description}}</td>
+                        <td md-cell>{{p.Date | date:'dd.MM.yyyy'}}</td>
+                        <td md-cell right ng-style="p.Debit  > 0 && {'color':'red'}">
+                            {{p.Debit | currency}}</td>
+                        <td md-cell right ng-style="p.Credit  > 0 && {'color':'green'}">
+                            {{p.Credit | currency}}</td>
+                            <td md-cell>{{p.Status}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </md-table-container>
+        <!--[if IE]> </div> <![endif]-->
+        <md-table-pagination md-page="myPage" md-limit="myLimit" md-limit-options="[5, 10, 15]" md-total="{{rows}}">
+        </md-table-pagination>
+    </md-card>
+</div>
+
+<div ng-init="init()"></div>
+</div>

@@ -1,0 +1,1 @@
+"use strict";var app=angular.module("SbManifest");app.controller("userCtrl",(function($scope,$state,config,apiService){$scope.user={},$scope.data=[],$scope.prijava="Pošlji enkratno geslo",$scope.working=!1,$scope.response="",$scope.SendGsmToken=function(){},$scope.NovoGeslo=function(){$state.go("novogeslo")}}));

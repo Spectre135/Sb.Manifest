@@ -1,0 +1,65 @@
+<div class="page">
+    <md-card style="padding:20px;margin-right:20px;">
+        <md-toolbar class="md-table-toolbar md-default">
+            <md-card-title-text style="padding-bottom: 15px;">
+                <span class="md-title">Statistics</span>
+            </md-card-title-text>
+            <md-divider></md-divider>
+        </md-toolbar>
+
+        <md-content class="md-padding" layout="row">
+            <div layout="column" layout-padding layout-wrap layout-fill ng-cloak ng-repeat="d in data1 | orderBy:'Profit':true">
+                <md-whiteframe class="md-whiteframe-1dp" style="border-radius: 3px;" ng-style="{'background-color':d.Colors}"
+                flex-sm="45" flex-gt-sm="35" flex-gt-md="25" layout="column" layout-align="center right">
+                <h4 style="color:white">{{d.Category}}</h4>
+                <span style="color:white">Total jumps {{d.Numbers}}</span>
+                <md-divider style="background-color:white"></md-divider>
+                <span style="color:white">Income</span>
+                <span class="font20" style="color:white">{{d.Profit | currency}}</span>
+                </md-whiteframe>
+            </div>          
+       </md-content>
+
+        <md-content class="md-padding" layout-xs="column" layout="row">
+
+            <div flex-xs flex-gt-xs="25" layout="column">
+            <md-card>
+                <canvas  id="loadsChart"></canvas>
+               
+                <md-card-title>
+                    <md-card-title-text>
+                         <md-divider></md-divider>
+                      <span>Total jumps</span>
+                      <span class="font30">{{loads}}</span>
+                    </md-card-title-text>
+                  </md-card-title>
+                 
+              </md-card>
+            </div>
+
+            <div flex-xs flex-gt-xs="25" layout="column">
+                <md-card>  
+                    <canvas  id="profitChart"></canvas>
+                    <md-card-title>
+                        <md-card-title-text>
+                            <md-divider></md-divider>
+                            <span>Total income</span>
+                            <span class="font30">{{profit | currency}}</span>
+                        </md-card-title-text>
+                      </md-card-title>
+    
+                  </md-card>
+                </div>
+            
+
+            <div flex-xs flex-gt-xs="50" layout="column">
+                    <md-card>  
+                        <canvas id="lineChart"></canvas>      
+                    </md-card>
+            </div>
+            
+        </md-content>
+
+    </md-card>
+
+</div>

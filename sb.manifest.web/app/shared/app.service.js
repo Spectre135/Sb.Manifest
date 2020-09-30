@@ -6,7 +6,7 @@ var app = angular.module('SbManifest');
 app.factory('httpRequestInterceptor', [function () {
     return {
         request: function (config) {
-            config.headers['Authorization'] = 'HitAuthToken ' + sessionStorage.getItem('Authorization');
+            config.headers['Authorization'] = sessionStorage.getItem('Authorization');
             return config;
         }
     };

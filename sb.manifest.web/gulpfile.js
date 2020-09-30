@@ -13,6 +13,7 @@ var prodmin = 'app.' + timeStamp;
 var prodJSMin = prodmin + '-min.js';
 var prodCssMin = 'bundle.' + timeStamp + '-min.css'; //damo v assets če ne so fonti narobe
 var del = require('del');
+var strip = require('gulp-strip-comments'); //odstrani komentarje
 
 // seznam js datotek po pravilnem vrstnem redu
 var jsAssets = [
@@ -96,6 +97,7 @@ gulp.task('preimenuj', function () {
             'css': 'assets/css/' + prodCssMin,
             'app': prodJSMin
         }))
+        .pipe(strip())
         .pipe(gulp.dest('dist/'));
 });
 

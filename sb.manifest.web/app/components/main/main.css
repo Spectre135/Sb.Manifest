@@ -3,7 +3,7 @@ tbody > .md-row:hover {
   transition:background-color 0.6s ease;
  }
 
- table.md-table td.md-cell {
+table.md-table td.md-cell {
   font-size: 14px;
 }
 table.md-table th.md-column {
@@ -36,13 +36,40 @@ table.md-table th.md-column {
   border-color: transparent;
 }
 .md-button.md-default-theme.md-primary.md-fab:not([disabled]).md-focused, .md-button.md-primary.md-fab:not([disabled]).md-focused, .md-button.md-default-theme.md-primary.md-fab:not([disabled]):hover, .md-button.md-primary.md-fab:not([disabled]):hover, .md-button.md-default-theme.md-primary.md-raised:not([disabled]).md-focused, .md-button.md-primary.md-raised:not([disabled]).md-focused, .md-button.md-default-theme.md-primary.md-raised:not([disabled]):hover, .md-button.md-primary.md-raised:not([disabled]):hover {
-  background-color: rgb(7, 91, 175);
+  background-color: rgba(0, 102, 188, 1);
 }
 .md-button.md-default-theme.md-primary, .md-button.md-primary {
   color: rgba(0, 102, 188, 1);
 }
+md-toolbar.md-default-theme:not(.md-menu-toolbar), md-toolbar:not(.md-menu-toolbar) {
+  background-color: rgba(0, 102, 188, 1);
+  color: rgba(255,255,255,0.87);
+}
+md-checkbox.md-default-theme:not([disabled]).md-primary.md-checked .md-icon, md-checkbox:not([disabled]).md-primary.md-checked .md-icon {
+  background-color: rgba(0, 102, 188, 1);
+}
 md-progress-circular.md-default-theme path, md-progress-circular path {
   stroke:rgba(0, 102, 188, 1);
+}
+md-toolbar.md-default-theme.md-hue-1:not(.md-menu-toolbar), md-toolbar.md-hue-1:not(.md-menu-toolbar) {
+  background-color: rgba(0, 102, 188, 1);
+  color: rgb(255,255,255);
+}
+md-input-container:not(.md-input-has-value) input:not(:focus) {
+  color: inherit;
+}
+/*
+md-input-container label:not(.md-container-ignore) {
+  position: absolute;
+  bottom: 90%;
+  left: 0;
+  right: auto;
+}*/
+md-tabs.md-default-theme .md-tab.md-active, md-tabs .md-tab.md-active, md-tabs.md-default-theme .md-tab.md-active md-icon, md-tabs .md-tab.md-active md-icon, md-tabs.md-default-theme .md-tab.md-focused, md-tabs .md-tab.md-focused, md-tabs.md-default-theme .md-tab.md-focused md-icon, md-tabs .md-tab.md-focused md-icon {
+  color: rgba(0, 102, 188, 1);
+}
+md-checkbox.md-checked.blue .md-icon {
+  background-color:  rgba(0, 102, 188, 1);
 }
 .iti__selected-flag {
   z-index: 99;
@@ -839,7 +866,7 @@ body {
   padding-top: 75px !important;
 }
 
-.hit-navbar {
+.my-navbar {
   position: fixed;
   top: 0;
   left: 0;
@@ -860,6 +887,9 @@ body {
   -webkit-box-shadow: 0 2px 4px 0 rgba(22, 25, 31, 0.8);
   border: 0 1px 1px 0 solid #393f4a;
 }
+.font12 {
+  font-size: 12px;
+}
 .font14 {
   font-size: 14px;
 }
@@ -875,6 +905,12 @@ body {
 .font34 {
   font-size: 34px;
 }
+.font44 {
+  font-size: 44px;
+}
+.gray{
+  color:rgba(0,0,0,0.54);
+}
 .payroll{
   font-size: 16px;
   font-family: 'Courier New', Courier, monospace;
@@ -883,10 +919,10 @@ body {
   line-height: normal;
   padding:10px 0px 0px 15px;
 }
-.bg-hit{
+.bg-blue{
   background-color: rgba(0, 102, 188, 1);
 }
-.hitblue{
+.blue{
   color:rgba(0, 102, 188, 1) !important;
 }
 .bottom-meni-item{
@@ -900,19 +936,40 @@ body {
   font-size: 12px;
   padding-left: 66px;
 }
-.racunMobileCss{
-  font-size: 12px;
-  font-size: 4.34vw;
-  padding-top:10px;
+.alert{
+  color: rgb(221,44,0);
 }
-.racunCss{
-  padding:10px 0px 0px 15px;
-}
-.payrollMobileCss{
-  font-size: 2.34vw;
-  padding-top:10px;
-}
-
 .right{
   text-align: right;
+}
+
+.showme {
+  display: none;
+}
+
+.showhim:hover .showme {
+  display: block;
+}
+.page{
+  padding-top:10px;
+}
+.relative {
+  position: relative;
+}
+
+.absolute-center {
+  position:absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.text-center{
+  text-align: center;
+}
+
+#timepickericon{
+  font-size: 23px;
+  color:rgba(0,0,0,0.38);
+  padding-top: 1px;
 }

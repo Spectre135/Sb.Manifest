@@ -132,3 +132,100 @@ function addDays(datum, days) {
         return datum;
     }
 };
+
+function getChartValues(array, key) {
+    var result = [];
+    try {
+        array.forEach(function (item) {
+            if (item.hasOwnProperty(key)) {
+                result.push(item[key]);
+            }
+        });
+    } catch (err) {}
+    return result;
+};
+
+function getDoughnutChart(cdata, labelData, dataX, dataY, title) {
+
+    var data = {
+        type: 'doughnut',
+        data: {
+            labels: getChartValues(cdata, labelData),
+            datasets: [{
+                label: dataY,
+                backgroundColor: getChartValues(cdata, dataX),
+                data: getChartValues(cdata, dataY)
+            }]
+        },
+        options: {
+            responsive: true,
+            legend: {
+                display: false
+            },
+            title: {
+                display: true,
+                text: title,
+                fontFamily: 'Roboto',
+                fontSize: 14
+            }
+        }
+    };
+
+    return data;
+};
+
+function getLineChart(labels, labelData1, data1, labelData2, data2, title) {
+
+    var data = {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                    label: labelData1,
+                    data: data1,
+                    fill: false,
+                    borderColor: '#3A75D7',
+                },
+                {
+                    label: labelData2,
+                    data: data2,
+                    fill: false,
+                    borderColor: '#D73A75',
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            legend: {
+                display: false
+            },
+            title: {
+                display: true,
+                text: title,
+                fontFamily: 'Roboto',
+                fontSize: 14
+            },
+            scales: {
+                xAxes: [{
+                    ticks: {
+                        fontFamily: 'Roboto',
+                        fontSize: 14
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        fontFamily: 'Roboto',
+                        fontSize: 14
+                    }
+                }]
+            }
+        }
+    };
+
+    return data;
+};
+
+Date.prototype.addMinutes = function(minutes) {
+    var copiedDate = new Date(this.getTime());
+    return new Date(copiedDate.getTime() + minutes * 60000);
+};

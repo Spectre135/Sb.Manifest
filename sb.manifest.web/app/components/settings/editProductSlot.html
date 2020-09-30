@@ -1,0 +1,74 @@
+<md-dialog>
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <span><i class="fas fa-edit"></i></span>
+      <h2>&nbsp;&nbsp;{{label}}</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="ctrl.cancel()">
+        <i class="fas fa-times"></i>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-dialog-content ng-cloak style="min-width: 500px;">
+    <div class="md-dialog-content">
+      <form name="form" ng-submit="$event.preventDefault()">
+
+        <md-input-container class="md-block" style="padding-bottom: 25px;">
+          <label>Product</label>
+          <md-select ng-required ng-model="dto.IdProduct" name="product" >
+            <md-option ng-repeat="item in productList" value="{{item.Id}}" >
+              {{item.Name}}
+            </md-option>
+          </md-select>
+          <div ng-messages="form.product.$error" role="alert">
+            <div ng-message="required">Product is required.</div>
+          </div>
+        </md-input-container>
+
+        <md-input-container class="md-icon-float md-block" style="width: 100%;">
+          <label>Name</label>
+          <input required type="text" ng-model="dto.Name" name="name" />
+          <div ng-messages="form.name.$error" role="alert">
+            <div ng-message="required">Product slot name is required.</div>
+          </div>
+        </md-input-container>
+
+        <md-input-container class="md-icon-float md-block" style="width: 100%;">
+          <label>Description</label>
+          <input type="text" ng-model="dto.Description" name="description" />
+        </md-input-container>
+
+        <md-input-container class="md-icon-float md-block" style="width: 100%;">
+          <label>Income</label>
+          <input type="number" step="any" name="income" ng-model="dto.Income" ng-pattern="/^[0-9]/"/>
+        </md-input-container>
+
+        <md-input-container class="md-icon-float md-block" style="width: 100%;">
+          <label>Outcome</label>
+          <input type="number" step="any" name="outcome" ng-model="dto.Outcome" ng-pattern="/^[0-9]/"/>
+        </md-input-container>
+
+        <md-input-container class="md-block">
+          <label>Account</label>
+          <md-select ng-required ng-model="dto.Account" name="account" >
+            <md-option ng-repeat="acc in accountList" value="{{acc.Account}}" >            
+              <span>{{acc.Account}} - {{acc.Description}}</span>
+            </md-option>
+          </md-select>
+          <div ng-messages="form.account.$error" role="alert">
+            <div ng-message="required">Account is required.</div>
+          </div>
+        </md-input-container>
+
+        <div class="alert">{{warning}}</div>
+
+      </form>
+    </div>
+  </md-dialog-content>
+
+  <md-dialog-actions>
+    <md-button aria-label="Finished" ng-disabled="form.$invalid" class="md-primary" ng-click="ctrl.save($event)">Save</md-button>
+  </md-dialog-actions>
+</md-dialog>
+<div ng-init="init()"></div>

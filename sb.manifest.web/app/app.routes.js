@@ -89,13 +89,12 @@ app.config( function ($stateProvider, $urlRouterProvider, $locationProvider) {
             controller: 'loadCtrl'
 
         })
-        .state('skydiver', {
-            url: '/skydiver',
+        .state('customers', {
+            url: '/customers',
             parent: 'main',
             params: {
                 from: undefined,
                 to: undefined,
-                malica: null,
                 rows: null,
                 page: 1,
                 limit: 10,
@@ -104,24 +103,59 @@ app.config( function ($stateProvider, $urlRouterProvider, $locationProvider) {
             resolve: {
                 redirectIfNotAuthenticated: _redirectIfNotAuthenticated
             },
-            templateUrl: 'app/components/skydiver/skydiver.html',
-            controller: 'skydiverCtrl'
+            templateUrl: 'app/components/customers/customers.html',
+            controller: 'customerCtrl'
+
+        })
+        .state('payments', {
+            url: '/payments',
+            parent: 'main',
+            params: {
+                from: undefined,
+                to: undefined,
+                rows: null,
+                page: 1,
+                limit: 10,
+                order: null
+            },
+            resolve: {
+                redirectIfNotAuthenticated: _redirectIfNotAuthenticated
+            },
+            templateUrl: 'app/components/payments/payments.html',
+            controller: 'paymentsCtrl'
 
         })
         .state('settings', {
             url: '/settings',
             parent: 'main',
+            params: {
+                from: undefined,
+                to: undefined,
+                rows: null,
+                page: 1,
+                limit: 10,
+                order: null
+            },
             resolve: {
                 redirectIfNotAuthenticated: _redirectIfNotAuthenticated
             },
-            templateUrl: 'app/components/nastavitve/settings.html',
+            templateUrl: 'app/components/settings/settings.html',
             controller: 'settingsCtrl'
+
+        })
+        .state('report', {
+            url: '/reports',
+            parent: 'main',
+            resolve: {
+                redirectIfNotAuthenticated: _redirectIfNotAuthenticated
+            },
+            templateUrl: 'app/components/reports/report.html',
+            controller: 'reportCtrl'
 
         });
 });
 
 function _skipIfAuthenticated($q) {
-    /*
     var defer = $q.defer();
 
     if (sessionStorage.getItem('Authorization') != null) {
@@ -130,11 +164,9 @@ function _skipIfAuthenticated($q) {
         defer.resolve(); 
     }
     return defer.promise;
-    */
 };
 
 function _redirectIfNotAuthenticated($q, $state, $timeout) {
-    /*
     var defer = $q.defer();
     if (sessionStorage.getItem('Authorization') != null) {
         defer.resolve(); 
@@ -145,5 +177,4 @@ function _redirectIfNotAuthenticated($q, $state, $timeout) {
         defer.reject();
     }
     return defer.promise;
-    */
 };

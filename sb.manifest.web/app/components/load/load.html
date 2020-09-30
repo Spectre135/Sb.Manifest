@@ -1,51 +1,63 @@
 <div>
-    <md-card style="padding:20px;margin-right:20px;">
-        <md-toolbar class="md-table-toolbar md-default">
-            <md-card-title-text style="padding-bottom: 15px;">
-                <span class="md-title">Loads</span>
-            </md-card-title-text>
-            <md-divider></md-divider>
-            <div flex-gt-xs style="padding:15px 0px 0px 0px;">
-                <md-input-container style="margin: 0px;">
-                    <md-datepicker md-min-date="minDateFrom" md-date-locale="monthFormat"
-                        md-mode="month" ng-change="dateChanged()" ng-model="fromDate" md-placeholder="Date from">
-                    </md-datepicker>
-                    <div ng-if="alertFromDate" class="alert-md-datepicker">Chose date</div>
-                </md-input-container>
-
-                <md-input-container style="margin: 0px;">
-                    <md-datepicker md-min-date="minDateTo" md-date-locale="monthFormat"
-                        md-mode="month" ng-change="dateChanged()" ng-model="toDate" md-placeholder="Date to">
-                    </md-datepicker>
-                    <div ng-if="alertToDate" class="alert-md-datepicker">Chose date</div>
-                </md-input-container>
+        <md-content class="md-padding" layout-xs="column" layout="row">
+            <div flex-xs flex-gt-xs="33" style="flex-shrink: 0;" layout="column" ng-repeat="l in loads | orderBy: 'Number'">
+                <md-card>
+                    <md-card-title>
+                        <md-card-title-text>
+                            <span class="md-headline blue">Load {{l.Number}} {{l.Name}}</span>
+                            <span class="md-subhead">{{l.Aircraft}} {{l.Registration}} {{l.Altitude}}</span>
+                        </md-card-title-text>
+                        <md-card-actions layout="column">
+                            <md-button class="md-icon-button" ng-click="addPeople($event,l)">
+                                <md-tooltip md-direction="left">{{messages.addPassenger}} {{l.Number}}</md-tooltip>
+                                <span><i class="fas fa-user-plus font16"></i></span>
+                            </md-button>
+                        </md-card-actions>
+                    </md-card-title>
+                    <md-card-content layout="row" layout-align="space-between">
+                        <div layout="row" style="width: 100%;">
+                            <div flex="30">
+                                <span class="md-subhead gray">Slots left</span></br>
+                                <span class="font30">{{getSlotsLeft(l.Seats,l.Number)}}</span>
+                                </br>
+                                <span class="md-subhead gray">Profit</span></br>
+                                <span class="font18">{{getLoadProfit(l.Number) | currency}}</span>
+                            </div>
+                            <div flex="70">
+                                <md-table-container>
+                                    <table md-table>
+                                        <thead md-head>
+                                            <tr md-row style="height: 5px;">
+                                                <th md-column></th>
+                                                <th md-column md-numeric right></th>                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody md-body>
+                                            <tr md-row md-select-id="lista" md-auto-select
+                                                ng-repeat="p in list | orderBy: myOrder | filter: { Id: l.Number }"
+                                                class="md-row" style="cursor: pointer;" ng-click="showConfirm(p.Passenger,p.ProductSlotName,l.Number)">                                              
+                                                <td md-cell>
+                                                    <span class="font12 gray">{{p.ProductSlotName}}</span><br>
+                                                    <span>{{p.Passenger}}</span>
+                                                </td>
+                                                <td md-cell right
+                                                    ng-style="p.Profit >= 0 && {'color':'green'} || {'color': 'red'}">
+                                                    {{p.Profit | currency}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </md-table-container>
+                            </div>
+                        </div>
+                    </md-card-content>
+                    <md-card-actions layout="row" layout-align="end center">
+                        <md-button>Remove</md-button>
+                        <md-button ng-click="confirmLoad($event,l)" class="md-primary">Confirm</md-button>
+                    </md-card-actions>
+                </md-card>
             </div>
-        </md-toolbar>
-        <!--[if IE]> <div style="margin-top:20px;"> <![endif]-->
-        <md-table-container style="padding-top: 15px;">
-            <table md-table>
-                <thead md-head md-order="myOrder">
-                    <tr md-row>
-                        <th md-column md-order-by="AircraftRegistration"><span>Aircraft Registration</span></th>
-                        <th md-column md-order-by="AircraftType"><span>Aircraft Type</span></th>
-                        <th md-column md-order-by="Skydiver"><span>Skydiver</span></th>
-                    </tr>
-                </thead>
-                <tbody md-body>
-                    <tr md-row md-select-id="lista" md-auto-select
-                        ng-repeat="p in list | orderBy: myOrder | limitTo: myLimit: (myPage - 1) * myLimit"
-                        class="md-row" style="cursor: pointer;">
-                        <td md-cell>{{p.AircraftRegistration}}</td>
-                        <td md-cell>{{p.AircraftType}}</td>
-                        <td md-cell>{{p.Skydiver}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </md-table-container>
-        <!--[if IE]> </div> <![endif]-->
-        <md-table-pagination md-label="{page: 'Stran:', rowsPerPage: 'Vrstic na strani:', of: 'od'}" md-page="myPage"
-            md-limit="myLimit" md-limit-options="[5, 10, 15]" md-total="{{rows}}"></md-table-pagination>
-    </md-card>
+        </md-content>
 </div>
 
 <div ng-init="init()"></div>

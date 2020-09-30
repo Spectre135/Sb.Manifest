@@ -1,0 +1,1 @@
+"use strict";var app=angular.module("SbManifest");app.controller("statisticsCtrl",(function($scope,$state,$window,apiService,config){}));

@@ -1,0 +1,45 @@
+<md-dialog>
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <span><i class="fas fa-user-plus"></i></span>
+      <h2>&nbsp;&nbsp;Load {{dto.Number}} {{dto.Aircraft}} {{dto.Registration}}</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="ctrl.cancel()">
+        <i class="fas fa-times"></i>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-dialog-content ng-cloak style="min-width: 500px">
+    <div class="md-dialog-content">
+      <form ng-submit="$event.preventDefault()">
+
+        <md-input-container class="md-block" style="padding-bottom: 30px;">
+          <label>Product</label>
+          <md-select ng-model="productSelected" ng-change="productChange(productSelected)">
+            <md-option ng-repeat="item in productList" value="{{item.Id}}">
+              {{item.Name}}
+            </md-option>
+          </md-select>
+        </md-input-container>
+
+        <md-input-container class="md-block" style="padding-bottom: 15px;" ng-repeat="p in productSlot" ng-if="!warning">
+          <label>{{p.Name}}</label>
+          <md-select required ng-model="passenger" ng-change="addPassenger(passenger,p.Id)">
+            <md-option ng-repeat="item in ctrl.data" value="{{item.Id}}">
+              {{item.Name}}
+            </md-option>
+          </md-select>
+        </md-input-container>
+
+        <div class="alert">{{warning}}</div>
+
+      </form>
+    </div>
+  </md-dialog-content>
+
+  <md-dialog-actions>
+    <md-button aria-label="Finished" ng-disabled="(warning || !isValid())" class="md-primary" ng-click="ctrl.add($event)">Add</md-button>
+  </md-dialog-actions>
+</md-dialog>
+<div ng-init="init()"></div>

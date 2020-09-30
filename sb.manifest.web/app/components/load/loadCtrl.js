@@ -2,15 +2,8 @@
 
 var app = angular.module('SbManifest');
 
-app.controller('loadCtrl', function ($scope, $state, $window, apiService, config) {
+app.controller('loadCtrl', function ($scope, $state, $filter, $mdDialog, $window, apiService, config) {
 
-    $scope.fromDate = $state.params.from;
-    $scope.toDate = $state.params.to;
-    $scope.monthFormat = buildLocaleProvider("MMM YYYY");
-    $scope.minDateTo = new Date(2019, 12, 31);
-    $scope.minDateFrom = new Date(2019, 12, 31);
-    $scope.alertFromDate = false;
-    $scope.alertToDate = false;
     $scope.data = $state.params.data;
     $scope.list = $state.params.list;
     $scope.myPage = $state.params.page;
@@ -22,30 +15,69 @@ app.controller('loadCtrl', function ($scope, $state, $window, apiService, config
         page: 1
     };
     $scope.rows = $state.params.rows;
+    $scope.loads = [{
+            'Number': 1,
+            'Id': 1,
+            'Name': '',
+            'Altitude': '4000m',
+            'Aircraft': 'PC6',
+            'Registration': 'S5-CMD',
+            'Seats': 10,
+            'Confirmed': true
+        },
+        {
+            'Number': 3,
+            'Id': 3,
+            'Name': '',
+            'Altitude': '4000m',
+            'Aircraft': 'PC6',
+            'Registration': 'F-HSBF',
+            'Seats': 10,
+            'Confirmed': false
+        },
+        {
+            'Number': 2,
+            'Id': 2,
+            'Name': 'Lalala',
+            'Altitude': '6000m',
+            'Aircraft': 'Cessna Caravan',
+            'Registration': 'D-ECFD',
+            'Seats': 15,
+            'Confirmed': true
+        },
+        {
+            'Number': 4,
+            'Id': 4,
+            'Aircraft': 'PC6',
+            'Registration': 'F-HSBF',
+            'Seats': 10,
+            'Confirmed': false
+        },
+        {
+            'Number': 5,
+            'Id': 5,
+            'Aircraft': 'PC6',
+            'Registration': 'F-HSBF',
+            'Seats': 10,
+            'Confirmed': false
+        },
+        {
+            'Number': 6,
+            'Id': 6,
+            'Aircraft': 'PC6',
+            'Registration': 'F-HSBF',
+            'Seats': 10,
+            'Confirmed': false
+        }
+    ]
 
     //getLoadList
     $scope.getLoadList = function () {
         $scope.myPage = 1;
-        /*
-        var fd = new Date($scope.fromDate);
-        var td = new Date($scope.toDate);
 
-        //if we have toDate < fromDate then swap
-        if ($scope.fromDate > $scope.toDate) {
-            var fd = new Date($scope.toDate);
-            var td = new Date($scope.fromDate);
-        }
-
+        var params = {};
         var url = config.manifestApi + '/load/list';
-        
-        var params = {
-            'aFromDate': fd.setMonth(fd.getMonth()), //only to init date if false then NaN
-            'bToDate': td.setMonth(td.getMonth() + 1) //to use month selected too if false then NaN
-        };
-        */
-       var url = config.manifestApi + '/load/list';
-       
-        apiService.getData(url, null, true)
+        apiService.getData(url, params, true)
             .then(function (data) {
                 $scope.list = data.DataList;
                 $scope.rows = data.RowsCount;
@@ -66,30 +98,37 @@ app.controller('loadCtrl', function ($scope, $state, $window, apiService, config
         });
     };
 
-    $scope.dateChanged = function () {
-        //check dates if are OK
-        $scope.alertFromDate = false;
-        $scope.alertToDate = false;
+    $scope.getSlotsLeft = function (seats, idLoad) {
 
-        if ($scope.fromDate == undefined) {
-            $scope.alertFromDate = true;
-        }
-        if ($scope.toDate == undefined) {
-            $scope.alertToDate = true;
-        }
+        try {
+            if ($scope.list != undefined) {
+                var array = $filter('filter')($scope.list, function(item){return item.Id==idLoad;});
+                return seats - array.length;
+            }
 
-        if ($scope.fromDate && $scope.toDate) {
-            $scope.getPayrollList();
+            return seats;
+        } catch (error) {
+            return seats;
         }
     };
 
-    $scope.getPayrollCss = function () {
-        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-            return 'payrollMobileCss';
-        } else {
-            return 'payroll';
-        }
+    $scope.getLoadProfit = function (idLoad) {
+
+        try {
+            var profit = 0;
+
+            if ($scope.list != undefined) {
+                var array = $filter('filter')($scope.list, function(item){return item.Id==idLoad;});
+                angular.forEach(array, function (value, key) {
+                    profit = profit + value.Profit;
+                });
+            }
+
+            return profit;
+
+        } catch (error) {}
     };
+
     //init
     $scope.init = function () {
         ///če še nimamo liste potem je to verjetno prvi obisk strani
@@ -98,12 +137,77 @@ app.controller('loadCtrl', function ($scope, $state, $window, apiService, config
         }
     };
 
-    //back na browserju
-    window.addEventListener('popstate', function (event) {
-        if ($state.current.name == 'load') {
-            window.history.pushState(null, '', window.location.href);
-            $scope.showList();
-        }
-    }, false);
+    //add people to load
+    $scope.addPeople = function ($event, dto) {
+        //slots left to handle add people to load
+        dto.SlotsLeft = $scope.getSlotsLeft(dto.Seats, dto.Number);
+        $mdDialog.show({
+            locals: {
+                dataToPass: dto
+            },
+            controller: 'addSlotCtrl',
+            controllerAs: 'ctrl',
+            templateUrl: 'app/components/load/addSlot.html',
+            parent: angular.element(document.body),
+            targetEvent: $event,
+            clickOutsideToClose: false,
+            onRemoving: function (event, removePromise) {
+                $scope.getLoadList();
+            }
+        });
+    };
 
+    //delete passenger from load
+    $scope.showConfirm = function (passenger, productSlot, LoadNo) {
+        // Appending dialog to document.body to cover sidenav in docs app
+        var confirm = $mdDialog.confirm()
+            .title('Would you like to delete ' + passenger + '?')
+            .textContent('You will delete ' + passenger + '-' + productSlot + '\n\rfrom Load ' + LoadNo)
+            .ok('Delete')
+            .cancel('Cancel');
+
+        $mdDialog.show(confirm).then(function () {
+            $scope.status = 'Deleted';
+        }, function () {
+            $mdDialog.hide();
+        });
+    };
+
+    //confirm load
+    $scope.confirmLoad = function ($event, dto) {
+        var now = new Date();
+        dto.scheduled = new Date(now.getTime() + 20 * 60000);
+        $mdDialog.show({
+            locals: {
+                dataToPass: dto
+            },
+            controller: 'confirmLoadCtrl',
+            controllerAs: 'ctrl',
+            templateUrl: 'app/components/load/confirmLoad.html',
+            parent: angular.element(document.body),
+            targetEvent: $event,
+            clickOutsideToClose: false,
+            onRemoving: function (event, removePromise) {
+                $scope.getLoadList();
+            }
+        });
+    };
+
+});
+
+app.controller('confirmLoadCtrl', function ($scope, $state, $filter, $mdDialog, $window, dataToPass, apiService, config) {
+    var self = this;
+    $scope.dto = dataToPass; //data from parent ctrl
+
+    self.cancel = function ($event) {
+        $mdDialog.cancel();
+    };
+
+    self.save = function ($event) {
+        var url = config.manifestApi + '/load/confirm';
+        apiService.postData(url, $scope.dto, true)
+            .then(function () {
+                $mdDialog.hide();
+            });
+    };
 });

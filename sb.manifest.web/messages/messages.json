@@ -1,0 +1,9 @@
+{
+    "login" : "Prijava",
+    "addProduct" : "Add new product",
+    "addProductSlot" : "Add new product slot",
+    "addAircraft" : "Add new aircraft",
+    "addPassenger" : "Add passenger to load",
+    "required" : "Field is required.",
+    "nomoreslots" : "There are not enought slots available !"
+}

@@ -17,7 +17,7 @@ app.controller('prijavaCtrl', function ($scope, $state, config, apiService) {
         $scope.working = true;
         $scope.success='';
         $scope.response='';
-        var url = config.authApi + '/api/token/';
+        var url = config.manifestApi + '/token/';
         apiService.postData(url, $scope.user, true).then(function (data) {
             if (data){
                 sessionStorage.setItem('Authorization', data);

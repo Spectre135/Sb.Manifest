@@ -1,0 +1,39 @@
+<md-dialog>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <span><i class="fas fa-edit"></i></span>
+        <h2>&nbsp;&nbsp;{{label}}</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="ctrl.cancel()">
+          <i class="fas fa-times"></i>
+        </md-button>
+      </div>
+    </md-toolbar>
+  
+    <md-dialog-content ng-cloak style="min-width: 500px">
+      <div class="md-dialog-content">
+        <form name="form" ng-submit="$event.preventDefault()">
+  
+                <md-input-container class="md-icon-float md-block" style="width: 100%;">
+                    <label>Name</label>
+                    <input required type="text" ng-model="product.Name" name="name"/>
+                    <div ng-messages="form.name.$error" role="alert">
+                        <div ng-message="required">Product name is required.</div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container class="md-icon-float md-block" style="width: 100%;">
+                  <label>Description</label>
+                  <input type="text" ng-model="product.Description" name="description"/>
+              </md-input-container>
+  
+          <div class="alert">{{warning}}</div>
+  
+        </form>
+      </div>
+    </md-dialog-content>
+  
+    <md-dialog-actions>
+      <md-button aria-label="Finished" ng-disabled="form.$invalid" ng-click="ctrl.save($event)">Save</md-button>
+    </md-dialog-actions>
+  </md-dialog>
