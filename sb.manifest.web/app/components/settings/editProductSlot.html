@@ -51,9 +51,9 @@
 
         <md-input-container class="md-block">
           <label>Account</label>
-          <md-select ng-required ng-model="dto.Account" name="account" >
-            <md-option ng-repeat="acc in accountList" value="{{acc.Account}}" >            
-              <span>{{acc.Account}} - {{acc.Description}}</span>
+          <md-select ng-required ng-model="dto.IdAccount" name="account" >
+            <md-option ng-repeat="acc in accountList" value="{{acc.Id}}" >            
+              <span>{{acc.Description}}</span>
             </md-option>
           </md-select>
           <div ng-messages="form.account.$error" role="alert">

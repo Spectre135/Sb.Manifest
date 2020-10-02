@@ -31,17 +31,26 @@
         }
         public static string InsertPostLoadConfirmSQL()
         {
-            return @"INSERT INTO post(IdTransaction, Account, XAccount, IdCompany, IdCustomer, IdLoad, Description, Debit, Credit)
-                        SELECT (@IdTransaction || pl.IdCustomer), ps.Account,null, @IdCompany, pl.IdCustomer, pl.IdLoad, ps.Name Details, ps.Income, ps.Outcome
-                        FROM PassengerLoad pl
-                        INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot
-                        where IdLoad = @IdLoad 
+            return @"INSERT INTO post(IdTransaction, Account, IdCompany, IdCustomer, IdLoad, Description, Debit, Credit)
+                    SELECT(@IdTransaction || pl.IdCustomer), acc1.DAccount, 1, pl.IdCustomer, pl.IdLoad, ps.Name Details, ps.Income, ps.Outcome
+                               FROM PassengerLoad pl
+                                INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot
+                                INNER JOIN TAccount acc1 ON acc1.Id = ps.IdAccount AND acc1.DAccount IS NOT NULL
+                                where IdLoad = @IdLoad
+                    UNION
+                    SELECT(@IdTransaction || pl.IdCustomer), acc1.CAccount, 1, pl.IdCustomer, pl.IdLoad, ps.Name Details, ps.Outcome, ps.Income
+                                FROM PassengerLoad pl
+                                INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot
+                                INNER JOIN TAccount acc1 ON acc1.Id = ps.IdAccount AND acc1.CAccount IS NOT NULL
+                                where IdLoad = @IdLoad";
+/*
                         UNION
                         SELECT (@IdTransaction || pl.IdCustomer), null,acc.XAccount, @IdCompany, pl.IdCustomer, pl.IdLoad, ps.Name Details,ps.Outcome, ps.Income
                         FROM PassengerLoad pl
                         INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot
                         INNER JOIN TAccount acc ON acc.Account = ps.Account and acc.Account=110004
                         Where pl.IdLoad = @IdLoad";
+*/
         }
         #endregion
 
@@ -76,12 +85,12 @@
         }
         public static string GetInsertProductSlotSQL()
         {
-            return @"INSERT INTO ProductSlot(IdProduct,Name,Description,Income,Outcome,Account) 
-                                      VALUES(@IdProduct,@Name, @Description, @Income,@Outcome, @Account)";
+            return @"INSERT INTO ProductSlot(IdProduct,Name,Description,Income,Outcome,IdAccount) 
+                                      VALUES(@IdProduct,@Name, @Description, @Income,@Outcome, @IdAccount)";
         }
         public static string GetSaveProductSlotSQL()
         {
-            return @"UPDATE ProductSlot set Name = @Name, Description = @Description, Income = @Income, Outcome = @Outcome, Account= @Account, IdProduct= @IdProduct WHERE Id = @Id";
+            return @"UPDATE ProductSlot set Name = @Name, Description = @Description, Income = @Income, Outcome = @Outcome, IdAccount= @IdAccount, IdProduct= @IdProduct WHERE Id = @Id";
         }
         #endregion
 
@@ -111,7 +120,8 @@
         #region Accounts
         public static string GetAccountsSQL()
         {
-            return "SELECT * FROM TAccount";
+            //TODO view
+            return "SELECT * FROM TAccount where hidden=0";
         }
         #endregion
 

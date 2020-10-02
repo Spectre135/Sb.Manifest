@@ -30,9 +30,9 @@ namespace sb.manifest.api.Model
         [DataField("ProductName")]
         public string ProductName { get; set; }
 
-        [DataField("Account")]
-        [ParamField("Account")]
-        public int Account { get; set; }
+        [DataField("IdAccount")]
+        [ParamField("IdAccount")]
+        public int IdAccount { get; set; }
 
         [DataField("AccountDescription")]
         public string AccountDescription { get; set; }

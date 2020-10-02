@@ -4,10 +4,13 @@ namespace sb.manifest.api.Model
 {
     public class MAccount
     {
-        [DataField("Account")]
+        [DataField("Id")]
+        public int Id{ get; set; }
+
+        [DataField("DAccount")]
         public int Account { get; set; }
 
-        [DataField("XAccount")]
+        [DataField("CAccount")]
         public int XAccount { get; set; }
 
         [DataField("Description")]

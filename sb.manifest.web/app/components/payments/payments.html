@@ -2,7 +2,7 @@
     <md-card style="padding:20px;margin-right:20px;">
         <md-toolbar class="md-table-toolbar md-default">
             <md-card-title-text style="padding-bottom: 15px;">
-                <span class="md-title">Payments</span>
+                <span class="md-title">Cash Book</span>
             </md-card-title-text>
             <md-divider></md-divider>
         </md-toolbar>
@@ -32,7 +32,6 @@
                         <th md-column md-order-by="Date"><span>Date</span></th>
                         <th md-column md-numeric right md-order-by="Debit"><span>Debit</span></th>
                         <th md-column md-numeric right md-order-by="Credit"><span>Credit</span></th>
-                        <th md-column md-numeric right md-order-by="Status"><span>Status</span></th>
                     </tr>
                 </thead>
                 <tbody md-body>
@@ -51,7 +50,6 @@
                             {{p.Debit | currency}}</td>
                         <td md-cell right ng-style="p.Credit  > 0 && {'color':'green'}">
                             {{p.Credit | currency}}</td>
-                            <td md-cell>{{p.Status}}</td>
                     </tr>
                 </tbody>
             </table>
