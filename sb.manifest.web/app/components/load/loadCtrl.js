@@ -85,19 +85,6 @@ app.controller('loadCtrl', function ($scope, $state, $filter, $mdDialog, $window
 
     };
 
-    //show list
-    $scope.showList = function () {
-        $state.go('payrollist', {
-            from: $scope.fromDate,
-            to: $scope.toDate,
-            list: $scope.list,
-            rows: $scope.rows,
-            page: $scope.myPage,
-            limit: $scope.myLimit,
-            order: $scope.myOrder
-        });
-    };
-
     $scope.getSlotsLeft = function (seats, idLoad) {
 
         try {

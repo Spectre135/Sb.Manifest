@@ -14,5 +14,10 @@ namespace sb.manifest.api.Services
             using CustomerDAO dao = new CustomerDAO();
                 return dao.GetCustomers(config);
         }
+        public void Save(IConfiguration config, MCustomer mCustomer)
+        {
+            using CustomerDAO dao = new CustomerDAO();
+            dao.Save(config, mCustomer);
+        }
     }
 }

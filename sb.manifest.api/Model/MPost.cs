@@ -21,6 +21,7 @@ namespace sb.manifest.api.Model
         public long IdCustomer { get; set; }
 
         [DataField("Customer")]
+        [DataSearch("Customer")]
         public string Customer { get; set; }
 
         [DataField("Description")]
@@ -35,8 +36,10 @@ namespace sb.manifest.api.Model
         [DataField("Date")]
         public DateTime Date{ get; set; }
 
+        /*
         [DataField("Status")]
         public string Status { get; set; }
+        */
 
     }
 }

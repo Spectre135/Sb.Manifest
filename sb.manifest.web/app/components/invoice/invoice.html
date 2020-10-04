@@ -14,30 +14,36 @@
     <div class="md-dialog-content">
       <form ng-submit="$event.preventDefault()">
 
-        <h1>{{dto.Customer}}</h1>
+        <h1>{{dto.Name}}</h1>
 
         <div layout="row" layout-sm="column" layout-align="space-around" ng-if="working">
           <md-progress-circular md-mode="indeterminate"></md-progress-circular>
         </div>
 
-          <md-table-container ng-if="!working">
+
+        <md-table-container ng-if="!working" style="height:50%;overflow:auto;">
             <table md-table>
                 <thead md-head md-order="myOrder">
                     <tr md-row>
                         <th md-column md-order-by="Description"><span>Description</span></th>
-                        <th md-column md-order-by="Description"><span>Qty</span></th>
-                        <th md-column md-order-by="Amount"><span>Amount</span></th>
+                        <th md-column md-order-by="LoadNo"><span>LoadNo</span></th>
+                        <th md-column md-order-by="Aircraft"><span>Aircraft</span></th>                   
+                        <th md-column md-order-by="Date"><span>Date</span></th>
+                        <th md-column md-numeric right md-order-by="Amount"><span>Amount</span></th>
                     </tr>
                 </thead>
                 <tbody md-body>
                     <tr md-row md-select-id="lista" md-auto-select ng-repeat="p in list">
                         <td md-cell>{{p.Description}}</td>
-                        <td md-cell right>{{p.Qty}}</td>
+                        <td md-cell>{{p.LoadNo}}</td>
+                        <td md-cell>{{p.Aircraft}}</td>
+                        <td md-cell>{{p.Date | date:'HH:mm dd.MM.yyyy'}}</td>
                         <td md-cell right>{{p.Amount | currency}}</td>
                     </tr>
                 </tbody>
             </table>
           </md-table-container>
+         
 <md-divider></md-divider>
 
           <div layout="row" ng-if="!working">
@@ -55,7 +61,7 @@
   </md-dialog-content>
 
   <md-dialog-actions>
-    <md-button aria-label="Confirm" class="md-primary" ng-click="ctrl.save($event)">Confirm</md-button>
+    <md-button aria-label="Confirm" class="md-primary" ng-click="ctrl.save($event)">Payed</md-button>
   </md-dialog-actions>
 </md-dialog>
 <div ng-init="getInvoiceData()"></div>

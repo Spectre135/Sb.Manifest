@@ -110,14 +110,6 @@ app.config( function ($stateProvider, $urlRouterProvider, $locationProvider) {
         .state('payments', {
             url: '/payments',
             parent: 'main',
-            params: {
-                from: undefined,
-                to: undefined,
-                rows: null,
-                page: 1,
-                limit: 10,
-                order: null
-            },
             resolve: {
                 redirectIfNotAuthenticated: _redirectIfNotAuthenticated
             },

@@ -162,5 +162,23 @@ namespace sb.manifest.api.Controllers
             }
 
         }
+
+        /// <summary>
+        /// Get List of all countries
+        /// </summary>
+        [HttpGet("settings/countries")]
+        public IActionResult GetCountries()
+        {
+            try
+            {
+                SettingsService service = new SettingsService();
+                return Ok(service.GetCountries(config));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+
+        }
     }
 }

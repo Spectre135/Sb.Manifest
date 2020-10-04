@@ -8,10 +8,10 @@ namespace sb.manifest.api.Model
         public int Id{ get; set; }
 
         [DataField("DAccount")]
-        public int Account { get; set; }
+        public int DAccount { get; set; }
 
         [DataField("CAccount")]
-        public int XAccount { get; set; }
+        public int CAccount { get; set; }
 
         [DataField("Description")]
         public string Description { get; set; }

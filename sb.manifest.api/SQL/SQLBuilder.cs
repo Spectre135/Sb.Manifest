@@ -1,11 +1,23 @@
-﻿namespace sb.manifest.api.SQL
+﻿using System;
+
+namespace sb.manifest.api.SQL
 {
     public class SQLBuilder
     {
+
         #region Customers
         public static string GetCustomersListSQL()
         {
             return "SELECT * FROM v_customer";
+        }
+        public static string GetInsertCustomerSQL()
+        {
+            return @"INSERT INTO Customer(FirstName,LastName,Email,IdCountry) 
+                                      VALUES(@FirstName,@LastName,@Email,@IdCountry)";
+        }
+        public static string GetSaveCustomerSQL()
+        {
+            return @"UPDATE Customer set FirstName = @FirstName, LastName = @LastName, Email=@Email, IdCountry=@IdCountry WHERE Id = @Id";
         }
         #endregion
 
@@ -31,35 +43,105 @@
         }
         public static string InsertPostLoadConfirmSQL()
         {
-            return @"INSERT INTO post(IdTransaction, Account, IdCompany, IdCustomer, IdLoad, Description, Debit, Credit)
-                    SELECT(@IdTransaction || pl.IdCustomer), acc1.DAccount, 1, pl.IdCustomer, pl.IdLoad, ps.Name Details, ps.Income, ps.Outcome
-                               FROM PassengerLoad pl
-                                INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot
-                                INNER JOIN TAccount acc1 ON acc1.Id = ps.IdAccount AND acc1.DAccount IS NOT NULL
-                                where IdLoad = @IdLoad
-                    UNION
-                    SELECT(@IdTransaction || pl.IdCustomer), acc1.CAccount, 1, pl.IdCustomer, pl.IdLoad, ps.Name Details, ps.Outcome, ps.Income
-                                FROM PassengerLoad pl
-                                INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot
-                                INNER JOIN TAccount acc1 ON acc1.Id = ps.IdAccount AND acc1.CAccount IS NOT NULL
-                                where IdLoad = @IdLoad";
-/*
-                        UNION
-                        SELECT (@IdTransaction || pl.IdCustomer), null,acc.XAccount, @IdCompany, pl.IdCustomer, pl.IdLoad, ps.Name Details,ps.Outcome, ps.Income
-                        FROM PassengerLoad pl
-                        INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot
-                        INNER JOIN TAccount acc ON acc.Account = ps.Account and acc.Account=110004
-                        Where pl.IdLoad = @IdLoad";
-*/
+            return @"INSERT INTO post(
+                      IdTransaction, Account, IdCompany, 
+                      IdCustomer, IdLoad, Description, 
+                      Debit, Credit
+                    ) --Odpremo terjatev do kupca konto 120/760 
+                    SELECT 
+                      (@IdTransaction || pl.IdCustomer), 
+                      acc1.DAccount, 
+                      1, 
+                      pl.IdCustomer, 
+                      pl.IdLoad, 
+                      ps.Name Details, 
+                      ps.Income, 
+                      ps.Outcome 
+                    FROM 
+                      PassengerLoad pl 
+                      INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot 
+                      INNER JOIN TAccount acc1 ON acc1.Id = ps.IdAccount 
+                      AND acc1.DAccount IS NOT NULL 
+                    where 
+                      IdLoad = @IdLoad 
+                    UNION 
+                    SELECT 
+                      (@IdTransaction || pl.IdCustomer), 
+                      acc1.CAccount, 
+                      1, 
+                      pl.IdCustomer, 
+                      pl.IdLoad, 
+                      ps.Name Details, 
+                      ps.Outcome, 
+                      ps.Income 
+                    FROM 
+                      PassengerLoad pl 
+                      INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot 
+                      INNER JOIN TAccount acc1 ON acc1.Id = ps.IdAccount 
+                      AND acc1.CAccount IS NOT NULL 
+                    where 
+                      IdLoad = @IdLoad 
+                    UNION 
+                      --V primeru da kupec ima sredstva na kontu 230 potem poplačamo terjatev iz teh sredstev
+                    SELECT 
+                      (@IdTransaction || pl.IdCustomer), 
+                      acc.DAccount Account, 
+                      1, 
+                      pl.IdCustomer, 
+                      pl.IdLoad, 
+                      ps.Name Details, 
+                      ps.Income, 
+                      ps.Outcome 
+                    FROM 
+                      PassengerLoad pl 
+                      INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot 
+                      INNER JOIN v_customer c ON c.Id = pl.IdCustomer 
+                      INNER JOIN TAccount acc ON acc.DAccount in (230) 
+                    WHERE 
+                      c.Balance > 0 
+                      AND pl.IdLoad = @IdLoad 
+                    UNION 
+                    SELECT 
+                      (@IdTransaction || pl.IdCustomer), 
+                      acc.CAccount Account, 
+                      1, 
+                      pl.IdCustomer, 
+                      pl.IdLoad, 
+                      ps.Name Details, 
+                      ps.Outcome, 
+                      ps.Income 
+                    FROM 
+                      PassengerLoad pl 
+                      INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot 
+                      INNER JOIN v_customer c ON c.Id = pl.IdCustomer 
+                      INNER JOIN TAccount acc ON acc.DAccount in (230) 
+                    WHERE 
+                      c.Balance > 0 
+                      AND pl.IdLoad = @IdLoad";
         }
         #endregion
 
         #region Invoice
         public static string GetInvoiceSQL()
         {
-            return @"select IdCustomer, Customer, Description, Sum(Debit)-Sum(Credit) Amount,count(*) Qty
-                     from v_post where idCustomer = @IdCustomer
-                     group by Description";
+            return @"WITH 
+                        IdTr(IdTransaction,Account) AS (
+                        select IdTransaction,Account
+                        from v_post 
+                        where idCustomer = @IdCustomer
+                        and Account in (120) 
+                        group by IdTransaction
+                        having SUM(Credit-Debit) < 0 )
+                    SELECT p.IdTransaction,p.Account, p.IdCustomer, p.Customer, p.Description, (p.Debit - p.Credit) Amount,p.Date,l.Id IdLoad,l.Number LoadNo, a.Registration Aircraft
+                    FROM v_post p
+                    INNER JOIN IdTr ON IdTr.IdTransaction = p.IdTransaction AND IdTr.Account = p.Account
+                    LEFT JOIN Load l ON l.Id = p.IdLoad
+                    LEFT JOIN Aircraft a ON a.Id = l.IdAircraft";
+        }
+        public static string InsertPostPayInvoiceSQL()
+        {
+            return @"INSERT INTO post(IdTransaction, Account, IdCompany, IdCustomer, IdLoad, Description, Debit, Credit)
+                            VALUES(@IdTransaction, @Account, @IdCompany, @IdCustomer, @IdLoad, @Description, @Debit, @Credit)";
         }
         #endregion
 
@@ -122,6 +204,13 @@
         {
             //TODO view
             return "SELECT * FROM TAccount where hidden=0";
+        }
+        #endregion
+
+        #region Countries
+        public static string GetCountriesSQL()
+        {
+            return "SELECT * FROM Countries";
         }
         #endregion
 

@@ -63,7 +63,7 @@ namespace sb.manifest.api.DAO
                 command.ExecuteNonQuery();
 
                 //insert DEBIT transakcije v POST tabelo
-                //id transaction sestavimo iz mmssff + idcustomer unique
+                //id transaction sestavimo iz mmssff
                 alParmValues = new List<KeyValuePair<string, object>>();
                 long idTransaction = long.Parse(DateTime.Now.ToString("mmssff"));
                 alParmValues.Add(new KeyValuePair<string, object>("@IdTransaction", idTransaction));
@@ -78,7 +78,7 @@ namespace sb.manifest.api.DAO
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw new Exception("Error AddPassengers " + ex.Message, ex.InnerException);
+                throw new Exception("Error Confirm load " + ex.Message, ex.InnerException);
             }
 
         }

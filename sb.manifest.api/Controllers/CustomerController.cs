@@ -33,5 +33,28 @@ namespace sb.manifest.api.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex);
             }
         }
+
+        /// <summary>
+        /// Save customer
+        /// Function add/edit Customer
+        /// </summary>
+        /// <param name="mCustomer">Model of MCustomer</param>
+        [HttpPost("customer/save")]
+        public IActionResult SaveSalesProduct([FromBody] MCustomer mCustomer)
+        {
+            try
+            {
+                CustomerService service = new CustomerService();
+                service.Save(config, mCustomer);
+                return Ok();
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+
+        }
+
     }
 }

@@ -59,5 +59,14 @@ namespace sb.manifest.api.Services
 
         }
         #endregion
+
+        #region Countries
+        public MResponse GetCountries(IConfiguration config)
+        {
+            using SettingsDAO dao = new SettingsDAO();
+            return dao.GetCountries(config);
+
+        }
+        #endregion
     }
 }

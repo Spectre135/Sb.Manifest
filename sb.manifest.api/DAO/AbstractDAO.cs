@@ -2,11 +2,14 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
 using sb.manifest.api.Model;
+using sb.manifest.api.SQL;
 using sb.manifest.api.Utils;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Reflection;
+using System.Text;
 #endregion
 
 namespace sb.manifest.api.DAO
@@ -48,7 +51,7 @@ namespace sb.manifest.api.DAO
         }
         #endregion
 
-        #region LoadObject,ParamteresValues
+        #region LoadObject,Parameters Values
         protected static TEntity LoadObject<TEntity>(IDataReader dr) where TEntity : class, new()
         {
             TEntity instanceToPopulate = new TEntity();
@@ -155,6 +158,41 @@ namespace sb.manifest.api.DAO
             return alParmValues;
 
         }
+        public static string GetSearchFields<T>() where T : class, new()
+        {
+
+            Type objType = typeof(T);
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (PropertyInfo p in objType.GetProperties())
+            {
+                foreach (DataSearchAttribute a in p.GetCustomAttributes(typeof(DataSearchAttribute), false))
+                {
+                    if (a.ColumnSearch != null)
+                        sb.Append(String.Format("IFNULL({0},'')||", a.ColumnSearch));
+                }
+
+            }
+            //remove last char wich is +
+            //string response = sb.ToString().Substring(0, sb.Length - 1);
+            string response = sb.ToString().Substring(0, sb.Length - 2);
+            response = " LOWER(" + response + ") ";
+
+            return response;
+
+        }
+        public long GetPageCount(IDataReader reader)
+        {
+            try
+            {
+                return  (long)reader["COUNT"];
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+        }
         #endregion
 
         #region GetData,SaveData
@@ -184,6 +222,47 @@ namespace sb.manifest.api.DAO
 
             return mResponse;
         }
+        public MResponse GetPaggingData<T>(IConfiguration config, string sql, string search, int from, int to, string orderby, bool asc,
+            List<KeyValuePair<string, object>> alParmValues = null) where T : class, new()
+        {
+            MResponse mResponse = new MResponse();
+            List<T> list = new List<T>();
+
+            try
+            {
+                StringBuilder _sql = new StringBuilder(sql);
+
+                //Search string
+                if (!String.IsNullOrEmpty(search) && !search.ToLower().Equals("undefined"))
+                {
+                    _sql.Append(" and ").Append(GetSearchFields<T>()).Append(" like :searchParam ");
+                    alParmValues.Add(SetParam(":searchParam", "%" + search.ToLower() + "%"));
+                }
+
+                string finalSQL = GetPagingQuery(_sql.ToString(), from, to, orderby, asc);
+                using var connection = GetConnection(config);
+                IDbCommand command = CreateCommand(connection, alParmValues, finalSQL);
+                using SqliteDataReader reader = (SqliteDataReader)command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    list.Add(LoadObject<T>(reader));
+                    if (list.Count == 1)
+                        mResponse.RowsCount = GetPageCount(reader);
+                }
+
+                mResponse.DataList = list;
+
+            }
+            catch (Exception ex)
+            {
+                connection.Close();
+                throw new Exception("Error Get Pagging Data" + ex.Message, ex.InnerException);
+            }
+
+            return mResponse;
+        }
+
         public void SaveData(IConfiguration config, string sql, List<KeyValuePair<string, object>> alParmValues)
         {
             try
@@ -204,6 +283,22 @@ namespace sb.manifest.api.DAO
                 connection.Close();
                 throw new Exception("Error in saving data" + ex.Message, ex.InnerException);
             }
+        }
+        #endregion
+
+        #region PaggingQuery
+        private static string GetPagingQuery(string query, int from, int to, string order, bool asc)
+        {
+            return string.Format(@"WITH sql AS ({0}),
+                                        sqlrows AS (SELECT COUNT(*) total_rows FROM sql)
+                                SELECT * FROM (
+                                    SELECT ROW_NUMBER () OVER (ORDER BY NULL) RowNum,
+                                        sql.*,sqlrows.total_rows COUNT
+                                    FROM sql,sqlrows
+	                                ORDER BY {1} {2} 
+                                ) t
+                    WHERE
+                    RowNum > {3} AND RowNum <= {4}", query, (string.IsNullOrEmpty(order) ? "NULL" : order), (asc ? "ASC" : "DESC"), from, to);
         }
         #endregion
 

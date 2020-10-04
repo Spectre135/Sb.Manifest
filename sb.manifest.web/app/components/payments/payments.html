@@ -19,8 +19,8 @@
 
         <!--[if IE]> <div style="margin-top:20px;"> <![endif]-->
         <md-table-container style="padding-top: 15px;">
-            <table md-table>
-                <thead md-head md-order="myOrder">
+            <table md-table md-progress="promise">
+                <thead md-head md-order="query.order" md-on-reorder="getPaymentsList">
                     <tr md-row>
                         <th md-column></th>
                         <th md-column md-order-by="IdTransaction"><span>Id</span></th>
@@ -36,8 +36,8 @@
                 </thead>
                 <tbody md-body>
                     <tr md-row md-select-id="lista" md-auto-select
-                        ng-repeat="p in list | filter: search | orderBy: myOrder | limitTo: myLimit: (myPage - 1) * myLimit"
-                        class="md-row" style="cursor: pointer;" ng-click="getInvoice($event,p)">
+                        ng-repeat="p in list"
+                        class="md-row" style="cursor: pointer;">
                         <td md-cell><md-checkbox class="blue" ng-model="p.selected" aria-label="Select"></md-checkbox></td>
                         <td md-cell>{{p.IdTransaction}}</td>
                         <td md-cell>{{p.Account}}</td>
@@ -46,16 +46,14 @@
                         <td md-cell>{{p.Customer}}</td>
                         <td md-cell>{{p.Description}}</td>
                         <td md-cell>{{p.Date | date:'dd.MM.yyyy'}}</td>
-                        <td md-cell right ng-style="p.Debit  > 0 && {'color':'red'}">
-                            {{p.Debit | currency}}</td>
-                        <td md-cell right ng-style="p.Credit  > 0 && {'color':'green'}">
-                            {{p.Credit | currency}}</td>
+                        <td md-cell right>{{p.Debit | currency}}</td>
+                        <td md-cell right>{{p.Credit | currency}}</td>
                     </tr>
                 </tbody>
             </table>
         </md-table-container>
         <!--[if IE]> </div> <![endif]-->
-        <md-table-pagination md-page="myPage" md-limit="myLimit" md-limit-options="[5, 10, 15]" md-total="{{rows}}">
+        <md-table-pagination md-page="query.page" md-limit="query.limit" md-limit-options="[5, 10, 15]" md-total="{{rows}}" md-on-paginate="getPaymentsList">
         </md-table-pagination>
     </md-card>
 </div>

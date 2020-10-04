@@ -80,5 +80,12 @@ namespace sb.manifest.api.DAO
             return GetData<MAccount>(config, SQLBuilder.GetAccountsSQL());
         }
         #endregion
+
+        #region Countries
+        public MResponse GetCountries(IConfiguration config)
+        {
+            return GetData<MCountry>(config, SQLBuilder.GetCountriesSQL());
+        }
+        #endregion
     }
 }
