@@ -10,6 +10,9 @@ namespace sb.manifest.api.Auth
     {
         public static bool IsUserAuthenticated(MUser user)
         {
+            if (string.IsNullOrEmpty(user.Username) || string.IsNullOrEmpty(user.Password))
+                return false;
+
             return (user.Password.ToLower().Equals("skydive") && user.Username.ToLower().Equals("darja"));
         }
     }

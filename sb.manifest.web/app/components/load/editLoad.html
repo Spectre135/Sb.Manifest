@@ -1,0 +1,57 @@
+<md-dialog>
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <span><i class="fas fa-edit"></i></span>
+      <h2>&nbsp;&nbsp;{{label}}</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="ctrl.cancel()">
+        <i class="fas fa-times"></i>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-dialog-content ng-cloak style="min-width: 500px">
+    <div class="md-dialog-content">
+      <form name="form" ng-submit="$event.preventDefault()">
+
+        <div layout-gt-sm="row">
+          <md-input-container class="md-icon-float md-block" style="width: 100%;">
+            <label>Aircraft</label>
+            <md-select ng-required ng-model="load.IdAircraft" name="aircraft" md-on-open="getAircrafts()" ng-init="setAircraft(load)">
+              <md-option ng-repeat="item in aircraftList" value="{{item.Id}}">
+                {{item.Type}} - {{item.Registration}}
+              </md-option>
+            </md-select>
+            <div ng-messages="form.aircraft.$error" role="alert">
+              <div ng-message="required">{{messages.required}}</div>
+            </div>
+          </md-input-container>
+        </div>
+
+        <div layout-gt-sm="row">
+          <md-input-container class="md-icon-float md-block">
+            <label>Number</label>
+            <input type="number" ng-model="load.Number" name="number"/>
+          </md-input-container>
+          <div ng-messages="form.number.$error" role="alert">
+            <div ng-message="required">{{messages.required}}</div>
+          </div>
+        </div>
+
+        <div layout-gt-sm="row">
+          <md-input-container class="md-icon-float md-block" style="width: 100%;">
+            <label>Description</label>
+            <input md-maxlength="100" type="text" ng-model="load.Description" name="description"/>
+          </md-input-container>
+        </div>
+
+        <div class="alert">{{warning}}</div>
+
+      </form>
+    </div>
+  </md-dialog-content>
+
+  <md-dialog-actions>
+    <md-button aria-label="Finished" ng-disabled="form.$invalid" ng-click="ctrl.save($event)">Save</md-button>
+  </md-dialog-actions>
+</md-dialog>

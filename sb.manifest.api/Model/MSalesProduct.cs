@@ -15,5 +15,9 @@ namespace sb.manifest.api.Model
         [ParamField("Description")]
         public string Description { get; set; }
 
+        [DataField("BackgroundColor")]
+        [ParamField("BackgroundColor")]
+        public string BackgroundColor { get; set; }
+
     }
 }

@@ -13,11 +13,46 @@ namespace sb.manifest.api.DAO
 {
     public class LoadDAO : AbstractDAO
     {
-        public MResponse GetLoad(IConfiguration config)
+        public MResponse GetLoads(IConfiguration config, int status=0)
         {
-            return GetData<MLoad>(config, SQLBuilder.GetLoadListSQL());
+            string sql = SQLBuilder.GetLoadSQL();
+            sql += " and Status = @Status";
+            List<KeyValuePair<string, object>> alParmValues = new List<KeyValuePair<string, object>>
+            {
+                SetParam("@Status", status)
+            };
+
+            return GetData<MLoad>(config, sql, alParmValues);
         }
-        public void AddSlot(IConfiguration config, List<MPassenger> list)
+        public MResponse GetLoadList(IConfiguration config)
+        {
+            return GetData<MLoadList>(config, SQLBuilder.GetLoadListSQL());
+        }
+
+        #region Active and Active Today skydivers
+        public MResponse GetActiveToday(IConfiguration config, int idLoad)
+        {
+            List<KeyValuePair<string, object>> alParmValues = new List<KeyValuePair<string, object>>
+            {
+                new KeyValuePair<string, object>("@IdLoad", idLoad)
+            };
+            return GetData<MSlot>(config, SQLBuilder.GetActiveTodaySQL(), alParmValues);
+        }
+        public MResponse GetActive(IConfiguration config, string search, int size, int idLoad)
+        {
+            List<KeyValuePair<string, object>> alParmValues = new List<KeyValuePair<string, object>>
+            {
+                new KeyValuePair<string, object>("@IdLoad", idLoad),
+                new KeyValuePair<string, object>("@Name", "%" + search.ToLower() + "%"),
+                new KeyValuePair<string, object>("@Limit", size)
+            };
+
+            return GetData<MSlot>(config, SQLBuilder.GetActiveSQL(), alParmValues);
+        }
+        #endregion
+
+        #region Move and Add Slot
+        public void AddSlot(IConfiguration config, List<MOnBoard> list)
         {
             IDbTransaction transaction = null;
             try
@@ -27,10 +62,13 @@ namespace sb.manifest.api.DAO
 
                 using var connection = GetConnection(config);
                 transaction = connection.BeginTransaction();
+                //idGroup za skupine ali tandeme da imamo skupaj osebe, če jih premikamo med loadi
+                int idGroup = int.Parse(DateTime.Now.ToString("ssff"));
 
-                foreach (MPassenger p in list)
+                foreach (MOnBoard p in list)
                 {
-                    alParmValues = LoadParametersValue<MPassenger>(p);
+                    p.IdGroup = idGroup;
+                    alParmValues = LoadParametersValue<MOnBoard>(p);
                     command = CreateCommand(connection, alParmValues, SQLBuilder.GetInsertPassengersToLoadSQL());
                     command.ExecuteNonQuery();
                 }
@@ -41,10 +79,42 @@ namespace sb.manifest.api.DAO
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw new Exception("Error AddPassengers " + ex.Message, ex.InnerException);
+                throw new Exception("Error AddPassengers to load " + ex.Message, ex.InnerException);
             }
             
         }
+        public void MoveSlot(IConfiguration config, MMove mMove)
+        {
+            IDbTransaction transaction = null;
+            try
+            {
+                List<KeyValuePair<string, object>> alParmValues = new List<KeyValuePair<string, object>>();
+                IDbCommand command;
+
+                using var connection = GetConnection(config);
+                transaction = connection.BeginTransaction();
+
+                foreach (int idCustomer in mMove.IdCustomer)
+                {
+                    alParmValues = LoadParametersValue<MMove>(mMove);
+                    alParmValues.Add(new KeyValuePair<string, object>("@IdCustomer", idCustomer));
+                    command = CreateCommand(connection, alParmValues, SQLBuilder.GetMoveSlotSQL());
+                    command.ExecuteNonQuery();
+                }
+
+                transaction.Commit();
+
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception("Error Moving passengers from-to load " + ex.Message, ex.InnerException);
+            }
+
+        }
+        #endregion
+
+        #region Confirm and Save Load
         public void ConfirmLoad(IConfiguration config, MLoad mLoad)
         {
             IDbTransaction transaction = null;
@@ -82,5 +152,21 @@ namespace sb.manifest.api.DAO
             }
 
         }
+        public void SaveLoad(IConfiguration config, MLoad mLoad)
+        {
+            string sql = SQLBuilder.GetInsertLoadSQL();
+            List<KeyValuePair<string, object>> alParmValues = LoadParametersValue<MLoad>(mLoad);
+
+            //SQLite nima MERGE zato hendalmo skozi različna SQL-a
+            if (mLoad.Id > 0)
+            {
+                sql = SQLBuilder.GetSaveLoadSQL();
+                alParmValues.Add(new KeyValuePair<string, object>("@Id", mLoad.Id));
+            }
+
+            SaveData(config, sql, alParmValues);
+
+        }
+        #endregion
     }
 }

@@ -17,7 +17,7 @@
         <div layout-gt-sm="row">
           <md-input-container class="md-icon-float md-block" style="width: 100%;">
             <label>First Name</label>
-            <input required type="text" ng-model="customer.FirstName" name="first" />
+            <input required md-maxlength="50" type="text" ng-model="customer.FirstName" name="first" capitalize-first/>
             <div ng-messages="form.first.$error" role="alert">
               <div ng-message="required">{{messages.required}}</div>
             </div>
@@ -25,7 +25,7 @@
 
           <md-input-container class="md-icon-float md-block" style="width: 100%;">
             <label>Last Name</label>
-            <input required type="text" ng-model="customer.LastName" name="last" />
+            <input required md-maxlength="50" type="text" ng-model="customer.LastName" name="last" capitalize-first/>
             <div ng-messages="form.last.$error" role="alert">
               <div ng-message="required">{{messages.required}}</div>
             </div>
@@ -35,7 +35,7 @@
         <div layout-gt-sm="row">
           <md-input-container class="md-icon-float md-block" style="width: 100%;">
             <label>Email</label>
-            <input required type="email" ng-model="customer.Email" name="email" />
+            <input required md-maxlength="50" type="email" ng-model="customer.Email" name="email" />
             <div ng-messages="form.email.$error" role="alert">
               <div ng-message="required">{{messages.required}}</div>
             </div>
@@ -45,7 +45,7 @@
         <div layout-gt-sm="row">
           <md-input-container class="md-icon-float md-block" style="width: 100%;">
             <label>Country</label>
-            <md-select ng-model="customer.IdCountry" md-on-open="getCountries()">
+            <md-select ng-model="customer.IdCountry" md-on-open="getCountries()" ng-init="setCountry(customer)">
               <md-option ng-repeat="item in countries" value="{{item.Id}}">
                 {{item.Name}}
               </md-option>

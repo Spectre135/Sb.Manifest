@@ -8,7 +8,7 @@ namespace sb.manifest.api.SQL
         #region Customers
         public static string GetCustomersListSQL()
         {
-            return "SELECT * FROM v_customer";
+            return "SELECT * FROM v_customer WHERE 1=1 "; //WHERE 1=1 ker dodajamo pogoje za search
         }
         public static string GetInsertCustomerSQL()
         {
@@ -22,24 +22,91 @@ namespace sb.manifest.api.SQL
         #endregion
 
         #region Load
+        public static string GetInsertLoadSQL()
+        {
+            return @"INSERT INTO Load(Number,Description,IdAircraft) 
+                                      VALUES(@Number,@Description,@IdAircraft)";
+        }
+        public static string GetSaveLoadSQL()
+        {
+            return @"UPDATE Load set 
+                                    Description = @Description, 
+                                    IdAircraft = @IdAircraft, 
+                                    Number = @Number
+                    WHERE Id = @Id";
+        }
         public static string GetInsertPassengersToLoadSQL()
         {
-            return "INSERT INTO PassengerLoad VALUES(@IdPeople,@IdLoad,@IdProductSlot,datetime('now'))";
+            return "INSERT INTO OnLoad(IdCustomer,IdLoad,IdProductSlot,IdGroup) VALUES(@IdCustomer,@IdLoad,@IdProductSlot,@IdGroup)";
         }
         public static string GetLoadListSQL()
         {
-            return "SELECT * FROM v_load";
+            return "SELECT * FROM v_loadlist WHERE Status=0 ";
+        }
+        public static string GetLoadSQL()
+        {
+            return "SELECT * FROM v_load WHERE 1=1 ";
         }
         public static string GetConfirmLoadSQL()
         {
-            return @"UPDATE Load set Status = @Status WHERE Id = @Id;";
+            return @"UPDATE Load set Status = @Status WHERE Id = @Id";
+        }
+        public static string GetActiveTodaySQL()
+        {
+            return @"WITH today as (
+                    select c.Id,l.IdLoad 
+                    from OnLoad l
+                    inner join customer c on c.id=l.IdCustomer
+                    where l.date > date('now')
+                    )
+                    SELECT c.id, 
+                           c.firstname 
+                           || ' ' 
+                           || c.lastname Name, 
+                           CASE 
+                             WHEN l.idload IS NULL THEN 0 
+                             ELSE 1 
+                           end           OnBoard 
+                    FROM   customer c 
+                           INNER JOIN today t ON t.Id = c.Id 
+                           LEFT JOIN onload l ON c.id = l.idcustomer  AND l.idload = @IdLoad
+                    GROUP  BY c.id, 
+                              c.firstname, 
+                              c.lastname, 
+                              l.idload ";
+        }
+        public static string GetActiveSQL()
+        {
+            return @"SELECT c.id, 
+                           l.IdLoad,
+                           c.firstname 
+                           || ' ' 
+                           || c.lastname Name, 
+                           CASE 
+                             WHEN l.idload IS NULL THEN 0 
+                             ELSE 1 
+                           end           OnBoard 
+                    FROM   customer c 
+                           LEFT JOIN onload l 
+                                  ON c.id = l.idcustomer 
+                                     AND l.idload = @IdLoad 
+                           WHERE (c.firstname || ' ' || c.lastname) like @Name
+                    GROUP  BY c.id, 
+                              c.firstname, 
+                              c.lastname, 
+                              l.idload 
+                    LIMIT @Limit";
+        }
+        public static string GetMoveSlotSQL()
+        {
+            return @"UPDATE OnLoad set IdLoad = @IdLoadTo WHERE IdCustomer = @IdCustomer AND IdLoad = @IdLoadFrom";
         }
         #endregion
 
         #region Post
         public static string GetPostListSQL()
         {
-            return "SELECT * FROM v_post";
+            return "SELECT * FROM v_post WHERE 1=1 "; //WHERE 1=1 ker dodajamo pogoje za search
         }
         public static string InsertPostLoadConfirmSQL()
         {
@@ -58,7 +125,7 @@ namespace sb.manifest.api.SQL
                       ps.Income, 
                       ps.Outcome 
                     FROM 
-                      PassengerLoad pl 
+                      OnLoad pl 
                       INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot 
                       INNER JOIN TAccount acc1 ON acc1.Id = ps.IdAccount 
                       AND acc1.DAccount IS NOT NULL 
@@ -75,7 +142,7 @@ namespace sb.manifest.api.SQL
                       ps.Outcome, 
                       ps.Income 
                     FROM 
-                      PassengerLoad pl 
+                      OnLoad pl 
                       INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot 
                       INNER JOIN TAccount acc1 ON acc1.Id = ps.IdAccount 
                       AND acc1.CAccount IS NOT NULL 
@@ -93,7 +160,7 @@ namespace sb.manifest.api.SQL
                       ps.Income, 
                       ps.Outcome 
                     FROM 
-                      PassengerLoad pl 
+                      OnLoad pl 
                       INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot 
                       INNER JOIN v_customer c ON c.Id = pl.IdCustomer 
                       INNER JOIN TAccount acc ON acc.DAccount in (230) 
@@ -111,7 +178,7 @@ namespace sb.manifest.api.SQL
                       ps.Outcome, 
                       ps.Income 
                     FROM 
-                      PassengerLoad pl 
+                      OnLoad pl 
                       INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot 
                       INNER JOIN v_customer c ON c.Id = pl.IdCustomer 
                       INNER JOIN TAccount acc ON acc.DAccount in (230) 
@@ -152,11 +219,11 @@ namespace sb.manifest.api.SQL
         }
         public static string GetInsertSalesProductSQL()
         {
-            return @"INSERT INTO Product(Name,Description) VALUES(@Name, @Description)";
+            return @"INSERT INTO Product(Name,Description,BackgroundColor) VALUES(@Name, @Description,@BackgroundColor)";
         }
         public static string GetSaveSalesProductSQL()
         {
-            return @"UPDATE Product set Name = @Name, Description = @Description WHERE Id = @Id;";
+            return @"UPDATE Product set Name = @Name, Description = @Description, BackgroundColor = @BackgroundColor WHERE Id = @Id;";
         }
         #endregion
 

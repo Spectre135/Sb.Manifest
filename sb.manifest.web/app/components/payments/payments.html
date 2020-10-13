@@ -7,15 +7,24 @@
             <md-divider></md-divider>
         </md-toolbar>
 
+        <div layout="row">
+            <div flex="70">
+                <!--
+                <md-button class="md-icon-button" ng-click="editCustomer($event)">
+                    <md-tooltip md-direction="right">{{messages.addCustomer}}</md-tooltip>
+                    <span><i class="fas fa-user-plus font16"></i></span>
+                </md-button>-->
+            </div>
 
-        <div layout="row" layout-align="end end">
-            <md-input-container class="md-icon-float md-block" style="width:30%;z-index: 1;">
-                <md-icon class="name" style="margin-left: 15px;"><i class="fas fa-search"></i></md-icon>
-                <label style="padding-left: 36px;">Search</label>
-                <input ng-model="search" name="search" />
-            </md-input-container>
+            <div flex="30">
+                <md-input-container class="md-icon-float md-block">
+                    <md-icon class="name" style="margin-left: 15px;" ng-click="getPaymentsList"><i class="fas fa-search"></i></md-icon>
+                    <label style="padding-left: 36px;z-index: 99;">Search</label>
+                    <input ng-model="search" name="search"  ng-keypress="onKeyPressSearch($event)"/>
+                </md-input-container>
+
+            </div>
         </div>
-
 
         <!--[if IE]> <div style="margin-top:20px;"> <![endif]-->
         <md-table-container style="padding-top: 15px;">
@@ -26,7 +35,7 @@
                         <th md-column md-order-by="IdTransaction"><span>Id</span></th>
                         <th md-column md-order-by="Account"><span>Account</span></th>
                         <th md-column md-order-by="AccountDescription"><span>Account Description</span></th>
-                        <th md-column md-order-by="Compay"><span>Compay</span></th>
+                        <th md-column md-order-by="Company"><span>Company</span></th>
                         <th md-column md-order-by="Customer"><span>Customer</span></th>
                         <th md-column md-order-by="Description"><span>Description</span></th>
                         <th md-column md-order-by="Date"><span>Date</span></th>
@@ -35,9 +44,8 @@
                     </tr>
                 </thead>
                 <tbody md-body>
-                    <tr md-row md-select-id="lista" md-auto-select
-                        ng-repeat="p in list"
-                        class="md-row" style="cursor: pointer;">
+                    <tr md-row md-select-id="lista"
+                        ng-repeat="p in list" class="md-row" ng-click="setSelected(p.Id)" ng-class="{selected: p.Id === IdSelected}">
                         <td md-cell><md-checkbox class="blue" ng-model="p.selected" aria-label="Select"></md-checkbox></td>
                         <td md-cell>{{p.IdTransaction}}</td>
                         <td md-cell>{{p.Account}}</td>

@@ -73,15 +73,6 @@ app.config( function ($stateProvider, $urlRouterProvider, $locationProvider) {
         .state('load', {
             url: '/load',
             parent: 'main',
-            params: {
-                from: undefined,
-                to: undefined,
-                malica: null,
-                rows: null,
-                page: 1,
-                limit: 10,
-                order: null
-            },
             resolve: {
                 redirectIfNotAuthenticated: _redirectIfNotAuthenticated
             },
@@ -92,14 +83,6 @@ app.config( function ($stateProvider, $urlRouterProvider, $locationProvider) {
         .state('customers', {
             url: '/customers',
             parent: 'main',
-            params: {
-                from: undefined,
-                to: undefined,
-                rows: null,
-                page: 1,
-                limit: 10,
-                order: null
-            },
             resolve: {
                 redirectIfNotAuthenticated: _redirectIfNotAuthenticated
             },

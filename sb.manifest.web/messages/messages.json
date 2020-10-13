@@ -1,6 +1,7 @@
 {
     "login" : "Prijava",
     "addProduct" : "Add new product",
+    "addLoad" : "Add new load",
     "addProductSlot" : "Add new product slot",
     "addAircraft" : "Add new aircraft",
     "addPassenger" : "Add passenger to load",

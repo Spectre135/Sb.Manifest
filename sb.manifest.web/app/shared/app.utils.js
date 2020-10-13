@@ -225,7 +225,25 @@ function getLineChart(labels, labelData1, data1, labelData2, data2, title) {
     return data;
 };
 
-Date.prototype.addMinutes = function(minutes) {
+Date.prototype.addMinutes = function (minutes) {
     var copiedDate = new Date(this.getTime());
     return new Date(copiedDate.getTime() + minutes * 60000);
+};
+
+function noDuplicates(arr) {
+    var newArr = [];
+    if (arr) {
+        angular.forEach(arr, function (value, key) {
+            var exists = false;
+            angular.forEach(newArr, function (val2, key) {
+                if (angular.equals(value, val2)) {
+                    exists = true
+                };
+            });
+            if (exists == false && value != '') {
+                newArr.push(value);
+            }
+        });
+    }
+    return newArr;
 };

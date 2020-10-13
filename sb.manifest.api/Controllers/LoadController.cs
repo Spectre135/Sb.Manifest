@@ -25,6 +25,24 @@ namespace sb.manifest.api.Controllers
         /// <summary>
         /// Get all loads list
         /// </summary>
+        [HttpGet("load")]
+        public IActionResult GetLoads()
+        {
+            try
+            {
+                LoadService service = new LoadService();
+                return Ok(service.GetLoads(config));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+
+        }
+
+        /// <summary>
+        /// Get skydivers in load
+        /// </summary>
         [HttpGet("load/list")]
         public IActionResult GetLoadList()
         {
@@ -42,16 +60,58 @@ namespace sb.manifest.api.Controllers
         }
 
         /// <summary>
-        /// Add passenger to load
+        /// Add/Edit load
+        /// </summary>
+        /// <param name="mLoad">Model MLoad with values</param>
+        [HttpPost("load/save")]
+        public IActionResult SaveLoad([FromBody] MLoad mLoad)
+        {
+            try
+            {
+                LoadService service = new LoadService();
+                service.SaveLoad(config, mLoad);
+                return Ok();
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+
+        }
+
+        /// <summary>
+        /// Add skykdiver/passenger to load
         /// </summary>
         /// <param name="list">List of passengers with MPassenger model</param>
         [HttpPost("load/slot/add")]
-        public IActionResult AddSlot([FromBody] List<MPassenger> list)
+        public IActionResult AddSlot([FromBody] List<MOnBoard> list)
         {
             try
             {
                 LoadService service = new LoadService();
                 service.AddSlot(config, list);
+                return Ok();
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+
+        }
+
+        /// <summary>
+        /// Move skykdiver/passenger from to load
+        /// </summary>
+        /// <param name="mMove">List of customers to be moved with MMove model</param>
+        [HttpPost("load/slot/move")]
+        public IActionResult MoveSlot([FromBody] MMove mMove)
+        {
+            try
+            {
+                LoadService service = new LoadService();
+                service.MoveSlot(config, mMove);
                 return Ok();
 
             }
@@ -75,6 +135,46 @@ namespace sb.manifest.api.Controllers
                 service.ConfirmLoad(config, mLoad);
                 return Ok();
 
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+
+        }
+
+        /// <summary>
+        /// Get active jumpers today
+        /// <param name="idLoad"></param>
+        /// </summary>
+        [HttpGet("load/active/today")]
+        public IActionResult GetActiveToday(int idLoad = 0)
+        {
+            try
+            {
+                LoadService service = new LoadService();
+                return Ok(service.GetActiveToday(config,idLoad));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+
+        }
+
+        /// <summary>
+        /// Get list of jumpers who can be add to load- excluded who are on board already 
+        /// <param name="search">Search string First name and Last name of customer</param>
+        /// <param name="size"> Max rows returned</param>
+        /// <param name="idLoad"></param>
+        /// </summary>
+        [HttpGet("load/active/")]
+        public IActionResult GetActive(string search = "", int size = 20, int idLoad=0)
+        {
+            try
+            {
+                LoadService service = new LoadService();
+                return Ok(service.GetActive(config, search, size, idLoad));
             }
             catch (Exception ex)
             {

@@ -14,7 +14,7 @@ namespace sb.manifest.api.DAO
     {
         public MResponse GetPosts(IConfiguration config, string search, int from, int to, string orderby, bool asc)
         {
-            return GetPaggingData<MPost>(config, SQLBuilder.GetPostListSQL(),search,from,to,orderby,asc);
+            return GetPagingData<MPost>(config, SQLBuilder.GetPostListSQL(),search,from,to,orderby,asc);
         }
         public MResponse GetInvoice(IConfiguration config, long idCustomer)
         {

@@ -2,11 +2,12 @@
 
 namespace sb.manifest.api.Model
 {
-    public class MPassenger
+    //Passengers on load
+    public class MOnBoard
     {
-        [DataField("IdPeople")]
-        [ParamField("IdPeople")]
-        public long IdPeople { get; set; }
+        [DataField("IdCustomer")]
+        [ParamField("IdCustomer")]
+        public long IdCustomer { get; set; }
 
         [DataField("IdLoad")]
         [ParamField("IdLoad")]
@@ -15,6 +16,10 @@ namespace sb.manifest.api.Model
         [DataField("IdProductSlot")]
         [ParamField("IdProductSlot")]
         public long IdProductSlot { get; set; }
+
+        [DataField("IdGroup")]
+        [ParamField("IdGroup")]
+        public int IdGroup { get; set; }
 
     }
 }

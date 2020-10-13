@@ -4,6 +4,7 @@ namespace sb.manifest.api.DAO
 {
     //Field Attributes to use with models
 
+    //Attribute za load data in object
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public sealed class DataFieldAttribute : Attribute
     {
@@ -20,6 +21,7 @@ namespace sb.manifest.api.DAO
         }
     }
 
+    //Attribute za search parameter
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public sealed class DataSearchAttribute : Attribute
     {
@@ -36,6 +38,7 @@ namespace sb.manifest.api.DAO
         }
     }
 
+    //Attribute za paramter pri INSERT,UPDATE
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public sealed class ParamFieldAttribute : Attribute
     {

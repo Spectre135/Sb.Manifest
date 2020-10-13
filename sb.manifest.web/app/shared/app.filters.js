@@ -45,26 +45,6 @@ app.filter('unique', function () {
     };
 });
 
-app.filter('filterData', function ($filter) {
-    return function (collection, keyname, calendar) {
-
-        var array = $filter('filter')(collection, {
-            ValueItemName: keyname
-        });
-
-        angular.forEach(calendar, function (c, key) {
-            
-            var a = array.map(function(x){return x.Day});
-            //var index = array.findIndex(x => x.Day==c.Day)
-            var index = a.indexOf(c.Day);
-            if (index === -1){
-                array.push(c);
-            }           
-        });
-
-        return $filter('orderBy')(array, 'Day', false);
-    };
-});
 
 app.filter('hours',function(){
     return function (value) {

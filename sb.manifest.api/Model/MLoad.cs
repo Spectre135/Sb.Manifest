@@ -1,5 +1,6 @@
 ﻿using sb.manifest.api.DAO;
 using System;
+using System.Collections.Generic;
 
 namespace sb.manifest.api.Model
 {
@@ -9,7 +10,16 @@ namespace sb.manifest.api.Model
         public int Id { get; set; }
 
         [DataField("Number")]
+        [ParamField("Number")]
         public int Number { get; set; }
+
+        [DataField("Description")]
+        [ParamField("Description")]
+        public string Description { get; set; }
+
+        [DataField("IdAircraft")]
+        [ParamField("IdAircraft")]
+        public int IdAircraft { get; set; }
 
         [DataField("Registration")]
         public string AircraftRegistration { get; set; }
@@ -17,20 +27,19 @@ namespace sb.manifest.api.Model
         [DataField("Type")]
         public string AircraftType { get; set; }
 
-        [DataField("Passenger")]
-        public string Passenger { get; set; }
+        [DataField("MaxSlots")]
+        public int MaxSlots { get; set; }
 
-        [DataField("ProductSlotName")]
-        public string ProductSlotName { get; set; }
-
-        [DataField("Profit")]
-        public decimal Profit { get; set; }
+        [DataField("Status")]
+        public int Status { get; set; }
 
         [DataField("DateC")]
         public DateTime DateConfirmed{ get; set; }
 
         [DataField("DateD")]
         public DateTime DateDeleted { get; set; }
+
+        public List<MGroup> GroupList { get; set; }
 
     }
 }

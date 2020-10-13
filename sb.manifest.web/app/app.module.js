@@ -10,7 +10,9 @@ var app = angular.module('SbManifest', [
     'ui.bootstrap',
     'ngSanitize',
     'ngIntlTelInput',
-    'ngCapsLock'
+    'ngCapsLock',
+    'ngDragDrop',
+    'mdColorPicker'
 ]);
 
 app.run(function ($state, $rootScope, $mdDialog, apiService) {
@@ -44,6 +46,35 @@ app.run(function ($state, $rootScope, $mdDialog, apiService) {
             .ariaLabel('Alert Dialog')
             .ok('Zapri!')
         );
+    };
+
+    //selected row for highlight on md-table click row
+    $rootScope.setSelected = function (id) {
+        $rootScope.IdSelected = id;
+    };
+
+    //Country flag src
+    $rootScope.getFlagSrc = function(iso){
+        if (iso){
+           return '../assets/img/flags/' + iso + '.png'; 
+        }
+        return null;      
+    };
+
+    $rootScope.dragOptions = {
+        opacity: 0.50,
+        revert: function () {
+            $(this).css({
+                'top': '0px',
+                'left': '0px'
+            });
+            return false;
+        },
+        revertDuration: 2500
+    };
+
+    $rootScope.dropOptions = {
+        hoverClass: 'drop-hover'
     };
 
 });

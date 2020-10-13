@@ -7,8 +7,7 @@
             <md-divider></md-divider>
         </md-toolbar>
 
-
-        <div layout="row" style="z-index: 99;">
+        <div layout="row">
             <div flex="70">
                 <md-button class="md-icon-button" ng-click="editCustomer($event)">
                     <md-tooltip md-direction="right">{{messages.addCustomer}}</md-tooltip>
@@ -18,44 +17,44 @@
 
             <div flex="30">
                 <md-input-container class="md-icon-float md-block">
-                    <md-icon class="name" style="margin-left: 15px;"><i class="fas fa-search"></i></md-icon>
-                    <label style="padding-left: 36px;">Search</label>
-                    <input ng-model="search" name="search" />
+                    <md-icon class="name" style="margin-left: 15px;" ng-click="getCustomerList()"><i class="fas fa-search"></i></md-icon>
+                    <label style="padding-left: 36px;z-index: 99;">Search</label>
+                    <input ng-model="search" name="search" ng-keypress="onKeyPressSearch($event)" />
                 </md-input-container>
 
             </div>
-
         </div>
 
         <!--[if IE]> <div style="margin-top:20px;"> <![endif]-->
         <md-table-container>
-            <table md-table>
-                <thead md-head md-order="myOrder">
+            <table md-table md-progress="promise">
+                <thead md-head md-order="query.order" md-on-reorder="getCustomerList">
                     <tr md-row>
                         <th md-column md-order-by="Id"><span>Id</span></th>
                         <th md-column md-order-by="FirstName"><span>First name</span></th>
                         <th md-column md-order-by="LastName"><span>Last name</span></th>
                         <th md-column md-order-by="Email"><span>Email</span></th>
-                        <th md-column md-order-by="Country"><span>Country</span></th>
+                        <th md-column md-order-by="IdCountry"><span>Country</span></th>
                         <th md-column md-numeric right md-order-by="Balance"><span>Balance</span></th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody md-body>
-                    <tr md-row md-select-id="lista" md-auto-select
-                        ng-repeat="p in list | filter: search | orderBy: myOrder | limitTo: myLimit: (myPage - 1) * myLimit"
-                        class="md-row" style="cursor: pointer;">
+                    <tr md-row md-select-id="lista" ng-repeat="p in list"
+                        class="md-row showhim" ng-click="setSelected(p.Id)" ng-class="{selected: p.Id === IdSelected}">
                         <td md-cell>{{p.Id}}</td>
                         <td md-cell>{{p.FirstName}}</td>
                         <td md-cell>{{p.LastName}}</td>
                         <td md-cell>{{p.Email}}</td>
-                        <td md-cell>{{p.Country}}</td>
+                        <td md-cell>
+                            <img ng-src="{{getFlagSrc(p.CountryIso)}}"/>
+                            {{p.Country}}</td>
                         <td md-cell right ng-style="p.Balance >= 0 && {'color':'green'} || {'color': 'red'}">
                             {{p.Balance | currency}}</td>
-                        <td>
+                        <td style="width: 20px;">
                             
-                            <md-menu>
-                                <md-button aria-label="Open menu" class="md-icon-button" ng-click="$mdMenu.open($event)">
+                            <md-menu class="td-menu showme">
+                                <md-button aria-label="Open menu" class="md-icon-button" ng-click="setSelected(p.Id);$mdMenu.open($event)">
                                     <span><i class="fas fa-ellipsis-v"></i></span>
                                 </md-button>
                                 <md-menu-content width="4">
@@ -86,7 +85,7 @@
             </table>
         </md-table-container>
         <!--[if IE]> </div> <![endif]-->
-        <md-table-pagination md-page="myPage" md-limit="myLimit" md-limit-options="[5, 10, 15]" md-total="{{rows}}">
+        <md-table-pagination md-page="query.page" md-limit="query.limit" md-limit-options="[5, 10, 15]" md-total="{{rows}}" md-on-paginate="getCustomerList">
         </md-table-pagination>
     </md-card>
 </div>

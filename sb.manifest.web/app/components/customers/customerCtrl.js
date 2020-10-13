@@ -4,25 +4,29 @@ var app = angular.module('SbManifest');
 
 app.controller('customerCtrl', function ($scope, $state, $mdDialog, apiService, config) {
 
-    $scope.data = $state.params.data;
-    $scope.list = $state.params.list;
-    $scope.myPage = $state.params.page;
-    $scope.myLimit = $state.params.limit;
-    $scope.myOrder = $state.params.order;
+    $scope.list;
     $scope.query = {
-        order: 'name',
+        order: '',
         limit: 5,
-        page: 1
+        page: 1,
+        filter: '',
+        asc:false
     };
-    $scope.rows = $state.params.rows;
+    $scope.rows;
 
     //get Customers list
     $scope.getCustomerList = function () {
-        $scope.myPage = 1;
         var url = config.manifestApi + '/customer/list';
-        var params = {};
+        $scope.query.asc = !$scope.query.asc;
+        var params = {
+            search: $scope.search,
+            pageIndex: $scope.query.page,
+            pageSizeSelected: $scope.query.limit,
+            sortKey: $scope.query.order,
+            asc:$scope.query.asc
 
-        apiService.getData(url, params, true)
+        };
+        $scope.promise = apiService.getData(url, params, true)
             .then(function (data) {
                 $scope.list = data.DataList;
                 $scope.rows = data.RowsCount;
@@ -40,11 +44,10 @@ app.controller('customerCtrl', function ($scope, $state, $mdDialog, apiService, 
             templateUrl: 'app/components/invoice/invoice.html',
             parent: angular.element(document.body),
             targetEvent: $event,
-            clickOutsideToClose: false,
-            onRemoving: function (event, removePromise) {
-                $scope.getCustomerList();
-            }
-        });
+            clickOutsideToClose: false
+        }).then(function() {
+            $scope.getCustomerList();
+        }).catch(function() {});;
     };
 
     //add/edit Customer
@@ -58,11 +61,17 @@ app.controller('customerCtrl', function ($scope, $state, $mdDialog, apiService, 
             templateUrl: 'app/components/customers/editCustomer.html',
             parent: angular.element(document.body),
             targetEvent: $event,
-            clickOutsideToClose: false,
-            onRemoving: function (event, removePromise) {
-                $scope.getCustomerList();
-            }
-        });
+            clickOutsideToClose: false
+        }).then(function() {
+            $scope.getCustomerList();
+        }).catch(function() {});
+    };
+
+    //submit search button on Enter key
+    $scope.onKeyPressSearch = function (event) {
+        if (event.charCode === 13) { //if enter then hit the search button
+            $scope.getCustomerList();
+        }
     };
 
     //init
@@ -93,7 +102,6 @@ app.controller('editCustomerCtrl', function ($scope, $mdDialog, dataToPass, apiS
     };
 
     $scope.getCountries = function () {
-        $scope.workingCountries = true;
         var url = config.manifestApi + '/settings/countries';
         var promise = apiService.getData(url, null, false)
             .then(function (data) {
@@ -102,5 +110,9 @@ app.controller('editCustomerCtrl', function ($scope, $mdDialog, dataToPass, apiS
         return promise;
     };
 
+    $scope.setCountry = function(dto){
+        $scope.countries= [{Id:dto.IdCountry,
+                           Name:dto.Country}];
+    };
 
 });

@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace sb.manifest.api.Model
 {
+    //Common model to use for data response from API
     public class MResponse
     {
         public IEnumerable<object> DataList { get; set; }

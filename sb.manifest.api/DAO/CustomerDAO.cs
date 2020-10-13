@@ -1,18 +1,17 @@
 ﻿#region using
-#endregion
-
 using Microsoft.Extensions.Configuration;
 using sb.manifest.api.Model;
 using sb.manifest.api.SQL;
 using System.Collections.Generic;
+#endregion
 
 namespace sb.manifest.api.DAO
 {
     public class CustomerDAO :AbstractDAO
     {
-        public MResponse GetCustomers(IConfiguration config)
+        public MResponse GetCustomers(IConfiguration config, string search, int from, int to, string orderby, bool asc)
         {
-            return GetData<MCustomer>(config, SQLBuilder.GetCustomersListSQL());
+            return GetPagingData<MCustomer>(config, SQLBuilder.GetCustomersListSQL(), search, from, to, orderby, asc);
         }
         public void Save(IConfiguration config, MCustomer mCustomer)
         {

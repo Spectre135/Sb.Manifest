@@ -72,7 +72,7 @@ namespace sb.manifest.api.Auth
                 return null;
             }
         }
-        //funkcija preverja ali im uporabnik pravice iz token-a
+        //funkcija preverja ali ima uporabnik pravice iz token-a
         public static bool HasRole(string token, string role)
         {
             try

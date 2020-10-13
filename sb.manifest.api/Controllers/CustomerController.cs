@@ -20,13 +20,21 @@ namespace sb.manifest.api.Controllers
             config = configuration;
         }
 
+        /// <summary>
+        /// Customers list with paging
+        /// </summary>
+        /// <param name="search">Search string First name and Last name of customer</param>
+        /// <param name="pageIndex"> Page of</param>
+        /// <param name="pageSizeSelected">Records on page </param>
+        /// <param name="sortKey"></param>
+        /// <param name="asc"> sorting asc/desc </param>
         [HttpGet("customer/list")]
-        public IActionResult GetCustomerList()
+        public IActionResult GetCustomerList(string search = "", int pageIndex = 1, int pageSizeSelected = 1, string sortKey = "", bool asc = false)
         {
             try
             {
                 CustomerService service = new CustomerService();
-                return Ok(service.GetCustomers(config));
+                return Ok(service.GetCustomers(config, search, pageIndex, pageSizeSelected, sortKey, asc));
             }
             catch (Exception ex)
             {

@@ -2,98 +2,44 @@
 
 var app = angular.module('SbManifest');
 
-app.controller('loadCtrl', function ($scope, $state, $filter, $mdDialog, $window, apiService, config) {
+app.controller('loadCtrl', function ($scope, $state, $q, $filter, $mdDialog, $window, apiService, config) {
 
-    $scope.data = $state.params.data;
-    $scope.list = $state.params.list;
-    $scope.myPage = $state.params.page;
-    $scope.myLimit = $state.params.limit;
-    $scope.myOrder = $state.params.order;
+    $scope.loads;
     $scope.query = {
-        order: 'name',
+        order: '',
         limit: 5,
         page: 1
     };
-    $scope.rows = $state.params.rows;
-    $scope.loads = [{
-            'Number': 1,
-            'Id': 1,
-            'Name': '',
-            'Altitude': '4000m',
-            'Aircraft': 'PC6',
-            'Registration': 'S5-CMD',
-            'Seats': 10,
-            'Confirmed': true
-        },
-        {
-            'Number': 3,
-            'Id': 3,
-            'Name': '',
-            'Altitude': '4000m',
-            'Aircraft': 'PC6',
-            'Registration': 'F-HSBF',
-            'Seats': 10,
-            'Confirmed': false
-        },
-        {
-            'Number': 2,
-            'Id': 2,
-            'Name': 'Lalala',
-            'Altitude': '6000m',
-            'Aircraft': 'Cessna Caravan',
-            'Registration': 'D-ECFD',
-            'Seats': 15,
-            'Confirmed': true
-        },
-        {
-            'Number': 4,
-            'Id': 4,
-            'Aircraft': 'PC6',
-            'Registration': 'F-HSBF',
-            'Seats': 10,
-            'Confirmed': false
-        },
-        {
-            'Number': 5,
-            'Id': 5,
-            'Aircraft': 'PC6',
-            'Registration': 'F-HSBF',
-            'Seats': 10,
-            'Confirmed': false
-        },
-        {
-            'Number': 6,
-            'Id': 6,
-            'Aircraft': 'PC6',
-            'Registration': 'F-HSBF',
-            'Seats': 10,
-            'Confirmed': false
-        }
-    ]
+    $scope.rows;
+    $scope.moved = {}; //array when we move passengers between loads
+    $scope.moved.IdCustomer = []; //array when we move passengers between loads
 
     //getLoadList
     $scope.getLoadList = function () {
-        $scope.myPage = 1;
-
         var params = {};
         var url = config.manifestApi + '/load/list';
         apiService.getData(url, params, true)
             .then(function (data) {
-                $scope.list = data.DataList;
-                $scope.rows = data.RowsCount;
+                $scope.loads = data.DataList;
             });
-
     };
 
     $scope.getSlotsLeft = function (seats, idLoad) {
-
         try {
-            if ($scope.list != undefined) {
-                var array = $filter('filter')($scope.list, function(item){return item.Id==idLoad;});
-                return seats - array.length;
+            if ($scope.loads != undefined) {
+                var array = $filter('filter')($scope.loads, function (item) {
+                    return item.Id == idLoad;
+                });
+                angular.forEach(array, function (value, key) {
+                    angular.forEach(value.GroupList, function (value, key) {
+                        if (value) { //undefined values ignore - cause drag and drop when moving
+                            seats = seats - value.LoadList.length;
+                        }
+                    });
+                });
             }
-
             return seats;
+
         } catch (error) {
             return seats;
         }
@@ -104,10 +50,18 @@ app.controller('loadCtrl', function ($scope, $state, $filter, $mdDialog, $window
         try {
             var profit = 0;
 
-            if ($scope.list != undefined) {
-                var array = $filter('filter')($scope.list, function(item){return item.Id==idLoad;});
+            if ($scope.loads != undefined) {
+                var array = $filter('filter')($scope.loads, function (item) {
+                    return item.Id == idLoad;
+                });
                 angular.forEach(array, function (value, key) {
-                    profit = profit + value.Profit;
+                    angular.forEach(value.GroupList, function (value, key) {
+                        if (value) { //undefined values ignore - cause drag and drop when moving
+                            angular.forEach(value.LoadList, function (value, key) {
+                                profit = profit + value.Profit;
+                            });
+                        }
+                    });
                 });
             }
 
@@ -118,16 +72,13 @@ app.controller('loadCtrl', function ($scope, $state, $filter, $mdDialog, $window
 
     //init
     $scope.init = function () {
-        ///če še nimamo liste potem je to verjetno prvi obisk strani
-        if (!$state.params.list) {
-            $scope.getLoadList();
-        }
+        $scope.getLoadList();
     };
 
     //add people to load
     $scope.addPeople = function ($event, dto) {
         //slots left to handle add people to load
-        dto.SlotsLeft = $scope.getSlotsLeft(dto.Seats, dto.Number);
+        dto.SlotsLeft = $scope.getSlotsLeft(dto.MaxSlots, dto.Id);
         $mdDialog.show({
             locals: {
                 dataToPass: dto
@@ -137,11 +88,10 @@ app.controller('loadCtrl', function ($scope, $state, $filter, $mdDialog, $window
             templateUrl: 'app/components/load/addSlot.html',
             parent: angular.element(document.body),
             targetEvent: $event,
-            clickOutsideToClose: false,
-            onRemoving: function (event, removePromise) {
-                $scope.getLoadList();
-            }
-        });
+            clickOutsideToClose: false
+        }).then(function () {
+            $scope.getLoadList();
+        }).catch(function () {});
     };
 
     //delete passenger from load
@@ -173,10 +123,100 @@ app.controller('loadCtrl', function ($scope, $state, $filter, $mdDialog, $window
             templateUrl: 'app/components/load/confirmLoad.html',
             parent: angular.element(document.body),
             targetEvent: $event,
-            clickOutsideToClose: false,
-            onRemoving: function (event, removePromise) {
-                $scope.getLoadList();
+            clickOutsideToClose: false
+        }).then(function () {
+            $scope.getLoads();
+        }).catch(function () {});
+    };
+
+    //add/edit Load
+    $scope.editLoad = function ($event, dto) {
+        $mdDialog.show({
+            locals: {
+                dataToPass: dto
+            },
+            controller: 'editLoadCtrl',
+            controllerAs: 'ctrl',
+            templateUrl: 'app/components/load/editLoad.html',
+            parent: angular.element(document.body),
+            targetEvent: $event,
+            clickOutsideToClose: false
+        }).then(function () {
+            $scope.getLoadList();
+        }).catch(function () {});;
+    };
+
+    //check if passenger is already in load
+    function isInLoad(item) {
+        try {
+            var response = false;
+            angular.forEach(item.GroupList, function (value, key) {
+                angular.forEach(value.LoadList, function (value, key) {
+                    if ($.inArray(value.IdCustomer, $scope.moved.IdCustomer) > -1) {
+                        response = true;
+                    }
+                });
+            });
+            return response;
+        } catch {}
+    };
+
+    //before drop item we show confirmation dialog
+    $scope.beforeDrop = function (event, ui, item) {
+        var deferred = $q.defer();
+        //we show confirm dialog only load number is changed
+        if ($scope.LoadMove != item.Number) {
+
+            //object to be saved after confirmation
+            $scope.moved.IdLoadFrom = $scope.LoadMoveId;
+            $scope.moved.IdLoadTo = item.Id;
+
+            if (!isInLoad(item)) {
+                var confirm = $mdDialog.confirm()
+                    .title('Would you like to move from Load ' + $scope.LoadMove + ' to ' + item.Number + ' ?')
+                    .textContent('You will move ' + $scope.PassengerMove)
+                    .ok('ok')
+                    .cancel('Cancel');
+
+                $mdDialog.show(confirm).then(function () {
+                    deferred.resolve();
+                }, function () {
+                    $mdDialog.hide();
+                });
+            } else {
+                var confirm = $mdDialog.alert()
+                    .title('Already in load ' + item.Number + ' !')
+                    .textContent($scope.PassengerMove + ' already In')
+                    .ok('ok')
+                $mdDialog.show(confirm).then(function () {
+                    $mdDialog.hide();
+                }, function () {
+                    $mdDialog.hide();
+                });
             }
+        }
+        return deferred.promise;
+    };
+
+    //when we start drag item to know what item
+    $scope.startCallback = function (event, ui, item) {
+        $scope.PassengerMove = [];
+        $scope.moved.IdCustomer = [];
+        angular.forEach(item.LoadList, function (value, key) {
+            $scope.LoadMove = value.Number;
+            $scope.LoadMoveId = value.Id;
+            $scope.moved.IdCustomer.push(value.IdCustomer);
+            $scope.PassengerMove.push(value.Passenger);
+        });
+    };
+
+    //on drop item we must save in db
+    $scope.dropCallback = function (event, ui) {
+        var url = config.manifestApi + '/load/slot/move';
+        apiService.postData(url, $scope.moved, true).then(function (data) {
+            //init
+            $scope.moved = {};
+            $scope.moved.IdCustomer = [];
         });
     };
 
@@ -196,5 +236,45 @@ app.controller('confirmLoadCtrl', function ($scope, $state, $filter, $mdDialog, 
             .then(function () {
                 $mdDialog.hide();
             });
+    };
+});
+
+app.controller('editLoadCtrl', function ($scope, $state, $filter, $mdDialog, $window, dataToPass, apiService, config) {
+
+    var self = this;
+    $scope.warning = null;
+    $scope.load = dataToPass;
+    $scope.label = $scope.load == null ? 'Add new load' : 'Edit ' + $scope.load.Name;
+
+    self.cancel = function ($event) {
+        $mdDialog.cancel();
+    };
+
+    self.save = function ($event) {
+        var url = config.manifestApi + '/load/save';
+        apiService.postData(url, $scope.load, true)
+            .then(function () {
+                $mdDialog.hide();
+            });
+
+    };
+
+    $scope.getAircrafts = function () {
+        var url = config.manifestApi + '/settings/aircraft';
+        var promise = apiService.getData(url, null, false)
+            .then(function (data) {
+                $scope.aircraftList = data.DataList;
+            });
+        return promise;
+    };
+
+    $scope.setAircraft = function (dto) {
+        if (dto) {
+            $scope.aircraftList = [{
+                Id: dto.IdAircraft,
+                Registration: dto.AircraftRegistration,
+                Type: dto.AircraftType
+            }];
+        }
     };
 });

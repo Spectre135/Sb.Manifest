@@ -3,8 +3,12 @@ using System;
 
 namespace sb.manifest.api.Model
 {
+    //Transaction model
     public class MPost
     {
+        [DataField("Id")]
+        public long Id { get; set; }
+
         [DataField("IdTransaction")]
         public long IdTransaction { get; set; }
 

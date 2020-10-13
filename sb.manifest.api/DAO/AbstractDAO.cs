@@ -140,6 +140,10 @@ namespace sb.manifest.api.DAO
                         try
                         {
                             object value = src.GetType().GetProperty(dfa.ColumnName).GetValue(src, null);
+                            //check if we have null value for SQL parameter
+                            if (src.GetType().GetProperty(dfa.ColumnName).PropertyType == typeof(string) && value == null)
+                                value = string.Empty;
+
                             alParmValues.Add(new KeyValuePair<string, object>(String.Format("@{0}",dfa.ColumnName), value));
 
                         }
@@ -222,7 +226,7 @@ namespace sb.manifest.api.DAO
 
             return mResponse;
         }
-        public MResponse GetPaggingData<T>(IConfiguration config, string sql, string search, int from, int to, string orderby, bool asc,
+        public MResponse GetPagingData<T>(IConfiguration config, string sql, string search, int from, int to, string orderby, bool asc,
             List<KeyValuePair<string, object>> alParmValues = null) where T : class, new()
         {
             MResponse mResponse = new MResponse();
@@ -230,13 +234,16 @@ namespace sb.manifest.api.DAO
 
             try
             {
+                if (alParmValues == null)
+                    alParmValues = new List<KeyValuePair<string, object>>();
+
                 StringBuilder _sql = new StringBuilder(sql);
 
                 //Search string
                 if (!String.IsNullOrEmpty(search) && !search.ToLower().Equals("undefined"))
                 {
-                    _sql.Append(" and ").Append(GetSearchFields<T>()).Append(" like :searchParam ");
-                    alParmValues.Add(SetParam(":searchParam", "%" + search.ToLower() + "%"));
+                    _sql.Append(" and ").Append(GetSearchFields<T>()).Append(" like @searchParam ");
+                    alParmValues.Add(SetParam("@searchParam", "%" + search.ToLower() + "%"));
                 }
 
                 string finalSQL = GetPagingQuery(_sql.ToString(), from, to, orderby, asc);
@@ -257,12 +264,11 @@ namespace sb.manifest.api.DAO
             catch (Exception ex)
             {
                 connection.Close();
-                throw new Exception("Error Get Pagging Data" + ex.Message, ex.InnerException);
+                throw new Exception("Error Get Paging Data" + ex.Message, ex.InnerException);
             }
 
             return mResponse;
         }
-
         public void SaveData(IConfiguration config, string sql, List<KeyValuePair<string, object>> alParmValues)
         {
             try
@@ -286,19 +292,20 @@ namespace sb.manifest.api.DAO
         }
         #endregion
 
-        #region PaggingQuery
-        private static string GetPagingQuery(string query, int from, int to, string order, bool asc)
+        #region PagingQuery
+        protected static string GetPagingQuery(string query, int from, int to, string order, bool asc)
         {
+            //front end pri sortiranju pošlje "-" pred order poljem zato odstranimo
+
             return string.Format(@"WITH sql AS ({0}),
                                         sqlrows AS (SELECT COUNT(*) total_rows FROM sql)
                                 SELECT * FROM (
-                                    SELECT ROW_NUMBER () OVER (ORDER BY NULL) RowNum,
+                                    SELECT ROW_NUMBER () OVER (ORDER BY {1} {2}) RowNum,
                                         sql.*,sqlrows.total_rows COUNT
-                                    FROM sql,sqlrows
-	                                ORDER BY {1} {2} 
+                                    FROM sql,sqlrows 
                                 ) t
                     WHERE
-                    RowNum > {3} AND RowNum <= {4}", query, (string.IsNullOrEmpty(order) ? "NULL" : order), (asc ? "ASC" : "DESC"), from, to);
+                    RowNum > {3} AND RowNum <= {4}", query, (string.IsNullOrEmpty(order) ? "NULL" : AppUtils.RemoveFirstChar("-",order)), (asc ? "ASC" : "DESC"), from, to);
         }
         #endregion
 
