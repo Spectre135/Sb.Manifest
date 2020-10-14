@@ -22,7 +22,7 @@ app.directive('myPassword', function () {
                     }
                 })
 
-                mCtrl.$setValidity('pass', isChar&&isDigit&&isUpper);
+                mCtrl.$setValidity('pass', isChar && isDigit && isUpper);
 
                 return value;
             });
@@ -84,42 +84,44 @@ app.directive('date', function (dateFilter) {
     };
 });
 
-app.directive('forceSelectFocus', function() {
+app.directive('forceSelectFocus', function () {
     return {
-      restrict: 'A',
-      require: ['^^mdSelect', '^ngModel'],
-      link: function(scope, element, controller) {
-        scope.$watch(function () {
-          let foundElement = element;
-          while (!foundElement.hasClass('md-select-menu-container')) {
-            foundElement = foundElement.parent();
-          }
-          return foundElement.hasClass('md-active');
-        }, function (newVal) {
-          if (newVal) {
-              element.focus();
-          }
-        })
-      }
+        restrict: 'A',
+        require: ['^^mdSelect', '^ngModel'],
+        link: function (scope, element, controller) {
+            scope.$watch(function () {
+                let foundElement = element;
+                while (!foundElement.hasClass('md-select-menu-container')) {
+                    foundElement = foundElement.parent();
+                }
+                return foundElement.hasClass('md-active');
+            }, function (newVal) {
+                if (newVal) {
+                    element.focus();
+                }
+            })
+        }
     }
-  });
+});
 
-app.directive('capitalizeFirst', function($parse) {
+app.directive('capitalizeFirst', function ($parse) {
     return {
-      require: 'ngModel',
-      link: function(scope, element, attrs, modelCtrl) {
-         var capitalize = function(inputValue) {
-            if (inputValue === undefined) { inputValue = ''; }
-            var capitalized = inputValue.charAt(0).toUpperCase() +
-                              inputValue.substring(1);
-            if(capitalized !== inputValue) {
-               modelCtrl.$setViewValue(capitalized);
-               modelCtrl.$render();
-             }         
-             return capitalized;
-          }
-          modelCtrl.$parsers.push(capitalize);
-          capitalize($parse(attrs.ngModel)(scope)); // capitalize initial value
-      }
+        require: 'ngModel',
+        link: function (scope, element, attrs, modelCtrl) {
+            var capitalize = function (inputValue) {
+                if (inputValue === undefined) {
+                    inputValue = '';
+                }
+                var capitalized = inputValue.charAt(0).toUpperCase() +
+                    inputValue.substring(1);
+                if (capitalized !== inputValue) {
+                    modelCtrl.$setViewValue(capitalized);
+                    modelCtrl.$render();
+                }
+                return capitalized;
+            }
+            modelCtrl.$parsers.push(capitalize);
+            capitalize($parse(attrs.ngModel)(scope)); // capitalize initial value
+        }
     };
- });
+});

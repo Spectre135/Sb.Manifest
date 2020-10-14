@@ -63,7 +63,7 @@ namespace sb.manifest.api.DAO
                 using var connection = GetConnection(config);
                 transaction = connection.BeginTransaction();
                 //idGroup za skupine ali tandeme da imamo skupaj osebe, če jih premikamo med loadi
-                int idGroup = int.Parse(DateTime.Now.ToString("ssff"));
+                int idGroup = int.Parse(DateTime.Now.ToString("mmssff"));
 
                 foreach (MOnBoard p in list)
                 {

@@ -2,7 +2,7 @@
 
 var app = angular.module('SbManifest');
 
-app.controller('loadCtrl', function ($scope, $state, $q, $filter, $mdDialog, $window, apiService, config) {
+app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog, apiService, config) {
 
     $scope.loads;
     $scope.query = {
@@ -18,12 +18,14 @@ app.controller('loadCtrl', function ($scope, $state, $q, $filter, $mdDialog, $wi
     $scope.getLoadList = function () {
         var params = {};
         var url = config.manifestApi + '/load/list';
-        apiService.getData(url, params, true)
+        var promise = apiService.getData(url, params, true)
             .then(function (data) {
                 $scope.loads = data.DataList;
             });
+        return promise;
     };
 
+    //ugly way to calculate slots left and profit
     $scope.getSlotsLeft = function (seats, idLoad) {
         try {
             if ($scope.loads != undefined) {
@@ -125,12 +127,21 @@ app.controller('loadCtrl', function ($scope, $state, $q, $filter, $mdDialog, $wi
             targetEvent: $event,
             clickOutsideToClose: false
         }).then(function () {
-            $scope.getLoads();
+            $scope.getLoadList();
         }).catch(function () {});
     };
 
     //add/edit Load
     $scope.editLoad = function ($event, dto) {
+        //get max Load No 
+        if (!dto) {
+            //if new load we find last load number + 1
+            dto = {};
+            var max = Math.max.apply(Math, $scope.loads.map(function (o) {
+                return o.Number;
+            }));
+            dto.Number = max > 0 ? max + 1 : 1;
+        }
         $mdDialog.show({
             locals: {
                 dataToPass: dto
@@ -165,15 +176,14 @@ app.controller('loadCtrl', function ($scope, $state, $q, $filter, $mdDialog, $wi
     $scope.beforeDrop = function (event, ui, item) {
         var deferred = $q.defer();
         //we show confirm dialog only load number is changed
-        if ($scope.LoadMove != item.Number) {
-
+        if ($scope.loadMove != item.Number) {
             //object to be saved after confirmation
-            $scope.moved.IdLoadFrom = $scope.LoadMoveId;
+            $scope.moved.IdLoadFrom = $scope.loadMoveId;
             $scope.moved.IdLoadTo = item.Id;
 
             if (!isInLoad(item)) {
                 var confirm = $mdDialog.confirm()
-                    .title('Would you like to move from Load ' + $scope.LoadMove + ' to ' + item.Number + ' ?')
+                    .title('Would you like to move from Load ' + $scope.loadMove + ' to ' + item.Number + ' ?')
                     .textContent('You will move ' + $scope.PassengerMove)
                     .ok('ok')
                     .cancel('Cancel');
@@ -185,7 +195,7 @@ app.controller('loadCtrl', function ($scope, $state, $q, $filter, $mdDialog, $wi
                 });
             } else {
                 var confirm = $mdDialog.alert()
-                    .title('Already in load ' + item.Number + ' !')
+                    .title($rootScope.messages.warning)
                     .textContent($scope.PassengerMove + ' already In')
                     .ok('ok')
                 $mdDialog.show(confirm).then(function () {
@@ -203,8 +213,9 @@ app.controller('loadCtrl', function ($scope, $state, $q, $filter, $mdDialog, $wi
         $scope.PassengerMove = [];
         $scope.moved.IdCustomer = [];
         angular.forEach(item.LoadList, function (value, key) {
-            $scope.LoadMove = value.Number;
-            $scope.LoadMoveId = value.Id;
+            console.log(value);
+            $scope.loadMove = value.Number;
+            $scope.loadMoveId = value.Id;
             $scope.moved.IdCustomer.push(value.IdCustomer);
             $scope.PassengerMove.push(value.Passenger);
         });
@@ -217,6 +228,8 @@ app.controller('loadCtrl', function ($scope, $state, $q, $filter, $mdDialog, $wi
             //init
             $scope.moved = {};
             $scope.moved.IdCustomer = [];
+            //we must refresh load list
+            $scope.getLoadList();
         });
     };
 

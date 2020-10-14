@@ -1,11 +1,11 @@
 <div style="padding-bottom: 50px;">
     <md-content class="md-padding" layout-xs="column" layout="row">
-        <div flex-xs flex-gt-xs="33" style="flex-shrink: 0;" layout="column"
+        <div flex-xs flex-gt-xs="25" style="flex-shrink: 0;" layout="column"
             ng-repeat="l in loads | orderBy: 'Number' track by $index">
 
             <md-card data-drop="true" data-jqyoui-options="dropOptions" ng-model="l.GroupList"
                 jqyoui-droppable="{onDrop:'dropCallback()',beforeDrop: 'beforeDrop(l)'}">
-                <md-card-title style="padding: 9px 16px 5px;">
+                <md-card-title style="padding: 9px 7px 5px;">
                     <md-card-title-text>
                         <span class="md-headline blue">Load {{l.Number}} {{l.Description}}</span>
                         <span class="md-subhead">{{l.AircraftType}} {{l.AircraftRegistration}} {{l.Altitude}}</span>
@@ -44,16 +44,16 @@
                         </md-menu>
                     </md-card-actions>
                 </md-card-title>
-                <md-card-content layout="row" layout-align="space-between">
+                <md-card-content layout="row" layout-align="space-between" style="padding: 0px 3px 3px 7px;">
                     <div layout="row" style="width: 100%;">
-                        <div flex="30">
+                        <div flex="25">
                             <span class="md-subhead gray">Slots left</span></br>
                             <span class="font30" ng-style="getSlotsLeft(l.MaxSlots,l.Id) < 0 && {'color':'red'}">{{getSlotsLeft(l.MaxSlots,l.Id)}}</span>
                             </br>
                             <span class="md-subhead gray">Profit</span></br>
                             <span class="font18">{{getLoadProfit(l.Id) | currency}}</span>
                         </div>
-                        <div flex="70">
+                        <div flex="75">
                             <md-card data-drag="true" data-jqyoui-options="dragOptions"
                                 ng-repeat="g in l.GroupList track by $index" ng-model="l.GroupList[$index]"
                                 jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallback(g)'}"

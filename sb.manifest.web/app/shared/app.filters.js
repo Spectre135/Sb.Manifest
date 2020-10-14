@@ -45,7 +45,6 @@ app.filter('unique', function () {
     };
 });
 
-
 app.filter('hours',function(){
     return function (value) {
         try {

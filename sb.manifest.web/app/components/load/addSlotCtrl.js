@@ -4,7 +4,6 @@ var app = angular.module('SbManifest');
 
 app.controller('addSlotCtrl', function ($rootScope, $scope, $mdDialog, $filter, dataToPass, apiService, config) {
   var self = this;
-  $scope.warning = null;
   self.selectedItem = null;
   self.searchText = null;
   $scope.dto = dataToPass; //data from parent ctrl
@@ -13,7 +12,7 @@ app.controller('addSlotCtrl', function ($rootScope, $scope, $mdDialog, $filter, 
   $scope.productSelected = 1; //default product selected
   $scope.productSlotList = [];
   $scope.customers = [];
-  $scope.working = false;
+  self.working = false;
 
   self.cancel = function ($event) {
     $mdDialog.cancel();
@@ -28,18 +27,18 @@ app.controller('addSlotCtrl', function ($rootScope, $scope, $mdDialog, $filter, 
   };
 
   $scope.productChange = function (id) {
-    $scope.warning = null;
+    self.warning = null;
     $scope.productSlot = $filter('filter')($scope.productSlotList, function (item) {
       return item.IdProduct == id;
     });
     if ($scope.dto.SlotsLeft < $scope.productSlot.length) {
-      $scope.warning = $rootScope.messages.nomoreslots;
+      self.warning = $rootScope.messages.nomoreslots;
     }
   };
 
   $scope.isValid = function () {
     try {
-      if ($scope.productSlot == null) {
+      if ($scope.productSlot == null || self.warning) {
         return false;
       }
       return ($scope.productSlot.length <= $scope.addPassengerList.length);
@@ -53,38 +52,45 @@ app.controller('addSlotCtrl', function ($rootScope, $scope, $mdDialog, $filter, 
     o.IdLoad = $scope.dto.Id; //IdLoad
     o.IdCustomer = p;
     o.IdProductSlot = d;
+    if ($filter('filter')($scope.addPassengerList, function (item) {
+        return item.IdCustomer == p;
+      }).length > 0) {
+      self.warning = $rootScope.messages.duplicatePassengerInLoad;
+    }
     $scope.addPassengerList.push(o);
     self.searchText = null;
   };
 
   function getCustomerList() {
-    $scope.working = true;
+    self.working = true;
     var url = config.manifestApi + '/load/active/';
     var params = {
       search: self.searchText,
       size: 20, //optional default 20
-      idLoad:$scope.dto.Id
+      idLoad: $scope.dto.Id
     };
-    apiService.getData(url, params, false)
+    var promise = apiService.getData(url, params, false)
       .then(function (data) {
         $scope.customers = noDuplicates($scope.customers.concat(data.DataList));
       }).finally(function () {
-        $scope.working = false;
+        self.working = false;
       });
+    return promise;
   };
 
   function getActiveToday() {
-    $scope.working = true;
+    self.working = true;
     var url = config.manifestApi + '/load/active/today';
     var params = {
-      idLoad:$scope.dto.Id
+      idLoad: $scope.dto.Id
     };
-    apiService.getData(url, params, false)
+    var promise = apiService.getData(url, params, false)
       .then(function (data) {
         $scope.customers = noDuplicates($scope.customers.concat(data.DataList));
       }).finally(function () {
-        $scope.working = false;
+        self.working = false;
       });
+    return promise;
   };
 
   $scope.onKeySearch = function ($event) {

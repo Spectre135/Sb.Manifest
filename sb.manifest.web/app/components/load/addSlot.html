@@ -34,7 +34,7 @@
                   placeholder="Search by Name..." autocomplete="off" class="header-searchbox md-text"
                   ng-keydown="$event.stopPropagation()" ng-keypress="onKeySearch($event)">
             </md-select-header>
-            <div layout="row" layout-sm="column" layout-align="space-around" ng-if="working">
+            <div layout="row" layout-sm="column" layout-align="space-around" ng-if="ctrl.working">
               <md-progress-circular md-mode="indeterminate"></md-progress-circular>
             </div>
             <md-option ng-value="item.Id" ng-repeat="item in customers | filter:ctrl.searchText | filter:unique" ng-disabled="item.OnBoard">
@@ -43,12 +43,14 @@
             </md-option>
           </md-select>
           <div ng-messages="form.passenger.$error" role="alert">
-            <div ng-message="required">Field is required.</div>
+            <div ng-message="required">{{message.required}}</div>
           </div>
         </md-input-container>
 
-        <div class="alert">{{warning}}</div>
-
+        <div ng-show="ctrl.warning" class="alert alert-danger" role="alert">
+          {{ctrl.warning}}
+        </div>
+        
       </form>
     </div>
   </md-dialog-content>

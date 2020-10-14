@@ -31,7 +31,7 @@
         <div layout-gt-sm="row">
           <md-input-container class="md-icon-float md-block">
             <label>Number</label>
-            <input type="number" ng-model="load.Number" name="number"/>
+            <input type="number" readonly ng-model="load.Number" name="number"/>
           </md-input-container>
           <div ng-messages="form.number.$error" role="alert">
             <div ng-message="required">{{messages.required}}</div>

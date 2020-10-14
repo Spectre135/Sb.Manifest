@@ -50,9 +50,11 @@ table.md-table th.md-column {
   color: rgba(255, 255, 255, 0.87);
   background-color: rgba(0, 102, 188, 1);
 }
-.md-button.md-primary:hover{
-  background-color:  rgb(5, 90, 160) !important;
-  color:rgba(255, 255, 255, 0.87) !important;
+
+
+.md-button.md-primary:not([disabled]):hover {
+  background-color: rgb(5, 90, 160) !important;
+  color: rgba(255, 255, 255, 0.87) !important;
 }
 
 .md-default-theme .md-calendar-date.md-calendar-selected-date .md-calendar-date-selection-indicator,
@@ -63,6 +65,7 @@ table.md-table th.md-column {
   color: rgba(255, 255, 255, 0.87);
   border-color: transparent;
 }
+
 
 .md-button.md-default-theme.md-primary.md-fab:not([disabled]).md-focused,
 .md-button.md-primary.md-fab:not([disabled]).md-focused,
@@ -79,6 +82,7 @@ table.md-table th.md-column {
 .md-button.md-primary {
   color: rgba(0, 102, 188, 1);
 }
+
 
 md-toolbar.md-default-theme:not(.md-menu-toolbar),
 md-toolbar:not(.md-menu-toolbar) {
@@ -105,16 +109,19 @@ md-toolbar.md-hue-1:not(.md-menu-toolbar) {
 md-input-container:not(.md-input-has-value) input:not(:focus) {
   color: inherit;
 }
-.md-button.md-default-theme.md-gray.md-fab, 
-.md-button.md-gray.md-fab, 
-.md-button.md-default-theme.md-gray.md-raised, 
+
+.md-button.md-default-theme.md-gray.md-fab,
+.md-button.md-gray.md-fab,
+.md-button.md-default-theme.md-gray.md-raised,
 .md-button.md-gray.md-raised {
   color: black;
-  background-color:white;
+  background-color: white;
 }
-.md-button.md-gray:hover{
+
+.md-button.md-gray:hover {
   background-color: whitesmoke !important;
 }
+
 /*
 md-input-container label:not(.md-container-ignore) {
   position: absolute;
@@ -1106,5 +1113,5 @@ body {
 }
 
 .drop-hover {
-  background-color:#EEEEEE;
+  background-color: #EEEEEE;
 }
