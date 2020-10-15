@@ -1,7 +1,7 @@
 <div style="padding-bottom: 50px;">
     <md-content class="md-padding" layout-xs="column" layout="row">
         <div flex-xs flex-gt-xs="25" style="flex-shrink: 0;" layout="column"
-            ng-repeat="l in loads | orderBy: 'Number' track by $index">
+            ng-repeat="l in loads | orderBy: 'Id' track by $index">
 
             <md-card data-drop="true" data-jqyoui-options="dropOptions" ng-model="l.GroupList"
                 jqyoui-droppable="{onDrop:'dropCallback()',beforeDrop: 'beforeDrop(l)'}">

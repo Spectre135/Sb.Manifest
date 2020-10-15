@@ -133,15 +133,11 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
 
     //add/edit Load
     $scope.editLoad = function ($event, dto) {
-        //get max Load No 
+        //init if null to pass the loads array for get max load number
         if (!dto) {
-            //if new load we find last load number + 1
             dto = {};
-            var max = Math.max.apply(Math, $scope.loads.map(function (o) {
-                return o.Number;
-            }));
-            dto.Number = max > 0 ? max + 1 : 1;
         }
+        dto.Loads = $scope.loads;
         $mdDialog.show({
             locals: {
                 dataToPass: dto
@@ -176,7 +172,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
     $scope.beforeDrop = function (event, ui, item) {
         var deferred = $q.defer();
         //we show confirm dialog only load number is changed
-        if ($scope.loadMove != item.Number) {
+        if ($scope.loadMoveId != item.Id) {
             //object to be saved after confirmation
             $scope.moved.IdLoadFrom = $scope.loadMoveId;
             $scope.moved.IdLoadTo = item.Id;
@@ -264,6 +260,8 @@ app.controller('editLoadCtrl', function ($scope, $state, $filter, $mdDialog, $wi
     };
 
     self.save = function ($event) {
+        //before save we clean Loads array if not we have error TypeError: cyclic object value
+        $scope.load.Loads=null;
         var url = config.manifestApi + '/load/save';
         apiService.postData(url, $scope.load, true)
             .then(function () {
@@ -288,6 +286,21 @@ app.controller('editLoadCtrl', function ($scope, $state, $filter, $mdDialog, $wi
                 Registration: dto.AircraftRegistration,
                 Type: dto.AircraftType
             }];
+            $scope.getLoadNumber(dto.IdAircraft);
         }
+    };
+
+    $scope.getLoadNumber = function (idAircraft) {
+        var array = $scope.load.Loads;
+        if (idAircraft){
+            var array = $filter('filter')(array, function (item) {
+                return item.IdAircraft == idAircraft;
+            });
+        }
+        //get max Load No for aircraft chosen
+        var max = Math.max.apply(Math, array.map(function (o) {
+            return o.Number;
+        }));
+        $scope.load.Number = max > 0 ? max + 1 : 1;
     };
 });

@@ -8,14 +8,14 @@
         </md-toolbar>
 
         <md-content class="md-padding" layout="row">
-            <div layout="column" layout-padding layout-wrap layout-fill ng-cloak ng-repeat="d in data1 | orderBy:'Profit':true">
-                <md-whiteframe class="md-whiteframe-1dp" style="border-radius: 3px;" ng-style="{'background-color':d.Colors}"
+            <div layout="column" layout-padding layout-wrap layout-fill ng-cloak ng-repeat="d in productList | orderBy:'Profit':true">
+                <md-whiteframe class="md-whiteframe-1dp" style="border-radius: 3px;" ng-style="{'background-color':d.BackgroundColor}"
                 flex-sm="45" flex-gt-sm="35" flex-gt-md="25" layout="column" layout-align="center right">
-                <h4 style="color:white">{{d.Category}}</h4>
-                <span style="color:white">Total jumps {{d.Numbers}}</span>
-                <md-divider style="background-color:white"></md-divider>
-                <span style="color:white">Income</span>
-                <span class="font20" style="color:white">{{d.Profit | currency}}</span>
+                <h4>{{d.Product}}</h4>
+                <span>Total jumps {{d.Number}}</span>
+                <md-divider></md-divider>
+                <span>Income</span>
+                <span class="font20">{{d.Profit | currency}}</span>
                 </md-whiteframe>
             </div>          
        </md-content>
@@ -24,8 +24,7 @@
 
             <div flex-xs flex-gt-xs="25" layout="column">
             <md-card>
-                <canvas  id="loadsChart"></canvas>
-               
+                <canvas id="loadsChart"></canvas>         
                 <md-card-title>
                     <md-card-title-text>
                          <md-divider></md-divider>
@@ -39,7 +38,7 @@
 
             <div flex-xs flex-gt-xs="25" layout="column">
                 <md-card>  
-                    <canvas  id="profitChart"></canvas>
+                    <canvas id="profitChart"></canvas>
                     <md-card-title>
                         <md-card-title-text>
                             <md-divider></md-divider>
@@ -63,3 +62,5 @@
     </md-card>
 
 </div>
+
+<div ng-init="init()"></div>

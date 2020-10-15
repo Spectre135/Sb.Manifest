@@ -277,7 +277,14 @@ namespace sb.manifest.api.SQL
         #region Countries
         public static string GetCountriesSQL()
         {
-            return "SELECT * FROM Countries";
+            return @"SELECT * FROM Countries";
+        }
+        #endregion
+
+        #region Dashboard
+        public static string GetDashboardProductListSQL()
+        {
+            return @"SELECT * FROM V_DashboardProduct";
         }
         #endregion
 

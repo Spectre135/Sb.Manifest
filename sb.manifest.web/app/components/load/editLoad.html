@@ -17,7 +17,8 @@
         <div layout-gt-sm="row">
           <md-input-container class="md-icon-float md-block" style="width: 100%;">
             <label>Aircraft</label>
-            <md-select ng-required ng-model="load.IdAircraft" name="aircraft" md-on-open="getAircrafts()" ng-init="setAircraft(load)">
+            <md-select ng-required ng-model="load.IdAircraft" name="aircraft" md-on-open="getAircrafts()" 
+              ng-change="getLoadNumber(load.IdAircraft)" ng-init="setAircraft(load)">
               <md-option ng-repeat="item in aircraftList" value="{{item.Id}}">
                 {{item.Type}} - {{item.Registration}}
               </md-option>

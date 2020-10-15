@@ -6,7 +6,7 @@ app.controller('invoiceCtrl', function ($scope, $state, $window, $mdDialog, data
     var self = this;
     $scope.working = false;
     $scope.dto = dataToPass;
-
+    
     //get Invoice data
     $scope.getInvoiceData = function () {
         $scope.working = true;

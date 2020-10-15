@@ -1,1 +1,1 @@
-"use strict";var app=angular.module("SbManifest");app.controller("homeCtrl",(function($scope,apiService,config){$scope.employee,$scope.getData=function(){var url=config.hrDocApi+"/api/employee/",params={};apiService.getData(url,params,!0).then((function(data){$scope.employee=data.DataList[0]}))},$scope.init=function(){$scope.employee||$scope.getData()}}));
+"use strict";var app=angular.module("SbManifest");app.controller("homeCtrl",(function($scope,apiService,config){}));
