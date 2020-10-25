@@ -1,4 +1,4 @@
-@font-face {
+/* @font-face {
     font-family: 'hit_logo_font';
     src: url('../font/hit/hit_logo_font.ttf') format('truetype');
     font-weight: normal;
@@ -10,16 +10,16 @@
     src: url('../font/hit/hit_app_font.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
-}
+} */
 
-@font-face {
+/* @font-face {
     font-family: 'Roboto';
     src: url('../font/Roboto-Regular.ttf') format('truetype'),
         url('../font/Roboto-Bold.ttf') format('truetype'),
         url('../font/Roboto-Thin.ttf') format('truetype'),
         url('../font/Roboto-Medium.ttf') format('truetype'),
         url('../font/Roboto-Light.ttf') format('truetype');
-}
+} */
 
 /*s HIT LOGOTIP */
 #logo>a {
@@ -36,20 +36,22 @@
     color: rgba(0, 102, 188, 1);
 } */
 
-#logo-txt {
-    font-family: 'hit_logo_font' !important;
+/* #logo-txt {
+    
+    font-family: 'Open Sans', sans-serif !important;
     font-size: 38px !important;
     text-transform: none !important;
     letter-spacing: normal !important;
-    font-weight: 300 !important;
-}
+    font-weight: 400 !important;
+} */
 
 #app-txt {
-    font-family: 'hit_app_font' !important;
-    font-size: 38px !important;
+    /* font-family: 'Roboto' !important; */
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 36px !important;
     text-transform: none !important;
     letter-spacing: normal !important;
-    font-weight: 300 !important;
+    font-weight: 400 !important;
     margin-left: -3px;
 }
 
