@@ -982,7 +982,7 @@ body {
 
 .load md-card-content {
   padding         : 2px 4px;
-  background-color: rgba(255, 255, 255, 0.66);
+  background-color: rgba(255, 255, 255, 0.75);
 }
 
 .load md-card-content .slot:not(:first-child) {
