@@ -87,8 +87,33 @@ app.config( function ($stateProvider, $urlRouterProvider, $locationProvider) {
                 redirectIfNotAuthenticated: _redirectIfNotAuthenticated
             },
             templateUrl: 'app/components/customers/customers.html',
-            controller: 'customerCtrl'
+            controller: 'customerCtrl',
+            params: {
+                list:null,
+                query: {order: '',
+                        limit: 5,
+                        page: 1,
+                        filter: '',
+                        asc: false
+                },
+                rows: null
+            }
 
+        })
+        .state('detailsCustomer', {
+            url: '/customers',
+            parent: 'main',
+            resolve: {
+                redirectIfNotAuthenticated: _redirectIfNotAuthenticated
+            },
+            templateUrl: 'app/components/customers/customer.html',
+            controller: 'detailsCustomerCtrl',
+            params: {
+                dto: null,
+                list:null,
+                query: null,
+                rows: null
+            }
         })
         .state('payments', {
             url: '/payments',

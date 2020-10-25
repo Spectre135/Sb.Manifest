@@ -15,6 +15,10 @@ namespace sb.manifest.api.Model
         [ParamField("Type")]
         public string Type { get; set; }
 
+        [DataField("Name")]
+        [ParamField("Name")]
+        public string Name { get; set; }
+
         [DataField("MaxSlots")]
         [ParamField("MaxSlots")]
         public int MaxSlots { get; set; }

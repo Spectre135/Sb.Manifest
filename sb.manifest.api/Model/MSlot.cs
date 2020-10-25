@@ -19,5 +19,14 @@ namespace sb.manifest.api.Model
 
         [DataField("OnBoard")]
         public bool OnBoard { get; set; }
+
+        [DataField("IsStaff")]
+        public bool IsStaff { get; set; }
+
+        [DataField("AvaibleTickets")]
+        public int AvaibleTickets { get; set; }
+
+        [DataField("AvaibleFunds")]
+        public decimal AvaibleFunds { get; set; }
     }
 }

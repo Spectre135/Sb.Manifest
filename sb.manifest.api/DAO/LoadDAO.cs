@@ -142,6 +142,10 @@ namespace sb.manifest.api.DAO
                 command = CreateCommand(connection, alParmValues, SQLBuilder.InsertPostLoadConfirmSQL());
                 command.ExecuteNonQuery();
 
+                //Debit ticketov če uporabniki imajo tickete
+                command = CreateCommand(connection, alParmValues, SQLBuilder.DebitTicketSQL());
+                command.ExecuteNonQuery();
+
                 transaction.Commit();
 
             }

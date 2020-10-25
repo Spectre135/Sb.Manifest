@@ -112,16 +112,41 @@ app.directive('capitalizeFirst', function ($parse) {
                 if (inputValue === undefined) {
                     inputValue = '';
                 }
-                var capitalized = inputValue.charAt(0).toUpperCase() +
-                    inputValue.substring(1);
-                if (capitalized !== inputValue) {
-                    modelCtrl.$setViewValue(capitalized);
-                    modelCtrl.$render();
+                try {
+                    var capitalized = inputValue.charAt(0).toUpperCase() +
+                        inputValue.substring(1);
+                    if (capitalized !== inputValue) {
+                        modelCtrl.$setViewValue(capitalized);
+                        modelCtrl.$render();
+                    }
+                    return capitalized;
+                } catch (error) {
+                    return inputValue;
                 }
-                return capitalized;
+
             }
             modelCtrl.$parsers.push(capitalize);
             capitalize($parse(attrs.ngModel)(scope)); // capitalize initial value
         }
     };
 });
+
+app.directive('format', ['$filter', function ($filter) {
+    return {
+        require: '?ngModel',
+        link: function (scope, elem, attrs, ctrl) {
+            if (!ctrl) return;
+
+            ctrl.$formatters.unshift(function (a) {
+                return $filter(attrs.format)(ctrl.$modelValue)
+            });
+
+            elem.bind('blur', function(event) {
+                console.log(elem.val());
+                var plainNumber = elem.val().replace(',','.').replace(/[^\d|\-+|\.+]/g, '');
+                console.log(plainNumber);
+                elem.val($filter(attrs.format)(plainNumber));
+            });
+        }
+    };
+}]);

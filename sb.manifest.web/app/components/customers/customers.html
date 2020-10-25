@@ -1,5 +1,5 @@
 <div class="page">
-    <md-card style="padding:20px;margin-right:20px;">
+    <md-card style="padding:10px;">
         <md-toolbar class="md-table-toolbar md-default">
             <md-card-title-text style="padding-bottom: 15px;">
                 <span class="md-title">Customers</span>
@@ -9,15 +9,16 @@
 
         <div layout="row">
             <div flex="70">
-                <md-button class="md-icon-button" ng-click="editCustomer($event)">
+                <md-button aria-label="Open menu" class="md-fab md-mini md-gray" ng-click="editCustomer($event,[])">
                     <md-tooltip md-direction="right">{{messages.addCustomer}}</md-tooltip>
-                    <span><i class="fas fa-user-plus font16"></i></span>
+                    <span><i style="margin-left: 5px;" class="fas fa-user-plus font16"></i></span>
                 </md-button>
             </div>
 
             <div flex="30">
                 <md-input-container class="md-icon-float md-block">
-                    <md-icon class="name" style="margin-left: 15px;" ng-click="getCustomerList()"><i class="fas fa-search"></i></md-icon>
+                    <md-icon class="name" style="margin-left: 15px;cursor: pointer;" ng-click="getCustomerList()"><i
+                            class="fas fa-search"></i></md-icon>
                     <label style="padding-left: 36px;z-index: 99;">Search</label>
                     <input ng-model="search" name="search" ng-keypress="onKeyPressSearch($event)" />
                 </md-input-container>
@@ -35,29 +36,42 @@
                         <th md-column md-order-by="LastName"><span>Last name</span></th>
                         <th md-column md-order-by="Email"><span>Email</span></th>
                         <th md-column md-order-by="IdCountry"><span>Country</span></th>
+                        <th md-column md-numeric right md-order-by="AvaibleTickets"><span>Avaible tickets</span></th>
+                        <th md-column md-numeric right md-order-by="Limit"><span>Limit</span></th>
+                        <th md-column md-numeric right md-order-by="TicketPrice"><span>TicketPrice</span></th>
                         <th md-column md-numeric right md-order-by="Balance"><span>Balance</span></th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody md-body>
-                    <tr md-row md-select-id="lista" ng-repeat="p in list"
-                        class="md-row showhim" ng-click="setSelected(p.Id)" ng-class="{selected: p.Id === IdSelected}">
+                    <tr md-row md-select-id="lista" ng-repeat="p in list" class="md-row showhim"
+                        ng-click="setSelected(p.Id)" ng-class="{selected: p.Id === IdSelected}">
                         <td md-cell>{{p.Id}}</td>
                         <td md-cell>{{p.FirstName}}</td>
                         <td md-cell>{{p.LastName}}</td>
                         <td md-cell>{{p.Email}}</td>
                         <td md-cell>
-                            <img ng-src="{{getFlagSrc(p.CountryIso)}}"/>
+                            <img ng-src="{{getFlagSrc(p.CountryIso)}}" />
                             {{p.Country}}</td>
+                        <td md-cell right>{{p.AvaibleTickets}}</td>
+                        <td md-cell right>{{p.Limit | currency}}</td>
+                        <td md-cell right>{{p.TicketPrice | currency}}</td>
                         <td md-cell right ng-style="p.Balance >= 0 && {'color':'green'} || {'color': 'red'}">
                             {{p.Balance | currency}}</td>
                         <td style="width: 20px;">
-                            
+
                             <md-menu class="td-menu showme">
-                                <md-button aria-label="Open menu" class="md-icon-button" ng-click="setSelected(p.Id);$mdMenu.open($event)">
+                                <md-button aria-label="Open menu" class="md-icon-button"
+                                    ng-click="setSelected(p.Id);$mdMenu.open($event)">
                                     <span><i class="fas fa-ellipsis-v"></i></span>
                                 </md-button>
                                 <md-menu-content width="4">
+                                    <md-menu-item>
+                                        <md-button ng-click="detailsCustomer(p)">
+                                            <span><i class="fas fa-info-circle"></i></span>
+                                            &nbsp;&nbsp;Details
+                                        </md-button>
+                                    </md-menu-item>
                                     <md-menu-item>
                                         <md-button ng-click="editCustomer($event,p)">
                                             <span><i class="fas fa-edit"></i></span>
@@ -76,6 +90,12 @@
                                             &nbsp;&nbsp;Invoice
                                         </md-button>
                                     </md-menu-item>
+                                    <md-menu-item>
+                                        <md-button ng-click="purchase($event,p)">
+                                            <span><i class="fas fa-shopping-cart"></i></span>
+                                            &nbsp;&nbsp;Purchase
+                                        </md-button>
+                                    </md-menu-item>
                                 </md-menu-content>
                             </md-menu>
                         </td>
@@ -85,7 +105,8 @@
             </table>
         </md-table-container>
         <!--[if IE]> </div> <![endif]-->
-        <md-table-pagination md-page="query.page" md-limit="query.limit" md-limit-options="[5, 10, 15]" md-total="{{rows}}" md-on-paginate="getCustomerList">
+        <md-table-pagination md-page="query.page" md-limit="query.limit" md-limit-options="[5, 10, 15]"
+            md-total="{{rows}}" md-on-paginate="getCustomerList">
         </md-table-pagination>
     </md-card>
 </div>

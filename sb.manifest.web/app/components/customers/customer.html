@@ -1,0 +1,182 @@
+<div class="page">
+    <md-card style="padding:10px;">
+        <md-toolbar class="md-table-toolbar md-default" style="margin-bottom: 6px;">
+            <div layout="row">
+                <md-button aria-label="back" class="md-fab md-mini md-gray" ng-click="back()">
+                    <md-tooltip md-direction="right">Back</md-tooltip>
+                    <span><i style="margin-top: 12px;" class="fa fa-arrow-left font16"></i></span>
+                </md-button>
+                <md-button aria-label="back" class="md-fab md-mini md-gray" ng-click="purchase($event)">
+                    <md-tooltip md-direction="right">Purchase</md-tooltip>
+                    <span><i style="margin-top: 12px;" class="fas fa-shopping-cart font16"></i></span>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <!--Customer data-->
+        <div layout="row" layout-align="end center" style="justify-content: space-between;padding-left: 10px;">
+            <div flex="60">
+                <div layout-gt-sm="row">
+                    <md-input-container class="md-icon-float md-block" style="width: 100%;">
+                        <label>First Name</label>
+                        <input readonly type="text" ng-model="dto.FirstName" />
+                    </md-input-container>
+                    <md-input-container class="md-icon-float md-block" style="width: 100%;">
+                        <label>Last Name</label>
+                        <input readonly type="text" ng-model="dto.LastName" />
+                    </md-input-container>
+                    <md-input-container class="md-icon-float md-block" style="width: 100%;">
+                        <label>Email</label>
+                        <input readonly type="email" ng-model="dto.Email" />
+                    </md-input-container>
+                </div>
+
+                <div layout-gt-sm="row">
+                    <md-input-container class="md-icon-float md-block" style="width: 100%;">
+                        <label>Address</label>
+                        <input readonly type="text" ng-model="dto.Address" />
+                    </md-input-container>
+                    <md-input-container class="md-icon-float md-block" style="width: 100%;">
+                        <label>Postal code</label>
+                        <input readonly type="number" ng-model="dto.PostalCode" />
+                    </md-input-container>
+                    <md-input-container class="md-icon-float md-block" style="width: 100%;">
+                        <label>Country</label>
+                        <md-icon><img ng-src="{{getFlagSrc(dto.CountryIso)}}" /></md-icon>
+                        <input readonly type="text" ng-model="dto.Country">
+                    </md-input-container>
+                    <md-input-container class="md-icon-float md-block" style="width: 100%;">
+                        <label>Phone</label>
+                        <input readonly type="text" ng-model="dto.Phone" />
+                    </md-input-container>
+                </div>
+            </div>
+            <div flex="30">
+                <div layout-gt-sm="row">
+                    <md-input-container class="md-icon-float md-block" style="width: -webkit-fill-available;">
+                        <label>Limit</label>
+                        <input readonly type="text" format="currency" ng-model="dto.Limit" />
+                    </md-input-container>
+                    <md-input-container class="md-icon-float md-block" style="width: -webkit-fill-available;">
+                        <label>Balance</label>
+                        <input readonly type="text" ng-style="dto.Balance >= 0 && {'color':'green'} || {'color': 'red'}"
+                            format="currency" ng-model="dto.Balance" />
+                    </md-input-container>
+                </div>
+                <div layout-gt-sm="row">
+                    <md-input-container class="md-icon-float md-block" style="width: -webkit-fill-available;">
+                        <label>Ticket price</label>
+                        <input readonly type="text" format="currency" ng-model="dto.TicketPrice" />
+                    </md-input-container>
+                    <md-input-container class="md-icon-float md-block" style="width: -webkit-fill-available;">
+                        <label>Avaible tickets</label>
+                        <input readonly type="number" ng-model="dto.AvaibleTickets" />
+                    </md-input-container>
+                </div>
+            </div>
+        </div>
+
+        <div layout="row">
+            <div flex="70">
+
+            </div>
+
+            <div flex="30">
+                <md-input-container class="md-icon-float md-block">
+                    <md-icon class="name" style="margin-left: 15px;cursor: pointer;" ng-click="getTicketPostList()"><i
+                            class="fas fa-search"></i></md-icon>
+                    <label style="padding-left: 36px;z-index: 99;">Search</label>
+                    <input ng-model="search" name="search" ng-keypress="onKeyPressSearch($event)" />
+                </md-input-container>
+
+            </div>
+        </div>
+
+        <!--Customer list of data-->
+        <md-content>
+            <md-tabs md-dynamic-height md-border-bottom>
+                <md-tab label="Jump activity">
+                    <md-card>
+                        <md-table-container>
+                            <table md-table md-progress="promise">
+                                <thead md-head md-order="query.order" md-on-reorder="getLoadList">
+                                    <tr md-row>
+                                        <th md-column md-order-by="Number"><span>Load Number</span></th>
+                                        <th md-column md-order-by="AircraftRegistration"><span>Aircraft
+                                                registration</span></th>
+                                        <th md-column md-order-by="ProductSlotName"><span>ProductSlotName</span></th>
+                                        <th md-column md-numeric right md-order-by="Profit"><span>Amount</span></th>
+                                        <th md-column md-order-by="CDate"><span>Date</span></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody md-body>
+                                    <tr md-row md-select-id="jumps" ng-repeat="p in jumps" class="md-row">
+                                        <td md-cell>{{p.Number}}</td>
+                                        <td md-cell>{{p.AircraftRegistration}}</td>
+                                        <td md-cell>{{p.ProductSlotName}}</td>
+                                        <td md-cell right
+                                            ng-style="p.Profit >= 0 && {'color':'red'} || {'color': 'green'}">
+                                            {{-p.Profit | currency}}</td>
+                                        <td md-cell>{{p.CDate | date:'dd.MM.yyyy HH:mm:ss'}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </md-table-container>
+
+                        <md-table-pagination md-page="query.page" md-limit="query.limit" md-limit-options="[5, 10, 15]"
+                            md-total="{{rows}}" md-on-paginate="getLoadList">
+                        </md-table-pagination>
+                    </md-card>
+                </md-tab>
+                <md-tab label="Tickets history" ng-click="getTicketPostList()">
+                    <md-card>
+                        <md-table-container>
+                            <table md-table md-progress="promise">
+                                <thead md-head md-order="query.order" md-on-reorder="getTicketPostList">
+                                    <tr md-row>
+                                        <th md-column md-order-by="LoadNo"><span>Load Number</span></th>
+                                        <th md-column md-order-by="AircraftRegistration"><span>Aircraft
+                                                registration</span></th>
+                                        <th md-column md-order-by="Name"><span>Name</span></th>
+                                        <th md-column md-order-by="Description"><span>Description</span></th>
+                                        <th md-column md-numeric right md-order-by="CTickets"><span>Credit
+                                                tickets</span></th>
+                                        <th md-column md-numeric right md-order-by="DTickets"><span>Debit tickets</span>
+                                        </th>
+                                        <th md-column md-order-by="Date"><span>Date</span></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody md-body>
+                                    <tr md-row md-select-id="tickets" ng-repeat="p in tickets" class="md-row">
+                                        <td md-cell>{{p.LoadNo}}</td>
+                                        <td md-cell>{{p.AircraftRegistration}}</td>
+                                        <td md-cell>{{p.Name}}</td>
+                                        <td md-cell>{{p.Description}}</td>
+                                        <td md-cell right>{{p.CTickets}}</td>
+                                        <td md-cell right>{{p.DTickets}}</td>
+                                        <td md-cell>{{p.Date | date:'dd.MM.yyyy HH:mm:ss'}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </md-table-container>
+
+                        <md-table-pagination md-page="query.page" md-limit="query.limit" md-limit-options="[5, 10, 15]"
+                            md-total="{{rows}}" md-on-paginate="getTicketPostList">
+                        </md-table-pagination>
+                    </md-card>
+                </md-tab>
+                <md-tab label="Money transactions">
+
+                </md-tab>
+                <md-tab label="Dashboard">
+
+                </md-tab>
+            </md-tabs>
+        </md-content>
+
+    </md-card>
+</div>
+
+<div ng-init="init()"></div>

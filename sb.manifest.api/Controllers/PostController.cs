@@ -79,5 +79,26 @@ namespace sb.manifest.api.Controllers
             }
 
         }
+
+        /// <summary>
+        /// Customer Buy product
+        /// </summary>
+        /// <param name="mBuy">MBuy</param>
+        [HttpPost("post/shop/buy")]
+        public IActionResult Confirm([FromBody] MBuy mBuy)
+        {
+            try
+            {
+                PostService service = new PostService();
+                service.Buy(config, mBuy);
+                return Ok();
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+
+        }
     }
 }

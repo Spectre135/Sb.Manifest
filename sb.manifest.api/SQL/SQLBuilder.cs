@@ -12,12 +12,42 @@ namespace sb.manifest.api.SQL
         }
         public static string GetInsertCustomerSQL()
         {
-            return @"INSERT INTO Customer(FirstName,LastName,Email,IdCountry) 
-                                      VALUES(@FirstName,@LastName,@Email,@IdCountry)";
+            return @"INSERT INTO customer 
+                                (firstname, 
+                                 lastname, 
+                                 email, 
+                                 birthdate, 
+                                 address, 
+                                 postalcode, 
+                                 idcountry, 
+                                 phone,
+                                 limit,
+                                 ticketprice) 
+                    VALUES     (@FirstName, 
+                                @LastName, 
+                                @Email, 
+                                Date(@BirthDate), 
+                                @Address, 
+                                @PostalCode, 
+                                @IdCountry, 
+                                @Phone,
+                                @Limit,
+                                @TicketPrice) ";
         }
         public static string GetSaveCustomerSQL()
         {
-            return @"UPDATE Customer set FirstName = @FirstName, LastName = @LastName, Email=@Email, IdCountry=@IdCountry WHERE Id = @Id";
+            return @"UPDATE customer 
+                     SET    firstname = @FirstName, 
+                            lastname = @LastName, 
+                            birthdate = Date(@BirthDate), 
+                            email = @Email, 
+                            address = @Address, 
+                            postalcode = @PostalCode, 
+                            idcountry = @IdCountry, 
+                            phone = @Phone,
+                            [limit] = @Limit,
+                            ticketprice = @TicketPrice
+                     WHERE  id = @Id ";
         }
         #endregion
 
@@ -43,6 +73,10 @@ namespace sb.manifest.api.SQL
         {
             return "SELECT * FROM v_loadlist WHERE Status=0 ";
         }
+        public static string GetLoadsHistoryByCustomerSQL()
+        {
+            return "SELECT * FROM v_loadlist WHERE IdCustomer = @IdCustomer";
+        }
         public static string GetLoadSQL()
         {
             return "SELECT * FROM v_load WHERE 1=1 ";
@@ -66,14 +100,19 @@ namespace sb.manifest.api.SQL
                            CASE 
                              WHEN l.idload IS NULL THEN 0 
                              ELSE 1 
-                           end           OnBoard 
-                    FROM   customer c 
+                           end           OnBoard,
+                           at.AvaibleTickets,
+                           IFNULL(c.[Limit],0) + c.Balance AvaibleFunds,
+                           c.IsStaff
+                    FROM   v_customer c 
                            INNER JOIN today t ON t.Id = c.Id 
                            LEFT JOIN onload l ON c.id = l.idcustomer  AND l.idload = @IdLoad
+                           LEFT JOIN V_AvaibleTickets at ON at.IdCustomer = c.Id 
                     GROUP  BY c.id, 
                               c.firstname, 
                               c.lastname, 
-                              l.idload ";
+                              l.idload,
+                              c.IsStaff";
         }
         public static string GetActiveSQL()
         {
@@ -85,16 +124,21 @@ namespace sb.manifest.api.SQL
                            CASE 
                              WHEN l.idload IS NULL THEN 0 
                              ELSE 1 
-                           end           OnBoard 
-                    FROM   customer c 
+                           end           OnBoard,
+                           at.AvaibleTickets,
+                           IFNULL(c.[Limit],0) + c.Balance AvaibleFunds,
+                           c.IsStaff
+                    FROM   v_customer c 
                            LEFT JOIN onload l 
                                   ON c.id = l.idcustomer 
-                                     AND l.idload = @IdLoad 
+                                     AND l.idload = @IdLoad
+                           LEFT JOIN V_AvaibleTICKETS at ON at.IdCustomer = c.Id  
                            WHERE (c.firstname || ' ' || c.lastname) like @Name
                     GROUP  BY c.id, 
                               c.firstname, 
                               c.lastname, 
-                              l.idload 
+                              l.idload,
+                              c.IsStaff
                     LIMIT @Limit";
         }
         public static string GetMoveSlotSQL()
@@ -127,10 +171,11 @@ namespace sb.manifest.api.SQL
                     FROM 
                       OnLoad pl 
                       INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot 
-                      INNER JOIN TAccount acc1 ON acc1.Id = ps.IdAccount 
-                      AND acc1.DAccount IS NOT NULL 
-                    where 
+                      INNER JOIN TAccount acc1 ON acc1.Id = ps.IdAccount AND acc1.DAccount IS NOT NULL 
+                      LEFT JOIN v_Avaibletickets at ON at.IdCustomer = pl.IdCustomer
+                    WHERE 
                       IdLoad = @IdLoad 
+                    AND at.AvaibleTickets is null
                     UNION 
                     SELECT 
                       (@IdTransaction || pl.IdCustomer), 
@@ -144,10 +189,11 @@ namespace sb.manifest.api.SQL
                     FROM 
                       OnLoad pl 
                       INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot 
-                      INNER JOIN TAccount acc1 ON acc1.Id = ps.IdAccount 
-                      AND acc1.CAccount IS NOT NULL 
-                    where 
+                      INNER JOIN TAccount acc1 ON acc1.Id = ps.IdAccount AND acc1.CAccount IS NOT NULL 
+                      LEFT JOIN v_Avaibletickets at ON at.IdCustomer = pl.IdCustomer
+                    WHERE 
                       IdLoad = @IdLoad 
+                    AND at.AvaibleTickets is null
                     UNION 
                       --V primeru da kupec ima sredstva na kontu 230 potem poplačamo terjatev iz teh sredstev
                     SELECT 
@@ -164,9 +210,11 @@ namespace sb.manifest.api.SQL
                       INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot 
                       INNER JOIN v_customer c ON c.Id = pl.IdCustomer 
                       INNER JOIN TAccount acc ON acc.DAccount in (230) 
+                      LEFT JOIN v_Avaibletickets at ON at.IdCustomer = pl.IdCustomer
                     WHERE 
                       c.Balance > 0 
                       AND pl.IdLoad = @IdLoad 
+                      AND at.AvaibleTickets is null
                     UNION 
                     SELECT 
                       (@IdTransaction || pl.IdCustomer), 
@@ -182,9 +230,101 @@ namespace sb.manifest.api.SQL
                       INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot 
                       INNER JOIN v_customer c ON c.Id = pl.IdCustomer 
                       INNER JOIN TAccount acc ON acc.DAccount in (230) 
+                      LEFT JOIN v_Avaibletickets at ON at.IdCustomer = pl.IdCustomer
                     WHERE 
                       c.Balance > 0 
+                      AND at.AvaibleTickets is null
                       AND pl.IdLoad = @IdLoad";
+        }
+        public static string InsertPostBuyTransactionSQL()
+        {
+            return @"INSERT INTO post 
+                                    (idtransaction, 
+                                     account, 
+                                     idcompany, 
+                                     idcustomer, 
+                                     description, 
+                                     debit, 
+                                     credit) --Odpremo terjatev do kupca konto 120/760   
+                        SELECT ( @IdTransaction 
+                                 || @IdCustomer ), 
+                               120, 
+                               1, 
+                               @IdCustomer, 
+                               p.description Details, 
+                               p.price * @Quantity  Income, 
+                               0             Outcome 
+                        FROM   product p 
+                        WHERE  p.id = @IdProduct 
+                        UNION ALL
+                        SELECT ( @IdTransaction 
+                                 || @IdCustomer ), 
+                               760, 
+                               1, 
+                               @IdCustomer, 
+                               p.description Details, 
+                               0             Income, 
+                               p.price * @Quantity Outcome
+                        FROM   product p 
+                        WHERE  p.id = @IdProduct
+                        -- Zapremo transakcijo s plačilom
+                        UNION ALL
+                        SELECT ( @IdTransaction 
+                                 || @IdCustomer ), 
+                               acc1.caccount, 
+                               1, 
+                               @IdCustomer, 
+                               p.description Details, 
+                               0  Income,            
+                               p.price * @Quantity Outcome
+                        FROM   product p 
+                               LEFT JOIN taccount acc1 
+                                      ON acc1.id = @IdPayMethod 
+                        WHERE  p.id = @IdProduct 
+                        UNION ALL
+                        SELECT ( @IdTransaction 
+                                 || @IdCustomer ), 
+                               acc1.daccount, 
+                               1, 
+                               @IdCustomer, 
+                               p.description Details, 
+                               p.price * @Quantity Income,
+                               0  Outcome
+                        FROM   product p 
+                               LEFT JOIN taccount acc1 
+                                      ON acc1.id = @IdPayMethod 
+                        WHERE  p.id = @IdProduct ";
+        }
+        #endregion
+
+        #region TicketPost
+        public static string InsertCreditTicketsSQL()
+        {
+            return @"INSERT INTO TicketPost(IdCustomer,IdProduct,IdTransaction, CTickets)
+                    Select 
+                    @IdCustomer,
+                    p.Id IdProduct,
+                    @IdTransaction,
+                    p.Tickets CTickets
+                    from Product p 
+                    where p.Id = @IdProduct and p.IsTicketProduct = 1 ";
+        }
+        public static string DebitTicketSQL()
+        {
+            return @"INSERT INTO TicketPost(IdCustomer,IdProduct,IdLoad, DTickets)
+                    Select 
+                    pl.IdCustomer,
+                    ps.IdProduct,
+                    pl.IdLoad,
+                    1 DTickets
+                    FROM OnLoad pl 
+                    INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot 
+                    INNER JOIN v_Avaibletickets t ON t.IdCustomer = pl.IdCustomer                  
+                    where pl.IdLoad = @IdLoad";
+        }
+        public static string GetTicketPostListSQL()
+        {
+            return "SELECT * FROM v_ticketpost WHERE IdCustomer = @IdCustomer "; 
         }
         #endregion
 
@@ -219,11 +359,33 @@ namespace sb.manifest.api.SQL
         }
         public static string GetInsertSalesProductSQL()
         {
-            return @"INSERT INTO Product(Name,Description,BackgroundColor) VALUES(@Name, @Description,@BackgroundColor)";
+            return @"INSERT INTO product 
+                                (name, 
+                                 description, 
+                                 backgroundcolor, 
+                                 isproductslot, 
+                                 price,
+                                 isticketproduct,
+                                 tickets) 
+                    VALUES     (@Name, 
+                                @Description, 
+                                @BackgroundColor, 
+                                @IsProductSlot, 
+                                @Price,
+                                @IsTicketProduct,
+                                @Tickets)";
         }
         public static string GetSaveSalesProductSQL()
         {
-            return @"UPDATE Product set Name = @Name, Description = @Description, BackgroundColor = @BackgroundColor WHERE Id = @Id;";
+            return @"UPDATE product 
+                     SET    name = @Name, 
+                            description = @Description, 
+                            backgroundcolor = @BackgroundColor, 
+                            isproductslot = @IsProductSlot, 
+                            price = @Price,
+                            isticketproduct = @IsTicketProduct,
+                            tickets = @Tickets
+                     WHERE  id = @Id ";
         }
         #endregion
 
@@ -234,12 +396,20 @@ namespace sb.manifest.api.SQL
         }
         public static string GetInsertProductSlotSQL()
         {
-            return @"INSERT INTO ProductSlot(IdProduct,Name,Description,Income,Outcome,IdAccount) 
-                                      VALUES(@IdProduct,@Name, @Description, @Income,@Outcome, @IdAccount)";
+            return @"INSERT INTO ProductSlot(IdProduct,Name,Description,Income,Outcome,IdAccount,IsStaffJob) 
+                                      VALUES(@IdProduct,@Name, @Description, @Income,@Outcome, @IdAccount,@IsStaffJob)";
         }
         public static string GetSaveProductSlotSQL()
         {
-            return @"UPDATE ProductSlot set Name = @Name, Description = @Description, Income = @Income, Outcome = @Outcome, IdAccount= @IdAccount, IdProduct= @IdProduct WHERE Id = @Id";
+            return @"UPDATE productslot 
+                        SET    NAME = @Name, 
+                               description = @Description, 
+                               income = @Income, 
+                               outcome = @Outcome, 
+                               idaccount = @IdAccount, 
+                               idproduct = @IdProduct, 
+                               isstaffjob = @IsStaffJob 
+                        WHERE  id = @Id ";
         }
         #endregion
 
@@ -250,14 +420,15 @@ namespace sb.manifest.api.SQL
         }
         public static string GetInsertAircraftSQL()
         {
-            return @"INSERT INTO Aircraft(Registration,Type,MaxSlots,MinSlots,RotationTime,Active) 
-                                      VALUES(upper(@Registration),@Type,@MaxSlots,@MinSlots,@RotationTime,@Active)";
+            return @"INSERT INTO Aircraft(Registration,Type,Name,MaxSlots,MinSlots,RotationTime,Active) 
+                                      VALUES(upper(@Registration),@Type,@Name,@MaxSlots,@MinSlots,@RotationTime,@Active)";
         }
         public static string GetSaveAircraftSQL()
         {
             return @"UPDATE Aircraft set 
                                     Registration = upper(@Registration), 
                                     Type = @Type, 
+                                    Name = @Name,
                                     MaxSlots = @MaxSlots,
                                     MinSlots = @MinSlots, 
                                     RotationTime= @RotationTime, 
@@ -285,6 +456,13 @@ namespace sb.manifest.api.SQL
         public static string GetDashboardProductListSQL()
         {
             return @"SELECT * FROM V_DashboardProduct";
+        }
+        #endregion
+
+        #region PayMethod
+        public static string GetPayMethodSQL()
+        {
+            return @"SELECT * FROM TAccount where IsPayMethod=1";
         }
         #endregion
 

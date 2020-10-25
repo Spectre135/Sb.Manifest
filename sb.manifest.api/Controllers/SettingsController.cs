@@ -180,5 +180,24 @@ namespace sb.manifest.api.Controllers
             }
 
         }
+
+
+        /// <summary>
+        /// Get List of payment methods
+        /// </summary>
+        [HttpGet("settings/paymethod")]
+        public IActionResult GetPayMethod()
+        {
+            try
+            {
+                SettingsService service = new SettingsService();
+                return Ok(service.GetPayMethod(config));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+
+        }
     }
 }

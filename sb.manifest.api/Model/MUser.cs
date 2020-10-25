@@ -15,6 +15,7 @@ namespace sb.manifest.api.Model
 
         [DataField("Email")]
         public string Email { get; set; }
+
         public int BadLogon { get; set; }
         public DateTime AccountLocked { get; set; } 
 

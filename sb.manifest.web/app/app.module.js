@@ -56,7 +56,7 @@ app.run(function ($state, $rootScope, $mdDialog, apiService) {
     //Country flag src
     $rootScope.getFlagSrc = function(iso){
         if (iso){
-           return '../assets/img/flags/' + iso + '.png'; 
+           return 'assets/img/flags/' + iso + '.png'; 
         }
         return null;      
     };

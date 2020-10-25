@@ -107,7 +107,7 @@ namespace sb.manifest.api.DAO
                 cmd.Parameters.Clear();
 
                 foreach (var item in alParmValues)
-                    cmd.Parameters.AddWithValue(item.Key, item.Value);
+                    cmd.Parameters.AddWithValue(item.Key, item.Value ?? DBNull.Value);
                 
                 return cmd;
             }

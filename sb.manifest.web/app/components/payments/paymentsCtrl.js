@@ -33,8 +33,8 @@ app.controller('paymentsCtrl', function ($scope, $state, apiService, config) {
     };
 
     //submit search button on Enter key
-    $scope.onKeyPressSearch = function (event) {
-        if (event.charCode === 13) { //if enter then hit the search button
+    $scope.onKeyPressSearch = function ($event) {
+        if ($event.charCode === 13) { //if enter then hit the search button
             $scope.getPaymentsList();
         }
     }

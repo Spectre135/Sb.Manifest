@@ -20,11 +20,14 @@ namespace sb.manifest.api.Model
         [ParamField("IdAircraft")]
         public int IdAircraft { get; set; }
 
-        [DataField("Registration")]
+        [DataField("AircraftRegistration")]
         public string AircraftRegistration { get; set; }
 
-        [DataField("Type")]
+        [DataField("AircraftType")]
         public string AircraftType { get; set; }
+
+        [DataField("AircraftName")]
+        public string AircraftName { get; set; }
 
         [DataField("MaxSlots")]
         public int MaxSlots { get; set; }
@@ -40,7 +43,10 @@ namespace sb.manifest.api.Model
 
         [DataField("Profit")]
         public decimal Profit { get; set; }
-        
+
+        [DataField("AvaibleTickets")]
+        public int AvaibleTickets { get; set; }
+
         [DataField("DateC")]
         public DateTime DateConfirmed{ get; set; }
 

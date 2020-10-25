@@ -1,4 +1,5 @@
 ﻿using sb.manifest.api.DAO;
+using System;
 
 namespace sb.manifest.api.Model
 {
@@ -24,6 +25,18 @@ namespace sb.manifest.api.Model
         [ParamField("Email")]
         public string Email { get; set; }
 
+        [DataField("BirthDate")]
+        [ParamField("BirthDate")]
+        public DateTime? BirthDate { get; set; }
+
+        [DataField("Address")]
+        [ParamField("Address")]
+        public string Address { get; set; }
+
+        [DataField("PostalCode")]
+        [ParamField("PostalCode")]
+        public int? PostalCode { get; set; }
+
         [DataField("Country")]
         public string Country { get; set; }
 
@@ -34,14 +47,27 @@ namespace sb.manifest.api.Model
         [ParamField("IdCountry")]
         public int IdCountry { get; set; }
 
-        [DataField("Job")]
-        public string Job { get; set; }
+        [DataField("Phone")]
+        [ParamField("Phone")]
+        public string Phone { get; set; }
 
         [DataField("Balance")]
         public decimal Balance { get; set; }
 
-        [DataField("IdStaff")]
-        public long IdStaff { get; set; }
-        
+        [DataField("IsStaff")]
+        [ParamField("IsStaff")]
+        public bool IsStaff { get; set; }
+
+        [DataField("AvaibleTickets")]
+        public int? AvaibleTickets { get; set; }
+
+        [DataField("Limit")]
+        [ParamField("Limit")]
+        public decimal? Limit { get; set; }
+
+        [DataField("TicketPrice")]
+        [ParamField("TicketPrice")]
+        public decimal? TicketPrice { get; set; }
+
     }
 }

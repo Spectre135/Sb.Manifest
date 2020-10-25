@@ -115,7 +115,7 @@ app.controller('editProductCtrl', function ($scope, $mdDialog, dataToPass, apiSe
     var self = this;
     $scope.warning = null;
     $scope.dto = dataToPass;
-    $scope.label = $scope.dto == null ? 'Add new ' : 'Edit Product ' + $scope.dto.Name;
+    $scope.label = $scope.dto == null ? 'Add new ' : $scope.dto.Name;
 
     self.cancel = function ($event) {
         $mdDialog.cancel();
@@ -135,7 +135,7 @@ app.controller('editProductSlotCtrl', function ($scope, $mdDialog, dataToPass, a
     var self = this;
     $scope.warning = null;
     $scope.dto = dataToPass;
-    $scope.label = $scope.dto == null ? 'Add new ' : 'Edit ' + $scope.dto.Name;
+    $scope.label = $scope.dto == null ? 'Add new ' : $scope.dto.Name;
 
     self.cancel = function ($event) {
         $mdDialog.cancel();
@@ -176,7 +176,7 @@ app.controller('editAircraftCtrl', function ($scope, $mdDialog, dataToPass, apiS
     var self = this;
     $scope.warning = null;
     $scope.dto = dataToPass;
-    $scope.label = $scope.dto == null ? 'Add new ' : 'Edit ' + $scope.dto.Registration;
+    $scope.label = $scope.dto == null ? 'Add new ' : $scope.dto.Registration;
 
     self.cancel = function ($event) {
         $mdDialog.cancel();

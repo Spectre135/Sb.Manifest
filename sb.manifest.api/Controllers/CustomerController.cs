@@ -64,5 +64,51 @@ namespace sb.manifest.api.Controllers
 
         }
 
+        /// <summary>
+        /// Customers ticket post with paging
+        /// </summary>
+        /// <param name="search">Search string First name and Last name of customer</param>
+        /// <param name="idCustomer">Customer id</param>
+        /// <param name="pageIndex"> Page of</param>
+        /// <param name="pageSizeSelected">Records on page </param>
+        /// <param name="sortKey"></param>
+        /// <param name="asc"> sorting asc/desc </param>
+        [HttpGet("customer/ticketpost/list")]
+        public IActionResult GetTicketPostList(string search = "", int idCustomer=0, int pageIndex = 1, int pageSizeSelected = 1, string sortKey = "", bool asc = false)
+        {
+            try
+            {
+                CustomerService service = new CustomerService();
+                return Ok(service.GetTicketPosts(config, search, idCustomer, pageIndex, pageSizeSelected, sortKey, asc));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+        }
+
+        /// <summary>
+        /// Customers load list history with paging
+        /// </summary>
+        /// <param name="search">Search string First name and Last name of customer</param>
+        /// <param name="idCustomer">Customer id</param>
+        /// <param name="pageIndex"> Page of</param>
+        /// <param name="pageSizeSelected">Records on page </param>
+        /// <param name="sortKey"></param>
+        /// <param name="asc"> sorting asc/desc </param>
+        [HttpGet("customer/load/list")]
+        public IActionResult GetLoadsHistory(string search = "", int idCustomer = 0, int pageIndex = 1, int pageSizeSelected = 1, string sortKey = "", bool asc = false)
+        {
+            try
+            {
+                CustomerService service = new CustomerService();
+                return Ok(service.GetLoadsHistory(config, search, idCustomer, pageIndex, pageSizeSelected, sortKey, asc));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+        }
+
     }
 }

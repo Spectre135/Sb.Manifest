@@ -48,10 +48,18 @@ app.controller('addSlotCtrl', function ($rootScope, $scope, $mdDialog, $filter, 
   };
 
   $scope.addPassenger = function (p, d) {
+    //check if person have enought funds
+    if (!checkFunds(p, d)) {
+      var name = $filter('filter')($scope.customers, function (item) {
+        return item.Id == p;
+      })[0].Name;
+      self.warning = $rootScope.messages.notfunds + ' ' + name;
+    }
+    //add person to slot
     var o = {};
     o.IdLoad = $scope.dto.Id; //IdLoad
     o.IdCustomer = p;
-    o.IdProductSlot = d;
+    o.IdProductSlot = d.Id;
     if ($filter('filter')($scope.addPassengerList, function (item) {
         return item.IdCustomer == p;
       }).length > 0) {
@@ -59,6 +67,28 @@ app.controller('addSlotCtrl', function ($rootScope, $scope, $mdDialog, $filter, 
     }
     $scope.addPassengerList.push(o);
     self.searchText = null;
+
+  };
+
+  function checkFunds(p, d) {
+    //check if person have enought funds
+    try {
+
+      var person = $filter('filter')($scope.customers, function (item) {
+        return item.Id == p;
+      })[0];
+
+      //skip if staff
+      if (person.IsStaff){
+        return true;
+      }
+      //avaible funds(limit-balance) - cost of ticket if - then warning      
+      //TODO user can add person or not ???
+      if ((person.AvaibleFunds - d.Income) < 0) {
+        return false;
+      }
+      return true;
+    } catch (err) {}
   };
 
   function getCustomerList() {

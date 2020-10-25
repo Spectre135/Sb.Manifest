@@ -68,5 +68,14 @@ namespace sb.manifest.api.Services
 
         }
         #endregion
+
+        #region PayMethod
+        public MResponse GetPayMethod(IConfiguration config)
+        {
+            using SettingsDAO dao = new SettingsDAO();
+            return dao.GetPayMethod(config);
+
+        }
+        #endregion
     }
 }

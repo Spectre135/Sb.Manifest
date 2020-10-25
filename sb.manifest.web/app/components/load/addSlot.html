@@ -2,7 +2,7 @@
   <md-toolbar>
     <div class="md-toolbar-tools">
       <span><i class="fas fa-user-plus"></i></span>
-      <h2>&nbsp;&nbsp;Load {{dto.Number}} {{dto.Aircraft}} {{dto.Registration}}</h2>
+      <h2>&nbsp;&nbsp;Load {{dto.Number}} {{dto.AircraftType}} {{dto.AircraftRegistration}}</h2>
       <span flex></span>
       <md-button class="md-icon-button" ng-click="ctrl.cancel()">
         <i class="fas fa-times"></i>
@@ -10,7 +10,7 @@
     </div>
   </md-toolbar>
 
-  <md-dialog-content ng-cloak style="min-width: 500px">
+  <md-dialog-content ng-cloak style="min-width:30vw">
     <div class="md-dialog-content">
       <form name="form" ng-submit="$event.preventDefault()">
 
@@ -27,19 +27,24 @@
           ng-if="!warning">
 
           <label>{{p.Name}}</label>
-          <md-select required ng-model="passenger" name="passenger" ng-change="addPassenger(passenger,p.Id)"
+          <md-select required ng-model="passenger" name="passenger" ng-change="addPassenger(passenger,p)"
             md-container-class="selectSelectHeader">
             <md-select-header class="select-header">
-                <input ng-model="ctrl.searchText" aria-label="Search passenger" force-select-focus type="search"
-                  placeholder="Search by Name..." autocomplete="off" class="header-searchbox md-text"
-                  ng-keydown="$event.stopPropagation()" ng-keypress="onKeySearch($event)">
+              <input ng-model="ctrl.searchText" aria-label="Search passenger" force-select-focus type="search"
+                placeholder="Search by Name..." autocomplete="off" class="header-searchbox md-text"
+                ng-keydown="$event.stopPropagation()" ng-keypress="onKeySearch($event)">
             </md-select-header>
             <div layout="row" layout-sm="column" layout-align="space-around" ng-if="ctrl.working">
               <md-progress-circular md-mode="indeterminate"></md-progress-circular>
             </div>
-            <md-option ng-value="item.Id" ng-repeat="item in customers | filter:ctrl.searchText | filter:unique" ng-disabled="item.OnBoard">
-              {{item.Name}} 
-              <span style="font-size: 12px" ng-show="item.OnBoard">Already in</span>
+            <md-option ng-value="item.Id" ng-repeat="item in customers | filter:ctrl.searchText | filter:unique | staffilter:p.IsStaffJob"
+              ng-disabled="item.OnBoard">
+              {{item.Name}}</br>
+              <span class="font12 gray" ng-show="item.OnBoard">Already in</span>
+              <span class="font12 gray" ng-show="item.AvaibleTickets > 0 && !item.OnBoard">Tickets left
+                {{item.AvaibleTickets}}</span>
+              <span class="font12 gray" ng-show="!item.AvaibleTickets > 0 && !item.OnBoard">Avaible funds
+                {{item.AvaibleFunds | currency}}</span>
             </md-option>
           </md-select>
           <div ng-messages="form.passenger.$error" role="alert">
@@ -50,13 +55,13 @@
         <div ng-show="ctrl.warning" class="alert alert-danger" role="alert">
           {{ctrl.warning}}
         </div>
-        
+
       </form>
     </div>
   </md-dialog-content>
 
   <md-dialog-actions>
-    <md-button aria-label="Finished" ng-disabled="(warning || !isValid())" class="md-primary"
+    <md-button aria-label="Finished" ng-disabled="(ctrl.warning || !isValid())" class="md-primary"
       ng-click="ctrl.add($event)">Add</md-button>
   </md-dialog-actions>
 </md-dialog>

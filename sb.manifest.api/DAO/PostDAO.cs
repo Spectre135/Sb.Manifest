@@ -71,5 +71,36 @@ namespace sb.manifest.api.DAO
             }
 
         }
+        public void Buy(IConfiguration config, MBuy mBuy)
+        {
+            IDbTransaction transaction = null;
+            try
+            {
+
+                using var connection = GetConnection(config);
+                transaction = connection.BeginTransaction();
+
+                //insert DEBIT transakcijo v POST tabelo
+                List<KeyValuePair<string, object>> alParmValues = LoadParametersValue<MBuy>(mBuy);
+                //id transaction sestavimo iz mmssff
+                long idTransaction = long.Parse(DateTime.Now.ToString("mmssff"));
+                alParmValues.Add(new KeyValuePair<string, object>("@IdTransaction", idTransaction));
+                IDbCommand command = CreateCommand(connection, alParmValues, SQLBuilder.InsertPostBuyTransactionSQL());
+                command.ExecuteNonQuery();
+
+                //poknjižimo še tickete v ticketpost tabelo, če customer ima paket ticketov
+                command = CreateCommand(connection, alParmValues, SQLBuilder.InsertCreditTicketsSQL());
+                command.ExecuteNonQuery();
+
+                transaction.Commit();
+
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception("Error Create Buy transaction " + ex.Message, ex.InnerException);
+            }
+
+        }
     }
 }

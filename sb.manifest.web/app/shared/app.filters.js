@@ -45,18 +45,18 @@ app.filter('unique', function () {
     };
 });
 
-app.filter('hours',function(){
+app.filter('hours', function () {
     return function (value) {
         try {
-            
+
             var num = Math.abs(value);
             var hours = Math.floor(num / 60);
             var minutes = num % 60;
 
-            if (value<0){
-                return '-' + pad(hours,2) + ":" + pad(minutes, 2);
+            if (value < 0) {
+                return '-' + pad(hours, 2) + ":" + pad(minutes, 2);
             }
-            return pad(hours,2) + ":" + pad(minutes, 2);
+            return pad(hours, 2) + ":" + pad(minutes, 2);
 
         } catch (error) {
             return '';
@@ -64,12 +64,26 @@ app.filter('hours',function(){
     }
 });
 
-app.filter('formatHours',function(){
+app.filter('formatHours', function () {
     return function (value) {
-        try {           
-            return pad(value,2) + ":" + pad('', 2);   
+        try {
+            return pad(value, 2) + ":" + pad('', 2);
         } catch (error) {
             return '';
         }
     }
+});
+
+app.filter('staffilter', function () {
+    //filter to have list only of staff persons
+    return function (items, search) {
+        if (!search) {
+            return items;
+        }
+
+        return items.filter(function (element, index, array) {
+            return element.IsStaff === search;
+        });
+
+    };
 });

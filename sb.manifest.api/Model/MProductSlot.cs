@@ -37,5 +37,9 @@ namespace sb.manifest.api.Model
         [DataField("AccountDescription")]
         public string AccountDescription { get; set; }
 
+        [DataField("IsStaffJob")]
+        [ParamField("IsStaffJob")]
+        public bool IsStaffJob { get; set; }
+
     }
 }

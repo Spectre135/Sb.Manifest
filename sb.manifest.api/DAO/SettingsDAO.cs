@@ -87,5 +87,12 @@ namespace sb.manifest.api.DAO
             return GetData<MCountry>(config, SQLBuilder.GetCountriesSQL());
         }
         #endregion
+
+        #region PayMethod
+        public MResponse GetPayMethod(IConfiguration config)
+        {
+            return GetData<MPayMethod>(config, SQLBuilder.GetPayMethodSQL());
+        }
+        #endregion
     }
 }

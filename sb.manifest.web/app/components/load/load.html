@@ -8,11 +8,12 @@
                 <md-card-title style="padding: 9px 7px 5px;">
                     <md-card-title-text>
                         <span class="md-headline blue">Load {{l.Number}} {{l.Description}}</span>
-                        <span class="md-subhead">{{l.AircraftType}} {{l.AircraftRegistration}} {{l.Altitude}}</span>
+                        <span class="md-subhead">{{l.AircraftName}} {{l.AircraftRegistration}} {{l.Altitude}}</span>
                     </md-card-title-text>
                     <md-card-actions layout="column">
                         <md-menu class="td-menu">
-                            <md-button aria-label="Open menu" class="md-fab md-mini md-gray" ng-click="$mdMenu.open($event)">
+                            <md-button aria-label="Open menu" class="md-fab md-mini md-gray"
+                                ng-click="$mdMenu.open($event)">
                                 <span><i class="fas fa-ellipsis-v"></i></span>
                             </md-button>
                             <md-menu-content style="text-align: left;">
@@ -48,7 +49,8 @@
                     <div layout="row" style="width: 100%;">
                         <div flex="25">
                             <span class="md-subhead gray">Slots left</span></br>
-                            <span class="font30" ng-style="getSlotsLeft(l.MaxSlots,l.Id) < 0 && {'color':'red'}">{{getSlotsLeft(l.MaxSlots,l.Id)}}</span>
+                            <span class="font30"
+                                ng-style="getSlotsLeft(l.MaxSlots,l.Id) < 0 && {'color':'red'}">{{getSlotsLeft(l.MaxSlots,l.Id)}}</span>
                             </br>
                             <span class="md-subhead gray">Profit</span></br>
                             <span class="font18">{{getLoadProfit(l.Id) | currency}}</span>
@@ -60,15 +62,18 @@
                                 ng-hide="!g.IdGroup" ng-style="{'background-color':g.BackgroundColor}">
                                 <md-card-content style="padding: 0px 7px 0px 5px;cursor: -webkit-grab;">
                                     <div ng-repeat="p in g.LoadList | orderBy: 'ProductSlotName'">
-                                        <span  class="font12 gray">{{p.ProductSlotName}}</span><br>
+                                        <span class="font12 gray">{{p.ProductSlotName}}</span><br>
                                         <div layout="row" class="font14">
                                             <div flex="50">
                                                 <label>{{p.Passenger}}</label>
                                             </div>
                                             <div flex="50" style="text-align: end;">
-                                                <label
+                                                <label ng-if="p.Profit"
                                                     ng-style="p.Profit >= 0 && {'color':'green'} || {'color': 'red'}">
                                                     {{p.Profit | currency}}
+                                                </label>
+                                                <label ng-if="!p.Profit && p.AvaibleTickets > 0">
+                                                    Tickets left {{p.AvaibleTickets}}
                                                 </label>
                                             </div>
                                         </div>

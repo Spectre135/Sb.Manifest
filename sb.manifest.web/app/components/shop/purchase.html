@@ -1,0 +1,73 @@
+<md-dialog>
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <span><i class="fas fa-shopping-cart"></i></span>
+      <h2>&nbsp;&nbsp;Buy</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="ctrl.cancel()">
+        <i class="fas fa-times"></i>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-dialog-content ng-cloak style="min-width: 40vw">
+    <div class="md-dialog-content">
+      <form ng-submit="$event.preventDefault()">
+
+        <h1>{{dto.Name}}</h1>
+
+        <div layout="row" style="margin-top:40px;">
+          <md-input-container class="md-block" style="width: 100%;">
+            <label>Product</label>
+            <md-select ng-required ng-model="dto.IdProduct" name="product" ng-change="sum()">
+              <md-option ng-repeat="item in productList | filter:{IsStaffJob:false}" value="{{item.Id}}">
+                {{item.Name}} </br>
+                <span class="font12 gray">
+                  {{item.Description}}
+                </span>
+              </md-option>
+            </md-select>
+            <div ng-messages="form.product.$error" role="alert">
+              <div ng-message="required">Product is required.</div>
+            </div>
+          </md-input-container>
+        </div>
+
+        <div layout="row" style="padding-top: 15px;">
+          <md-input-container class="md-icon-float md-block">
+            <label>Quantity</label>
+            <input ng-change="sum()" type="number" step="any" name="quantity" ng-model="dto.Quantity"
+              ng-pattern="/^[0-9]/" />
+          </md-input-container>
+
+        </div>
+
+        <div layout="row" style="justify-content: space-between;">
+          <md-input-container class="md-block" style="width: 15vw;">
+            <label>Payment method</label>
+            <md-select ng-required ng-model="dto.IdPayMethod" name="paymethod">
+              <md-option ng-repeat="item in payMethodList" value="{{item.Id}}">
+                {{item.Name}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+
+          <md-input-container class="md-icon-float md-block">
+            <label>Total</label>
+            <input type="text" format="currency" name="price" ng-model="dto.Price" />
+          </md-input-container>
+
+        </div>
+
+
+        <div class="alert">{{warning}}</div>
+
+      </form>
+    </div>
+  </md-dialog-content>
+
+  <md-dialog-actions>
+    <md-button aria-label="Confirm" class="md-primary" ng-click="ctrl.save($event)">Buy</md-button>
+  </md-dialog-actions>
+</md-dialog>
+<div ng-init="init()"></div>

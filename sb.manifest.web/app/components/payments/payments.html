@@ -9,11 +9,7 @@
 
         <div layout="row">
             <div flex="70">
-                <!--
-                <md-button class="md-icon-button" ng-click="editCustomer($event)">
-                    <md-tooltip md-direction="right">{{messages.addCustomer}}</md-tooltip>
-                    <span><i class="fas fa-user-plus font16"></i></span>
-                </md-button>-->
+
             </div>
 
             <div flex="30">
@@ -53,7 +49,7 @@
                         <td md-cell>{{p.Company}}</td>
                         <td md-cell>{{p.Customer}}</td>
                         <td md-cell>{{p.Description}}</td>
-                        <td md-cell>{{p.Date | date:'dd.MM.yyyy'}}</td>
+                        <td md-cell>{{p.Date | date:'dd.MM.yyyy HH:mm:ss'}}</td>
                         <td md-cell right>{{p.Debit | currency}}</td>
                         <td md-cell right>{{p.Credit | currency}}</td>
                     </tr>

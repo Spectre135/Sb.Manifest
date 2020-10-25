@@ -19,5 +19,21 @@ namespace sb.manifest.api.Model
         [ParamField("BackgroundColor")]
         public string BackgroundColor { get; set; }
 
+        [DataField("IsProductSlot")]
+        [ParamField("IsProductSlot")]
+        public bool IsProductSlot { get; set; }
+
+        [DataField("IsTicketProduct")]
+        [ParamField("IsTicketProduct")]
+        public bool IsTicketProduct { get; set; }
+
+        [DataField("Price")]
+        [ParamField("Price")]
+        public decimal Price { get; set; }
+
+        [DataField("Tickets")]
+        [ParamField("Tickets")]
+        public int Tickets { get; set; }
+
     }
 }

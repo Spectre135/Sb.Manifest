@@ -27,5 +27,23 @@ namespace sb.manifest.api.DAO
 
             SaveData(config, sql, alParmValues);
         }
+        public MResponse GetTicketPosts(IConfiguration config, string search, int idCustomer, int from, int to, string orderby, bool asc)
+        {
+            //vedno delamo za id Customer
+            List<KeyValuePair<string, object>> alParmValues = new List<KeyValuePair<string, object>>
+            {
+                new KeyValuePair<string, object>("@IdCustomer", idCustomer)
+            };
+            return GetPagingData<MTicketPost>(config, SQLBuilder.GetTicketPostListSQL(), search, from, to, orderby, asc, alParmValues);
+        }
+        public MResponse GetLoadsHistory(IConfiguration config, string search, int idCustomer, int from, int to, string orderby, bool asc)
+        {
+            //vedno delamo za id Customer
+            List<KeyValuePair<string, object>> alParmValues = new List<KeyValuePair<string, object>>
+            {
+                new KeyValuePair<string, object>("@IdCustomer", idCustomer)
+            };
+            return GetPagingData<MLoadList>(config, SQLBuilder.GetLoadsHistoryByCustomerSQL(), search, from, to, orderby, asc, alParmValues);
+        }
     }
 }

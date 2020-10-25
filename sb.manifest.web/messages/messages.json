@@ -9,5 +9,6 @@
     "required" : "Field is required",
     "nomoreslots" : "There are not enought slots available !",
     "duplicatePassengerInLoad": "Duplicate passenger in load",
-    "warning":"WARNING !"
+    "warning":"WARNING !",
+    "notfunds":"No enough funds"
 }

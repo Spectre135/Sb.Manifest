@@ -13,8 +13,8 @@ namespace sb.manifest.api.Model
         [DataField("CAccount")]
         public int CAccount { get; set; }
 
-        [DataField("Description")]
-        public string Description { get; set; }
+        [DataField("Name")]
+        public string Name { get; set; }
      
     }
 }
