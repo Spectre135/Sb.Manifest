@@ -61,6 +61,9 @@ namespace sb.manifest.api.Model
         [DataField("AvaibleTickets")]
         public int? AvaibleTickets { get; set; }
 
+        [DataField("TicketName")]
+        public string TicketName { get; set; }
+
         [DataField("Limit")]
         [ParamField("Limit")]
         public decimal? Limit { get; set; }

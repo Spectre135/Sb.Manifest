@@ -102,6 +102,8 @@ namespace sb.manifest.api.SQL
                              ELSE 1 
                            end           OnBoard,
                            at.AvaibleTickets,
+                           at.ProductName TicketName,
+                           at.IdProductSlot,
                            IFNULL(c.[Limit],0) + c.Balance AvaibleFunds,
                            c.IsStaff
                     FROM   v_customer c 
@@ -126,6 +128,8 @@ namespace sb.manifest.api.SQL
                              ELSE 1 
                            end           OnBoard,
                            at.AvaibleTickets,
+                           at.ProductName TicketName,
+                           at.IdProductSlot,
                            IFNULL(c.[Limit],0) + c.Balance AvaibleFunds,
                            c.IsStaff
                     FROM   v_customer c 
@@ -303,10 +307,10 @@ namespace sb.manifest.api.SQL
         }
         public static string DebitTicketSQL()
         {
-            return @"INSERT INTO TicketPost(IdCustomer,IdProduct,IdLoad, DTickets)
+            return @"INSERT INTO TicketPost(IdCustomer,IdProductSlot,IdLoad, DTickets)
                     Select 
                     pl.IdCustomer,
-                    ps.IdProduct,
+                    ps.Id,
                     pl.IdLoad,
                     1 DTickets
                     FROM OnLoad pl 

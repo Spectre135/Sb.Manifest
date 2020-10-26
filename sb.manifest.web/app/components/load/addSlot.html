@@ -41,9 +41,9 @@
               ng-disabled="item.OnBoard">
               {{item.Name}}</br>
               <span class="font12 gray" ng-show="item.OnBoard">Already in</span>
-              <span class="font12 gray" ng-show="item.AvaibleTickets > 0 && !item.OnBoard">Tickets left
-                {{item.AvaibleTickets}}</span>
-              <span class="font12 gray" ng-show="!item.AvaibleTickets > 0 && !item.OnBoard">Avaible funds
+              <span class="font12 gray" ng-show="item.AvaibleTickets && !item.OnBoard">Tickets left
+                {{item.TicketName}}({{item.AvaibleTickets}})</span>
+              <span class="font12 gray" ng-show="item.AvaibleFunds && !item.OnBoard">Avaible funds
                 {{item.AvaibleFunds | currency}}</span>
             </md-option>
           </md-select>

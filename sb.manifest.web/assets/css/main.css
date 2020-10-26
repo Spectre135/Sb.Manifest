@@ -974,19 +974,18 @@ body {
   font-size: 12px;
 }
 
- .slot-card {
+.load .slots md-card {
   margin      : 0 8px 12px 0;
   border-width: 0 8px 0 0;
   border-style: solid;
-  min-width: 224px;
 }
 
-.slot-card md-card-content {
+.load .slots md-card-content {
   padding         : 2px 4px;
   background-color: rgba(255, 255, 255, 0.75);
 }
 
-.slot-card md-card-content .slot:not(:first-child) {
+.load .slots md-card-content .slot:not(:first-child) {
   margin-top  : 2px;
   padding-top : 2px;
   border-width: 1px 0 0;
@@ -995,32 +994,32 @@ body {
 }
 
 .load .slots-left,
-.slot .slot-name {
+.load .slot-name {
   font-size: 11px;
   color    : #666;
 }
 
-.slot .passenger {
+.load .passenger {
   font-size: 14px;
 }
 
-.slot .passenger .name {
+.load .passenger .name {
   font-weight: 700;
 }
 
-.slot .passenger .profit {
+.load .passenger .profit {
   font-weight: 400;
 }
 
-.slot .passenger .profit.positive {
+.load .passenger .profit.positive {
   color: #060;
 }
 
-.slot .passenger .profit.negative {
+.load .passenger .profit.negative {
   color: #d00;
 }
 
-.slot .passenger .tickets {}
+.load .passenger .tickets {}
 
 .font16 {
   font-size: 16px;

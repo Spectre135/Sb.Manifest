@@ -53,7 +53,7 @@
                         <td md-cell>
                             <img ng-src="{{getFlagSrc(p.CountryIso)}}" />
                             {{p.Country}}</td>
-                        <td md-cell right>{{p.AvaibleTickets}}</td>
+                        <td md-cell right>{{p.TicketName}} {{p.AvaibleTickets}}</td>
                         <td md-cell right>{{p.Limit | currency}}</td>
                         <td md-cell right>{{p.TicketPrice | currency}}</td>
                         <td md-cell right ng-style="p.Balance >= 0 && {'color':'green'} || {'color': 'red'}">
