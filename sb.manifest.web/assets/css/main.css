@@ -974,11 +974,11 @@ body {
   font-size: 12px;
 }
 
- .slot-card {
+.slot-card {
   margin      : 0 8px 12px 0;
   border-width: 0 8px 0 0;
   border-style: solid;
-  min-width: 224px;
+  min-width   : 224px;
 }
 
 .slot-card md-card-content {
