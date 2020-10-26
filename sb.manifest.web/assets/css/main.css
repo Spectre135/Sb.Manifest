@@ -974,18 +974,18 @@ body {
   font-size: 12px;
 }
 
-.load md-card {
+.load .slots md-card {
   margin      : 0 8px 12px 0;
   border-width: 0 8px 0 0;
   border-style: solid;
 }
 
-.load md-card-content {
+.load .slots md-card-content {
   padding         : 2px 4px;
   background-color: rgba(255, 255, 255, 0.75);
 }
 
-.load md-card-content .slot:not(:first-child) {
+.load .slots md-card-content .slot:not(:first-child) {
   margin-top  : 2px;
   padding-top : 2px;
   border-width: 1px 0 0;
@@ -993,6 +993,7 @@ body {
   border-color: rgba(0, 0, 0, 0.1);
 }
 
+.load .slots-left,
 .load .slot-name {
   font-size: 11px;
   color    : #666;
