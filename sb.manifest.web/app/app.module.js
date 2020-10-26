@@ -54,11 +54,11 @@ app.run(function ($state, $rootScope, $mdDialog, apiService) {
     };
 
     //Country flag src
-    $rootScope.getFlagSrc = function(iso){
-        if (iso){
-           return 'assets/img/flags/' + iso + '.png'; 
+    $rootScope.getFlagSrc = function (iso) {
+        if (iso) {
+            return 'assets/img/flags/' + iso + '.png';
         }
-        return null;      
+        return null;
     };
 
     $rootScope.dragOptions = {
@@ -94,7 +94,12 @@ app.config(function ($mdDateLocaleProvider, $mdThemingProvider) {
     $mdDateLocaleProvider.firstDayOfWeek = 1;
 
     $mdDateLocaleProvider.formatDate = function (date) {
-        return moment(date).format('DD.MM.YYYY');
+        return date ? moment(date).format('DD.MM.YYYY') : '';
+    };
+
+    $mdDateLocaleProvider.parseDate = function (dateString) {
+        var m = moment(dateString, 'DD.MM.YYYY', true);
+        return m.isValid() ? m.toDate() : new Date(NaN);
     };
 
     // Allow only a day and month to be specified.

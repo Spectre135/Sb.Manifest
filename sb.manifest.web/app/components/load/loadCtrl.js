@@ -18,7 +18,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
     $scope.getLoadList = function () {
         var params = {};
         var url = config.manifestApi + '/load/list';
-        var promise = apiService.getData(url, params, true)
+        var promise = apiService.getData(url, params, false)
             .then(function (data) {
                 $scope.loads = data.DataList;
             });
@@ -178,17 +178,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
             $scope.moved.IdLoadTo = item.Id;
 
             if (!isInLoad(item)) {
-                var confirm = $mdDialog.confirm()
-                    .title('Would you like to move from Load ' + $scope.loadMove + ' to ' + item.Number + ' ?')
-                    .textContent('You will move ' + $scope.PassengerMove)
-                    .ok('ok')
-                    .cancel('Cancel');
-
-                $mdDialog.show(confirm).then(function () {
-                    deferred.resolve();
-                }, function () {
-                    $mdDialog.hide();
-                });
+                deferred.resolve();
             } else {
                 var confirm = $mdDialog.alert()
                     .title($rootScope.messages.warning)
@@ -209,7 +199,6 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
         $scope.PassengerMove = [];
         $scope.moved.IdCustomer = [];
         angular.forEach(item.LoadList, function (value, key) {
-            console.log(value);
             $scope.loadMove = value.Number;
             $scope.loadMoveId = value.Id;
             $scope.moved.IdCustomer.push(value.IdCustomer);

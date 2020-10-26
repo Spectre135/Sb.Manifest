@@ -247,3 +247,15 @@ function noDuplicates(arr) {
     }
     return newArr;
 };
+
+function convertLocalDate(date) {
+    date = new Date(date);
+    //Local time converted to UTC
+    var localOffset = date.getTimezoneOffset() * 60000;
+    var localTime = date.getTime();
+
+    date = localTime - localOffset;
+
+    date = new Date(date);
+    return date;
+}

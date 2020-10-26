@@ -114,6 +114,7 @@ app.controller('editCustomerCtrl', function ($scope, $mdDialog, dataToPass, apiS
     };
 
     self.save = function ($event) {
+        $scope.customer.BirthDate = convertLocalDate($scope.customer.BirthDate);
         var url = config.manifestApi + '/customer/save';
         apiService.postData(url, $scope.customer, true)
             .then(function () {

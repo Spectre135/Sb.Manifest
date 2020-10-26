@@ -4,7 +4,7 @@ tbody>.md-row:hover {
 }
 
 table.md-table td.md-cell {
-  font-size: 14px;
+  font-size: 12px;
 }
 
 table.md-table th.md-column {
@@ -1161,4 +1161,13 @@ body {
 
 .bgwhite {
   background-color: white;
+}
+
+.animate-show-hide.ng-hide {
+  opacity: 0;
+}
+
+.animate-show-hide.ng-hide-add,
+.animate-show-hide.ng-hide-remove {
+  transition: all linear 0.01s .5s;
 }

@@ -56,7 +56,7 @@
                         </div>
                         <div flex="85" class="slots">
                             <md-card data-drag="true" data-jqyoui-options="dragOptions"
-                                ng-repeat="g in l.GroupList track by $index" ng-model="l.GroupList[$index]"
+                                ng-repeat="g in l.GroupList | orderBy: 'DateOnLoad' track by $index" ng-model="l.GroupList[$index]"
                                 jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallback(g)'}"
                                 ng-hide="!g.IdGroup"
                                 ng-style="{'background-color':g.BackgroundColor, 'border-color':g.BackgroundColor}">

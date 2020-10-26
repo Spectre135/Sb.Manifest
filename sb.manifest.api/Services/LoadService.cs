@@ -34,7 +34,7 @@ namespace sb.manifest.api.Services
             var loads = JsonConvert.DeserializeObject<List<MLoad>>(JsonConvert.SerializeObject(list)).GroupBy(u => u.Id).Select(grp => grp.ToList()).ToList();
 
             //zložimo objekt da ga zna front end pravilno prikazat in drag&drop pravilno dela
-            //List Load >> List Grupe v loadu >> Posamezna grupa >> LoadLista kjer so potniki
+            //List Load >> List Grupe v loadu >> Posamezna grupa >> LoadPerson kjer so potniki
             foreach (var l in loads)
             {
                 MLoad load = JsonConvert.DeserializeObject<MLoad>(JsonConvert.SerializeObject(l.FirstOrDefault()));
@@ -49,7 +49,7 @@ namespace sb.manifest.api.Services
                         if (g != gr.IdGroup)
                         {
                             g = gr.IdGroup;
-                            gr.LoadList = list.Where(u => u.IdGroup == gr.IdGroup).ToList();
+                            gr.LoadList = JsonConvert.DeserializeObject<List<MLoadPerson>>(JsonConvert.SerializeObject(list.Where(u => u.IdGroup == gr.IdGroup).ToList())); ;
                             load.GroupList.Add(gr);
                         }
                     }

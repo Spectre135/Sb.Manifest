@@ -33,23 +33,13 @@
           <md-switch ng-model="dto.IsProductSlot"></md-switch>
         </md-input-container>
 
-        <md-input-container class="md-icon-float md-block" ng-if="!dto.IsProductSlot">
+        <md-input-container class="md-icon-float md-block animate-show-hide" ng-show="!dto.IsProductSlot">
           <label>Price</label>
           <input type="text" format="currency" name="price" ng-model="dto.Price" />
-          <md-icon><i class="fas fa-euro-sign"></i></md-icon>
         </md-input-container>
 
-        <md-input-container class="md-icon-float md-block" style="width: 100%;">
-          <label ng-style="dto.IsTicketProduct == 1 && {'color':'black'}">Tickets product</label>
-          <md-switch ng-model="dto.IsTicketProduct"></md-switch>
-        </md-input-container>
 
-        <md-input-container class="md-icon-float md-block" ng-if="dto.IsTicketProduct">
-          <label>Tickets</label>
-          <input type="number" step="any" name="tickets" ng-model="dto.Tickets" ng-pattern="/^[0-9]/" />
-        </md-input-container>
-
-        <md-input-container class="md-icon-float md-block" style="width: 100%;" ng-if="dto.IsProductSlot">
+        <md-input-container class="md-icon-float md-block animate-show-hide" style="width: 100%;" ng-if="dto.IsProductSlot">
           <label>Background color</label>
           <div flex md-color-picker random="true" ng-model="dto.BackgroundColor" open-on-input="true"></div>
         </md-input-container>

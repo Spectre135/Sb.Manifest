@@ -1,10 +1,12 @@
-﻿using sb.manifest.api.DAO;
+﻿using Newtonsoft.Json;
+using sb.manifest.api.DAO;
 
 namespace sb.manifest.api.Model
 {
     public class MSlot
     {
         //Model used  to add passengers to load
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public string DummyId { get; set; } //empty string to work <md-select> angularjs 
 
         [DataField("Id")]
