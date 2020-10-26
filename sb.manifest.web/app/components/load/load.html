@@ -55,7 +55,7 @@
                                 ng-style="getSlotsLeft(l.MaxSlots,l.Id) < 0 && {'color':'red'}">{{getSlotsLeft(l.MaxSlots,l.Id)}}</div>                           
                         </div>
                         <div flex="85" class="slots">
-                            <md-card data-drag="true" data-jqyoui-options="dragOptions"
+                            <md-card class="slot-card" data-drag="true" data-jqyoui-options="dragOptions"
                                 ng-repeat="g in l.GroupList track by $index" ng-model="l.GroupList[$index]"
                                 jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallback(g)'}"
                                 ng-hide="!g.IdGroup"
@@ -64,10 +64,10 @@
                                     <div ng-repeat="p in g.LoadList | orderBy: 'ProductSlotName'" class="slot">
                                         <div class="slot-name">{{p.ProductSlotName}}</div>
                                         <div layout="row" class="passenger">
-                                            <div flex="75">
+                                            <div flex="70">
                                                 <span class="name">{{p.Passenger}}</span>
                                             </div>
-                                            <div flex="25" style="text-align: end;">
+                                            <div flex="30" style="text-align: end;">
                                                 <span ng-if="p.Profit"
                                                     ng-class="p.Profit >= 0 ? 'profit positive': 'profit negative'">
                                                     {{p.Profit | currency}}
