@@ -8,9 +8,10 @@
                 jqyoui-droppable="{onDrop:'dropCallback()', beforeDrop:'beforeDrop(l)', multiple:true}">
                 <md-card-title style="padding: 9px 7px 5px;">
                     <md-card-title-text>
-                        <span class="md-headline blue">Load {{l.Number}} <b>{{l.Description}}</b></span>
-                        <span class="md-subhead">TODO: l.AircraftName ... {{l.AircraftName}} {{l.AircraftRegistration}} {{l.Altitude}}</span>
-                        <span class="md-subhead gray">Profit: {{getLoadProfit(l.Id) | currency}}</span>
+                        <span class="md-headline blue">{{l.AircraftName}} {{l.Number}} <b
+                                style="display: inline-block;">{{l.Description}}</b></span>
+                        <span class="md-subhead">{{l.AircraftType}} <b>{{l.AircraftRegistration}}</b></span>
+                        <span class="md-subhead">{{getLoadProfit(l.Id) | currency}} | 780 kg (TODO)</span>
                     </md-card-title-text>
                     <md-card-actions layout="column">
                         <md-menu class="td-menu">
@@ -47,16 +48,18 @@
                         </md-menu>
                     </md-card-actions>
                 </md-card-title>
-                <md-card-content layout="row" layout-align="space-between" class="load" style="padding: 0px 3px 3px 7px;">
+                <md-card-content layout="row" layout-align="space-between" class="load"
+                    style="padding: 0px 3px 3px 7px;">
                     <div layout="row" style="width: 100%;">
                         <div flex="15">
                             <div class="slots-left">Slots<br>left</div>
-                            <div class="font30"
-                                ng-style="getSlotsLeft(l.MaxSlots,l.Id) < 0 && {'color':'red'}">{{getSlotsLeft(l.MaxSlots,l.Id)}}</div>                           
+                            <div class="font30" ng-style="getSlotsLeft(l.MaxSlots,l.Id) < 0 && {'color':'red'}">
+                                {{getSlotsLeft(l.MaxSlots,l.Id)}}</div>
                         </div>
                         <div flex="85" class="slots">
                             <md-card data-drag="true" data-jqyoui-options="dragOptions"
-                                ng-repeat="g in l.GroupList | orderBy: 'DateOnLoad' track by $index" ng-model="l.GroupList[$index]"
+                                ng-repeat="g in l.GroupList | orderBy: 'DateOnLoad' track by $index"
+                                ng-model="l.GroupList[$index]"
                                 jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallback(g)'}"
                                 ng-hide="!g.IdGroup"
                                 ng-style="{'background-color':g.BackgroundColor, 'border-color':g.BackgroundColor}">
@@ -64,10 +67,10 @@
                                     <div ng-repeat="p in g.LoadList | orderBy: 'ProductSlotName'" class="slot">
                                         <div class="slot-name">{{p.ProductSlotName}}</div>
                                         <div layout="row" class="passenger">
-                                            <div flex="75">
+                                            <div flex="70">
                                                 <span class="name">{{p.Passenger}}</span>
                                             </div>
-                                            <div flex="25" style="text-align: end;">
+                                            <div flex="30" style="text-align: end;">
                                                 <span ng-if="p.Profit"
                                                     ng-class="p.Profit >= 0 ? 'profit positive': 'profit negative'">
                                                     {{p.Profit | currency}}
