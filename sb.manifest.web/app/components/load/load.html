@@ -8,9 +8,9 @@
                 jqyoui-droppable="{onDrop:'dropCallback()', beforeDrop:'beforeDrop(l)', multiple:true}">
                 <md-card-title style="padding: 9px 7px 5px;">
                     <md-card-title-text>
-                        <span class="md-headline blue">Load {{l.Number}} <b>{{l.Description}}</b></span>
-                        <span class="md-subhead">TODO: l.AircraftName ... {{l.AircraftName}} {{l.AircraftRegistration}} {{l.Altitude}}</span>
-                        <span class="md-subhead gray">Profit: {{getLoadProfit(l.Id) | currency}}</span>
+                        <span class="md-headline blue">{{l.AircraftName}} {{l.Number}} <b style="display: inline-block;">{{l.Description}}</b></span>
+                        <span class="md-subhead">{{l.AircraftType}} <b>{{l.AircraftRegistration}}</b></span>
+                        <span class="md-subhead">{{getLoadProfit(l.Id) | currency}} | 780 kg (TODO)</span>
                     </md-card-title-text>
                     <md-card-actions layout="column">
                         <md-menu class="td-menu">
