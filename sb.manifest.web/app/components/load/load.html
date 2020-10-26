@@ -5,7 +5,7 @@
             ng-repeat="l in loads | orderBy: 'Id' track by $index">
 
             <md-card data-drop="true" data-jqyoui-options="dropOptions" ng-model="l.GroupList"
-                jqyoui-droppable="{onDrop:'dropCallback()',beforeDrop: 'beforeDrop(l)'}">
+                jqyoui-droppable="{onDrop:'dropCallback()', beforeDrop:'beforeDrop(l)', multiple:true}">
                 <md-card-title style="padding: 9px 7px 5px;">
                     <md-card-title-text>
                         <span class="md-headline blue">Load {{l.Number}} <b>{{l.Description}}</b></span>
@@ -78,6 +78,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- <div  class="dodatno">Delete ..... Move to .....</div> -->
                                 </md-card-content>
                             </md-card>
                         </div>
