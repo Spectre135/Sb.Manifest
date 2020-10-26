@@ -48,6 +48,10 @@ app.controller('purchaseCtrl', function ($scope, $filter, $mdDialog, dataToPass,
                 return item.Id == $scope.dto.IdProduct;
             });
             $scope.dto.Price =  (array[0].Income  * $scope.dto.Quantity);
+            //populate details from product for post table
+            //TODO input text with more text if needed
+            $scope.dto.Details =array[0].Name + ' ' + array[0].Description ;
+
         } catch (error) {
             
         }

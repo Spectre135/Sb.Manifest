@@ -9,7 +9,7 @@
 
         <div layout="row">
             <div flex="70">
-                <md-button aria-label="Open menu" class="md-fab md-mini md-gray" ng-click="editCustomer($event,[])">
+                <md-button aria-label="Open menu" class="md-fab md-mini md-gray" ng-click="editCustomer($event,{})">
                     <md-tooltip md-direction="right">{{messages.addCustomer}}</md-tooltip>
                     <span><i style="margin-left: 5px;" class="fas fa-user-plus font16"></i></span>
                 </md-button>
@@ -53,7 +53,7 @@
                         <td md-cell>
                             <img ng-src="{{getFlagSrc(p.CountryIso)}}" />
                             {{p.Country}}</td>
-                        <td md-cell right>{{p.AvaibleTickets}}</td>
+                        <td md-cell right>{{p.TicketName}} {{p.AvaibleTickets}}</td>
                         <td md-cell right>{{p.Limit | currency}}</td>
                         <td md-cell right>{{p.TicketPrice | currency}}</td>
                         <td md-cell right ng-style="p.Balance >= 0 && {'color':'green'} || {'color': 'red'}">

@@ -48,10 +48,13 @@ namespace sb.manifest.api.Model
         public int AvaibleTickets { get; set; }
 
         [DataField("DateC")]
-        public DateTime DateConfirmed{ get; set; }
+        public DateTime? DateConfirmed{ get; set; }
 
         [DataField("DateD")]
-        public DateTime DateDeleted { get; set; }
+        public DateTime? DateDeleted { get; set; }
+
+        [DataField("DateOnLoad")]
+        public DateTime? DateOnLoad { get; set; }
 
         [DataField("Status")]
         public int Status { get; set; }

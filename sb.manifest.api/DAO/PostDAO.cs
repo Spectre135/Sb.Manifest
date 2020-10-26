@@ -26,6 +26,7 @@ namespace sb.manifest.api.DAO
         }
         public void PayInvoice(IConfiguration config, List<MInvoice> invoices)
         {
+            //TODO parameters insert
             IDbTransaction transaction = null;
             try
             {
@@ -67,7 +68,7 @@ namespace sb.manifest.api.DAO
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw new Exception("Error Pay invoices " + ex.Message, ex.InnerException);
+                throw new Exception("Error Pay invoices " + ex.Message, ex);
             }
 
         }
@@ -98,7 +99,7 @@ namespace sb.manifest.api.DAO
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw new Exception("Error Create Buy transaction " + ex.Message, ex.InnerException);
+                throw new Exception("Error Create Buy transaction " + ex.Message, ex);
             }
 
         }

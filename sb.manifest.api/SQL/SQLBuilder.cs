@@ -21,7 +21,7 @@ namespace sb.manifest.api.SQL
                                  postalcode, 
                                  idcountry, 
                                  phone,
-                                 limit,
+                                 [limit],
                                  ticketprice) 
                     VALUES     (@FirstName, 
                                 @LastName, 
@@ -102,6 +102,8 @@ namespace sb.manifest.api.SQL
                              ELSE 1 
                            end           OnBoard,
                            at.AvaibleTickets,
+                           at.ProductName TicketName,
+                           at.IdProductSlot,
                            IFNULL(c.[Limit],0) + c.Balance AvaibleFunds,
                            c.IsStaff
                     FROM   v_customer c 
@@ -126,6 +128,8 @@ namespace sb.manifest.api.SQL
                              ELSE 1 
                            end           OnBoard,
                            at.AvaibleTickets,
+                           at.ProductName TicketName,
+                           at.IdProductSlot,
                            IFNULL(c.[Limit],0) + c.Balance AvaibleFunds,
                            c.IsStaff
                     FROM   v_customer c 
@@ -143,7 +147,7 @@ namespace sb.manifest.api.SQL
         }
         public static string GetMoveSlotSQL()
         {
-            return @"UPDATE OnLoad set IdLoad = @IdLoadTo WHERE IdCustomer = @IdCustomer AND IdLoad = @IdLoadFrom";
+            return @"UPDATE OnLoad set IdLoad = @IdLoadTo,Date=datetime('now', 'localtime') WHERE IdCustomer = @IdCustomer AND IdLoad = @IdLoadFrom";
         }
         #endregion
 
@@ -251,22 +255,18 @@ namespace sb.manifest.api.SQL
                                120, 
                                1, 
                                @IdCustomer, 
-                               p.description Details, 
-                               p.price * @Quantity  Income, 
-                               0             Outcome 
-                        FROM   product p 
-                        WHERE  p.id = @IdProduct 
+                               @Details, 
+                               @Price  Income, 
+                               0       Outcome 
                         UNION ALL
                         SELECT ( @IdTransaction 
                                  || @IdCustomer ), 
                                760, 
                                1, 
                                @IdCustomer, 
-                               p.description Details, 
-                               0             Income, 
-                               p.price * @Quantity Outcome
-                        FROM   product p 
-                        WHERE  p.id = @IdProduct
+                               @Details, 
+                               0   Income, 
+                               @Price Outcome
                         -- Zapremo transakcijo s plačilom
                         UNION ALL
                         SELECT ( @IdTransaction 
@@ -274,47 +274,43 @@ namespace sb.manifest.api.SQL
                                acc1.caccount, 
                                1, 
                                @IdCustomer, 
-                               p.description Details, 
+                               @Details, 
                                0  Income,            
-                               p.price * @Quantity Outcome
-                        FROM   product p 
-                               LEFT JOIN taccount acc1 
-                                      ON acc1.id = @IdPayMethod 
-                        WHERE  p.id = @IdProduct 
+                               @Price Outcome
+                        FROM   taccount acc1 
+                        WHERE  acc1.id = @IdPayMethod 
                         UNION ALL
                         SELECT ( @IdTransaction 
                                  || @IdCustomer ), 
                                acc1.daccount, 
                                1, 
                                @IdCustomer, 
-                               p.description Details, 
-                               p.price * @Quantity Income,
+                               @Details, 
+                               @Price Income,
                                0  Outcome
-                        FROM   product p 
-                               LEFT JOIN taccount acc1 
-                                      ON acc1.id = @IdPayMethod 
-                        WHERE  p.id = @IdProduct ";
+                        FROM   taccount acc1 
+                        WHERE acc1.id = @IdPayMethod ";
         }
         #endregion
 
         #region TicketPost
         public static string InsertCreditTicketsSQL()
         {
-            return @"INSERT INTO TicketPost(IdCustomer,IdProduct,IdTransaction, CTickets)
+            return @"INSERT INTO TicketPost(IdCustomer,IdProductSlot,IdTransaction, CTickets)
                     Select 
                     @IdCustomer,
-                    p.Id IdProduct,
+                    p.Id IdProductSlot,
                     @IdTransaction,
-                    p.Tickets CTickets
-                    from Product p 
-                    where p.Id = @IdProduct and p.IsTicketProduct = 1 ";
+                    @Quantity CTickets
+                    from ProductSlot p 
+                    where p.Id = @IdProduct";
         }
         public static string DebitTicketSQL()
         {
-            return @"INSERT INTO TicketPost(IdCustomer,IdProduct,IdLoad, DTickets)
+            return @"INSERT INTO TicketPost(IdCustomer,IdProductSlot,IdLoad, DTickets)
                     Select 
                     pl.IdCustomer,
-                    ps.IdProduct,
+                    ps.Id,
                     pl.IdLoad,
                     1 DTickets
                     FROM OnLoad pl 
@@ -364,16 +360,12 @@ namespace sb.manifest.api.SQL
                                  description, 
                                  backgroundcolor, 
                                  isproductslot, 
-                                 price,
-                                 isticketproduct,
-                                 tickets) 
+                                 price) 
                     VALUES     (@Name, 
                                 @Description, 
                                 @BackgroundColor, 
                                 @IsProductSlot, 
-                                @Price,
-                                @IsTicketProduct,
-                                @Tickets)";
+                                @Price)";
         }
         public static string GetSaveSalesProductSQL()
         {
@@ -382,9 +374,7 @@ namespace sb.manifest.api.SQL
                             description = @Description, 
                             backgroundcolor = @BackgroundColor, 
                             isproductslot = @IsProductSlot, 
-                            price = @Price,
-                            isticketproduct = @IsTicketProduct,
-                            tickets = @Tickets
+                            price = @Price
                      WHERE  id = @Id ";
         }
         #endregion

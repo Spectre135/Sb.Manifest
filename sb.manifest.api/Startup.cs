@@ -1,17 +1,11 @@
 #region using
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
-using sb.manifest.api.Auth;
-using sb.manifest.api.Filter;
 using System;
 using System.IO;
 using System.Reflection;
@@ -36,8 +30,13 @@ namespace sb.manifest.api
                                                                                   .AllowAnyHeader()));
             services.AddControllers().AddNewtonsoftJson(options =>
             {
-                options.SerializerSettings.ContractResolver = new DefaultContractResolver(); //drugaèe da lower case pri konvertiranju JSON objektov
+                options.SerializerSettings.ContractResolver = new DefaultContractResolver();//drugaèe da lower case pri konvertiranju JSON objektov
+                options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
             });
+                /*.AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.IgnoreNullValues = true; //prazne objekte ne kreiramo
+            });*/
 
             services.AddHttpClient();
 

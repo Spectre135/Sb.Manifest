@@ -99,16 +99,14 @@
             <div layout-gt-sm="row">
               <md-input-container class="md-icon-float md-block" style="width: 100%;">
                 <label>Limit</label>
-                <input type="number" step="any" name="limit" ng-model="customer.Limit" ng-pattern="/^[0-9]/"/>
-                <md-icon><i class="fas fa-euro-sign"></i></md-icon>
+                <input type="text" format="currency" name="limit" ng-model="customer.Limit"/>
               </md-input-container>
             </div>
 
             <div layout-gt-sm="row">
               <md-input-container class="md-icon-float md-block" style="width: 100%;">
                 <label>Ticket price</label>
-                <input type="number" step="any" name="ticketprice" ng-model="customer.TicketPrice" ng-pattern="/^[0-9]/"/>
-                <md-icon><i class="fas fa-euro-sign"></i></md-icon>
+                <input type="text" format="currency" name="ticketprice" ng-model="customer.TicketPrice"/>
               </md-input-container>
             </div>
 

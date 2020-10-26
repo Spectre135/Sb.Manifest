@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace sb.manifest.api.Model
 {
@@ -7,6 +8,7 @@ namespace sb.manifest.api.Model
     {
         public int IdGroup { get; set; }
         public string BackgroundColor { get; set; }
-        public List<MLoadList> LoadList { get; set; }
+        public DateTime? DateOnLoad { get; set; }
+        public List<MLoadPerson> LoadList { get; set; }
     }
 }

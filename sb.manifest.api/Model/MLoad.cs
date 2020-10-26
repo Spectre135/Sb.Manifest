@@ -37,10 +37,10 @@ namespace sb.manifest.api.Model
         public int Status { get; set; }
 
         [DataField("DateC")]
-        public DateTime DateConfirmed{ get; set; }
+        public DateTime? DateConfirmed{ get; set; }
 
         [DataField("DateD")]
-        public DateTime DateDeleted { get; set; }
+        public DateTime? DateDeleted { get; set; }
 
         public List<MGroup> GroupList { get; set; }
 

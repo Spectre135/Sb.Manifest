@@ -11,17 +11,17 @@ namespace sb.manifest.api.Model
         [DataField("IdCostumer")]
         public long IdCostumer { get; set; }
 
-        [DataField("IdProduct")]
-        public int IdProduct { get; set; }
+        [DataField("IdProductSlot")]
+        public int IdProductSlot { get; set; }
 
         [DataField("IdTransaction")]
         public long IdTransaction { get; set; }
 
         [DataField("IdLoad")]
-        public int IdLoad { get; set; }
+        public int? IdLoad { get; set; }
 
         [DataField("LoadNo")]
-        public int LoadNo { get; set; }
+        public int? LoadNo { get; set; }
 
         [DataField("Tickets")]
         public int Tickets { get; set; }
@@ -33,7 +33,7 @@ namespace sb.manifest.api.Model
         public int DTickets { get; set; }
 
         [DataField("Date")]
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; }
 
         [DataField("AircraftRegistration")]
         public string AircraftRegistration { get; set; }
