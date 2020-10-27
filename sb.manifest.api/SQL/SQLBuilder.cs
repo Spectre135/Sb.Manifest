@@ -176,7 +176,7 @@ namespace sb.manifest.api.SQL
                       OnLoad pl 
                       INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot 
                       INNER JOIN TAccount acc1 ON acc1.Id = ps.IdAccount AND acc1.DAccount IS NOT NULL 
-                      LEFT JOIN v_Avaibletickets at ON at.IdCustomer = pl.IdCustomer
+                      LEFT JOIN v_Avaibletickets at ON at.IdCustomer = pl.IdCustomer AND at.IdProductSlot = pl.IdProductSlot 
                     WHERE 
                       IdLoad = @IdLoad 
                     AND at.AvaibleTickets is null
@@ -194,7 +194,7 @@ namespace sb.manifest.api.SQL
                       OnLoad pl 
                       INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot 
                       INNER JOIN TAccount acc1 ON acc1.Id = ps.IdAccount AND acc1.CAccount IS NOT NULL 
-                      LEFT JOIN v_Avaibletickets at ON at.IdCustomer = pl.IdCustomer
+                      LEFT JOIN v_Avaibletickets at ON at.IdCustomer = pl.IdCustomer AND at.IdProductSlot = pl.IdProductSlot 
                     WHERE 
                       IdLoad = @IdLoad 
                     AND at.AvaibleTickets is null
@@ -214,7 +214,7 @@ namespace sb.manifest.api.SQL
                       INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot 
                       INNER JOIN v_customer c ON c.Id = pl.IdCustomer 
                       INNER JOIN TAccount acc ON acc.DAccount in (230) 
-                      LEFT JOIN v_Avaibletickets at ON at.IdCustomer = pl.IdCustomer
+                      LEFT JOIN v_Avaibletickets at ON at.IdCustomer = pl.IdCustomer AND at.IdProductSlot = pl.IdProductSlot 
                     WHERE 
                       c.Balance > 0 
                       AND pl.IdLoad = @IdLoad 
@@ -234,7 +234,7 @@ namespace sb.manifest.api.SQL
                       INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot 
                       INNER JOIN v_customer c ON c.Id = pl.IdCustomer 
                       INNER JOIN TAccount acc ON acc.DAccount in (230) 
-                      LEFT JOIN v_Avaibletickets at ON at.IdCustomer = pl.IdCustomer
+                      LEFT JOIN v_Avaibletickets at ON at.IdCustomer = pl.IdCustomer AND at.IdProductSlot = pl.IdProductSlot 
                     WHERE 
                       c.Balance > 0 
                       AND at.AvaibleTickets is null
