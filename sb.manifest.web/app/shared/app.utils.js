@@ -258,4 +258,4 @@ function convertLocalDate(date) {
 
     date = new Date(date);
     return date;
-}
+};

@@ -131,21 +131,53 @@ app.directive('capitalizeFirst', function ($parse) {
     };
 });
 
-app.directive('format', ['$filter', function ($filter) {
+app.directive('formatCurrency', ['$filter', '$locale', function ($filter, $locale) {
     return {
         require: '?ngModel',
         link: function (scope, elem, attrs, ctrl) {
             if (!ctrl) return;
-
-            ctrl.$formatters.unshift(function (a) {
-                return $filter(attrs.format)(ctrl.$modelValue)
+ 
+            // $formatters is used to process value from code to view
+            ctrl.$formatters.unshift(function (modelValue) {
+                var formattedValue;
+                if (modelValue) {
+                    formattedValue = $filter('currency', null, 2)(modelValue);  // use $filter to do some formatting
+                } else {
+                    formattedValue = '';
+                }
+                return formattedValue;
             });
-
-            elem.bind('blur', function(event) {
-                console.log(elem.val());
-                var plainNumber = elem.val().replace(',','.').replace(/[^\d|\-+|\.+]/g, '');
-                console.log(plainNumber);
-                elem.val($filter(attrs.format)(plainNumber));
+ 
+            // $parsers is used to process value from view to code
+            ctrl.$parsers.unshift(function (viewValue) {
+                var plainNumber;
+                var formattedValue;
+                 
+                var decimalSeparatorIndex = viewValue.lastIndexOf($locale.NUMBER_FORMATS.DECIMAL_SEP);  // $locale.NUMBER_FORMATS.DECIMAL_SEP variable is the decimal separator for the current culture
+                if (decimalSeparatorIndex > 0) {
+                    // if input has decimal part
+                    var wholeNumberPart = viewValue.substring(0, decimalSeparatorIndex);
+                    var decimalPart = viewValue.substr(decimalSeparatorIndex + 1, 2);
+                    plainNumber = parseFloat(wholeNumberPart.replace(/[^\d]/g, '') + '.' + decimalPart).toFixed(2); // remove any non number characters and round to two decimal places
+ 
+                    formattedValue = $filter('currency', null, 2)(plainNumber);
+                    formattedValue = formattedValue.substring(0, formattedValue.lastIndexOf($locale.NUMBER_FORMATS.DECIMAL_SEP) + 1);
+                    formattedValue = formattedValue + decimalPart;
+                } else {
+                    // input does not have decimal part
+                    plainNumber = parseFloat(viewValue.replace(/[^\d]/g, ''));
+                    formattedValue = $filter('currency', null, 0)(plainNumber);     // the 0 argument for no decimal does not work (issue with Angular)
+ 
+                    if (formattedValue) {
+                        // remove the decimal part
+                        formattedValue = formattedValue.substring(0, formattedValue.lastIndexOf($locale.NUMBER_FORMATS.DECIMAL_SEP));
+                    } else {
+                        formattedValue = viewValue;
+                    }
+                }
+ 
+                elem.val(formattedValue);
+                return plainNumber;
             });
         }
     };

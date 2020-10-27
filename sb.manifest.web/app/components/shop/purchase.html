@@ -2,7 +2,7 @@
   <md-toolbar>
     <div class="md-toolbar-tools">
       <span><i class="fas fa-shopping-cart"></i></span>
-      <h2>&nbsp;&nbsp;Buy</h2>
+      <h2>&nbsp;&nbsp;{{dto.Name}}</h2>
       <span flex></span>
       <md-button class="md-icon-button" ng-click="ctrl.cancel()">
         <i class="fas fa-times"></i>
@@ -14,9 +14,7 @@
     <div class="md-dialog-content">
       <form ng-submit="$event.preventDefault()">
 
-        <h1>{{dto.Name}}</h1>
-
-        <div layout="row" style="margin-top:40px;">
+        <div layout="row">
           <md-input-container class="md-block" style="width: 100%;">
             <label>Product</label>
             <md-select ng-required ng-model="dto.IdProduct" name="product" ng-change="sum()">
@@ -61,7 +59,7 @@
 
           <md-input-container class="md-icon-float md-block">
             <label>Total</label>
-            <input type="text" format="currency" name="price" ng-model="dto.Price" />
+            <input type="text" format-currency name="price" ng-model="dto.Price" />
           </md-input-container>
 
         </div>
