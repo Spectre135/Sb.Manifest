@@ -995,7 +995,8 @@ body {
 }
 
 .load .slots-left,
-.slot .slot-name {
+.slot .slot-name,
+.slot .profit {
   font-size: 11px;
   color    : #666;
 }
@@ -1008,19 +1009,24 @@ body {
   font-weight: 700;
 }
 
-.slot .passenger .profit {
-  font-weight: 400;
+.slot .profit {
+  text-align: end;
 }
 
-.slot .passenger .profit.positive {
-  color: #060;
+.slot .profit .positive {
+  /* color: #060; */
 }
 
-.slot .passenger .profit.negative {
+.slot .profit .negative {
   color: #d00;
 }
 
-.slot .passenger .tickets {}
+.slot .passenger .tickets {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding         : 0 3px;
+  color           : #fff;
+  border-radius   : 4px;
+}
 
 .font16 {
   font-size: 16px;
