@@ -8,8 +8,8 @@
                 jqyoui-droppable="{onDrop:'dropCallback()', beforeDrop:'beforeDrop(l)', multiple:true}">
                 <md-card-title style="padding: 9px 7px 5px;">
                     <md-card-title-text>
-                        <span class="md-headline blue">{{l.AircraftName}} {{l.Number}} <b
-                                style="display: inline-block;">{{l.Description}}</b></span>
+                        <div class="md-headline blue">{{l.AircraftName}} {{l.Number}} 
+                        <b style="display: block;">{{l.Description}}</b></div>
                         <span class="md-subhead">{{l.AircraftType}} <b>{{l.AircraftRegistration}}</b></span>
                         <span class="md-subhead">{{getLoadProfit(l.Id) | currency}} | {{getLoadWeight(l.Id)}} kg</span>
                     </md-card-title-text>
@@ -19,7 +19,7 @@
                                 ng-click="$mdMenu.open($event)">
                                 <span><i class="fas fa-ellipsis-v"></i></span>
                             </md-button>
-                            <md-menu-content style="text-align: left;"> 
+                            <md-menu-content style="text-align: left;">
                                 <md-menu-item>
                                     <md-button ng-click="addPeople($event,l)">
                                         <span><i class="fas fa-user-plus"></i></span>
@@ -65,18 +65,28 @@
                                 ng-style="{'background-color':g.BackgroundColor, 'border-color':g.BackgroundColor}">
                                 <md-card-content style="cursor: -webkit-grab;">
                                     <div ng-repeat="p in g.LoadList | orderBy: 'ProductSlotName'" class="slot">
-                                        <div class="slot-name">{{p.ProductSlotName}}</div>
+                                        <div layout="row">
+                                            <div flex="70" class="slot-name">
+                                             <div>{{p.ProductSlotName}}</div>
+                                            </div>
+                                            <div flex="30" class="profit">
+                                                <span ng-if="p.Profit"
+                                                    ng-class="p.Profit >= 0 ? 'positive': 'negative'">
+                                                    {{p.Profit | currency}}
+                                                </span>
+                                            </div>
+                                        </div>
                                         <div layout="row" class="passenger">
                                             <div flex="70">
                                                 <span class="name">{{p.Passenger}}</span>
                                             </div>
                                             <div flex="30" style="text-align: end;">
-                                                <span ng-if="p.Profit"
+                                                <!-- <span ng-if="p.Profit"
                                                     ng-class="p.Profit >= 0 ? 'profit positive': 'profit negative'">
                                                     {{p.Profit | currency}}
-                                                </span>
+                                                </span> -->
                                                 <span class="tickets" ng-if="!p.Profit && p.AvaibleTickets > 0">
-                                                    Tickets left {{p.AvaibleTickets}}
+                                                    <small>TK</small> {{p.AvaibleTickets}}
                                                 </span>
                                             </div>
                                         </div>
