@@ -21,6 +21,7 @@ namespace sb.manifest.api.SQL
                                  postalcode, 
                                  idcountry, 
                                  phone,
+                                 weight,
                                  [limit],
                                  ticketprice) 
                     VALUES     (@FirstName, 
@@ -31,6 +32,7 @@ namespace sb.manifest.api.SQL
                                 @PostalCode, 
                                 @IdCountry, 
                                 @Phone,
+                                @Weight,
                                 @Limit,
                                 @TicketPrice) ";
         }
@@ -45,6 +47,7 @@ namespace sb.manifest.api.SQL
                             postalcode = @PostalCode, 
                             idcountry = @IdCountry, 
                             phone = @Phone,
+                            weight = @Weight,
                             [limit] = @Limit,
                             ticketprice = @TicketPrice
                      WHERE  id = @Id ";
@@ -101,7 +104,7 @@ namespace sb.manifest.api.SQL
                              WHEN l.idload IS NULL THEN 0 
                              ELSE 1 
                            end           OnBoard,
-                           at.AvaibleTickets,
+                           at.AvaibleTickets-til.Tickets AvaibleTickets,
                            at.ProductName TicketName,
                            at.IdProductSlot,
                            IFNULL(c.[Limit],0) + c.Balance AvaibleFunds,
@@ -110,6 +113,7 @@ namespace sb.manifest.api.SQL
                            INNER JOIN today t ON t.Id = c.Id 
                            LEFT JOIN onload l ON c.id = l.idcustomer  AND l.idload = @IdLoad
                            LEFT JOIN V_AvaibleTickets at ON at.IdCustomer = c.Id 
+                           LEFT JOIN V_TicketsInLoad til ON til.IdCustomer = c.Id
                     GROUP  BY c.id, 
                               c.firstname, 
                               c.lastname, 
@@ -127,7 +131,7 @@ namespace sb.manifest.api.SQL
                              WHEN l.idload IS NULL THEN 0 
                              ELSE 1 
                            end           OnBoard,
-                           at.AvaibleTickets,
+                           at.AvaibleTickets-til.Tickets AvaibleTickets,
                            at.ProductName TicketName,
                            at.IdProductSlot,
                            IFNULL(c.[Limit],0) + c.Balance AvaibleFunds,
@@ -137,6 +141,7 @@ namespace sb.manifest.api.SQL
                                   ON c.id = l.idcustomer 
                                      AND l.idload = @IdLoad
                            LEFT JOIN V_AvaibleTICKETS at ON at.IdCustomer = c.Id  
+                           LEFT JOIN V_TicketsInLoad til ON til.IdCustomer = c.Id
                            WHERE (c.firstname || ' ' || c.lastname) like @Name
                     GROUP  BY c.id, 
                               c.firstname, 
@@ -386,8 +391,8 @@ namespace sb.manifest.api.SQL
         }
         public static string GetInsertProductSlotSQL()
         {
-            return @"INSERT INTO ProductSlot(IdProduct,Name,Description,Income,Outcome,IdAccount,IsStaffJob) 
-                                      VALUES(@IdProduct,@Name, @Description, @Income,@Outcome, @IdAccount,@IsStaffJob)";
+            return @"INSERT INTO ProductSlot(IdProduct,Name,Description,Income,Outcome,IdAccount,IsStaffJob,EquipmentWeight) 
+                                      VALUES(@IdProduct,@Name, @Description, @Income,@Outcome, @IdAccount,@IsStaffJob,@EquipmentWeight)";
         }
         public static string GetSaveProductSlotSQL()
         {
@@ -398,7 +403,8 @@ namespace sb.manifest.api.SQL
                                outcome = @Outcome, 
                                idaccount = @IdAccount, 
                                idproduct = @IdProduct, 
-                               isstaffjob = @IsStaffJob 
+                               isstaffjob = @IsStaffJob,
+                               equipmentweight = @EquipmentWeight
                         WHERE  id = @Id ";
         }
         #endregion

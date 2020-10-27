@@ -51,6 +51,10 @@ namespace sb.manifest.api.Model
         [ParamField("Phone")]
         public string Phone { get; set; }
 
+        [DataField("Weight")]
+        [ParamField("Weight")]
+        public int Weight { get; set; }
+
         [DataField("Balance")]
         public decimal Balance { get; set; }
 

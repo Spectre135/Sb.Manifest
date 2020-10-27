@@ -11,7 +11,7 @@
                         <span class="md-headline blue">{{l.AircraftName}} {{l.Number}} <b
                                 style="display: inline-block;">{{l.Description}}</b></span>
                         <span class="md-subhead">{{l.AircraftType}} <b>{{l.AircraftRegistration}}</b></span>
-                        <span class="md-subhead">{{getLoadProfit(l.Id) | currency}} | 780 kg (TODO)</span>
+                        <span class="md-subhead">{{getLoadProfit(l.Id) | currency}} | {{getLoadWeight(l.Id)}} kg</span>
                     </md-card-title-text>
                     <md-card-actions layout="column">
                         <md-menu class="td-menu">

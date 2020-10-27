@@ -27,11 +27,12 @@ var jsAssets = [
     'app/min/prijavaCtrl.js',
     'app/min/mainCtrl.js',
     'app/min/homeCtrl.js',
-    //'app/min/loadCtrl.js',
+    'app/min/loadCtrl.js',
     'app/min/customerCtrl.js',
-    'app/min/addSlotCtrl.js',  
+    'app/min/addSlotCtrl.js',
     'app/min/paymentsCtrl.js',
     'app/min/invoiceCtrl.js',
+    'app/min/purchaseCtrl.js',
     'app/min/settingsCtrl.js',
     'app/min/reportCtrl.js'
 ];
@@ -68,6 +69,16 @@ gulp.task('pocisti-vse', function () {
     });
 });
 
+gulp.task('kopiraj-assets', function () {
+    return gulp.src('assets/**/*')
+        .pipe(gulp.dest('dist/assets'));
+});
+
+gulp.task('pocisti-css', function () {
+    return del(['dist/assets/css/**'], {
+        force: true
+    });
+});
 
 gulp.task('min-css', function () {
     return gulp.src(cssAssets)
@@ -101,11 +112,6 @@ gulp.task('preimenuj', function () {
         .pipe(gulp.dest('dist/'));
 });
 
-gulp.task('kopiraj-assets', function () {
-    return gulp.src('assets/**/*')
-        .pipe(gulp.dest('dist/assets'));
-});
-
 gulp.task('kopiraj-app', function () {
     return gulp.src('app/**/*.html')
         .pipe(gulp.dest('dist/app'));
@@ -122,11 +128,18 @@ gulp.task('kopiraj-base', function () {
         .pipe(gulp.dest('dist/'));
 });
 
+gulp.task('kopiraj-messages', function () {
+    return gulp.src('messages/*.json')
+        .pipe(gulp.dest('dist/messages/'));
+});
+
+/*
 gulp.task('pocisti-min', function () {
     return del(['dist/assets/css/min/'], {
         force: true
     });
 });
+*/
 
 
 gulp.task('test', done => {
@@ -134,6 +147,6 @@ gulp.task('test', done => {
     done();
 });
 
-gulp.task('prod', gulp.series(['pocisti-vse', 'min-css', 'min-js', 'preimenuj', 'kopiraj-assets', 'kopiraj-app', 'kopiraj-base', 'pocisti-min']), function () {
+gulp.task('prod', gulp.series(['pocisti-vse', 'min-js', 'preimenuj', 'kopiraj-assets','pocisti-css','min-css', 'kopiraj-app', 'kopiraj-base', 'kopiraj-messages']), function () {
     // do something
 });

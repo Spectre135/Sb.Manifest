@@ -165,7 +165,7 @@ function getDoughnutChart(cdata, labelData, dataX, dataY, title) {
             title: {
                 display: true,
                 text: title,
-                fontFamily: 'Roboto',
+                fontFamily: 'Montserrat',
                 fontSize: 14
             }
         }
@@ -202,19 +202,19 @@ function getLineChart(labels, labelData1, data1, labelData2, data2, title) {
             title: {
                 display: true,
                 text: title,
-                fontFamily: 'Roboto',
+                fontFamily: 'Montserrat',
                 fontSize: 14
             },
             scales: {
                 xAxes: [{
                     ticks: {
-                        fontFamily: 'Roboto',
+                        fontFamily: 'Montserrat',
                         fontSize: 14
                     }
                 }],
                 yAxes: [{
                     ticks: {
-                        fontFamily: 'Roboto',
+                        fontFamily: 'Montserrat',
                         fontSize: 14
                     }
                 }]

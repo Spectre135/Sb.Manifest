@@ -20,7 +20,7 @@ app.run(function ($state, $rootScope, $mdDialog, apiService) {
     window.myAppErrorLog = [];
 
     //load messages for app
-    apiService.getData('./messages/messages.json', null, false)
+    apiService.getData('messages/messages.json', null, false)
         .then(function (data) {
             $rootScope.messages = data;
         });
