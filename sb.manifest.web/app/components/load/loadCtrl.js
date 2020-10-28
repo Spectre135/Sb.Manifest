@@ -2,7 +2,7 @@
 
 var app = angular.module('SbManifest');
 
-app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog, apiService, config) {
+app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog, $mdSidenav, apiService, config) {
 
     $scope.loads;
     $scope.query = {
@@ -13,6 +13,8 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
     $scope.rows;
     $scope.moved = {}; //array when we move passengers between loads
     $scope.moved.IdCustomer = []; //array when we move passengers between loads
+    $scope.customers = [];
+    $scope.dragToAdd = false; //to know if we must add person to load from side menu
 
     //getLoadList
     $scope.getLoadList = function () {
@@ -24,7 +26,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
             });
         return promise;
     };
-    
+
     //init
     $scope.init = function () {
         $scope.getLoadList();
@@ -32,8 +34,6 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
 
     //add people to load
     $scope.addPeople = function ($event, dto) {
-        //slots left to handle add people to load
-        dto.SlotsLeft = $scope.getSlotsLeft(dto.MaxSlots, dto.Id); //TODO tole zdej ne dela
         $mdDialog.show({
             locals: {
                 dataToPass: dto
@@ -118,7 +118,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
                 });
             });
             return response;
-        } catch(err) {}
+        } catch (err) {}
     };
 
     //before drop item we show confirmation dialog
@@ -159,16 +159,92 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
         });
     };
 
+    //when we start drag iitem to Add into load
+    $scope.startCallbackAdd = function (event, ui, item) {
+        $scope.addPassengerList = [];
+        $scope.passenger={};
+        $scope.dragToAdd = true;
+        $scope.passenger.IdCustomer = item.Id;
+        $scope.passenger.IdProductSlot = 1;//TODO read from list 1-solo 4 for test
+        $scope.moved.IdCustomer.push(item.Id); //for check if person already in load
+        $scope.PassengerMove=item.Name; //form warning modal
+    };
+
     //on drop item we must save in db
     $scope.dropCallback = function (event, ui) {
-        var url = config.manifestApi + '/load/slot/move';
-        apiService.postData(url, $scope.moved, true).then(function (data) {
-            //init
-            $scope.moved = {};
-            $scope.moved.IdCustomer = [];
-            //we must refresh load list
-            $scope.getLoadList();
-        });
+        //check if we must add or move person
+        if ($scope.dragToAdd) {
+            $scope.passenger.IdLoad = $scope.moved.IdLoadTo;
+            $scope.addPassengerList.push($scope.passenger);
+            var url = config.manifestApi + '/load/slot/add';
+            apiService.postData(url, $scope.addPassengerList, true)
+                .then(function () {
+                    $scope.moved = {};
+                    $scope.moved.IdCustomer = [];
+                    $scope.getLoadList();
+                });
+        } else {
+            var url = config.manifestApi + '/load/slot/move';
+            apiService.postData(url, $scope.moved, true)
+                .then(function () {
+                    //init
+                    $scope.moved = {};
+                    $scope.moved.IdCustomer = [];
+                    //we must refresh load list
+                    $scope.getLoadList();
+                });
+        }
+
+    };
+
+    $scope.openSideMenu = function () {
+        getActiveToday();
+        $mdSidenav('right').toggle();
+    };
+
+    $scope.closeSideMenu = function () {
+        $mdSidenav('right').close();
+    };
+
+    function getActiveToday() {
+        self.working = true;
+        var url = config.manifestApi + '/load/active/today';
+        var promise = apiService.getData(url, null, false)
+            .then(function (data) {
+                $scope.customers = noDuplicates($scope.customers.concat(data.DataList));
+            }).finally(function () {
+                self.working = false;
+            });
+        return promise;
+    };
+
+    function getCustomerList() {
+        $scope.working = true;
+        var url = config.manifestApi + '/load/active/';
+        var params = {
+            search: $scope.searchText,
+            size: 20 //optional default 20
+        };
+        var promise = apiService.getData(url, params, false)
+            .then(function (data) {
+                $scope.customers = noDuplicates($scope.customers.concat(data.DataList));
+            }).finally(function () {
+                $scope.working = false;
+            });
+        return promise;
+    };
+
+    $scope.onKeySearch = function ($event) {
+        $event.stopPropagation();
+        var array = {};
+        if ($scope.searchText) {
+            array = $filter('filter')($scope.customers, {
+                Name: $scope.searchText
+            });
+            if (array.length == 0) {
+                getCustomerList();
+            }
+        }
     };
 
 });
@@ -203,7 +279,7 @@ app.controller('editLoadCtrl', function ($scope, $state, $filter, $mdDialog, $wi
 
     self.save = function ($event) {
         //before save we clean Loads array if not we have error TypeError: cyclic object value
-        $scope.load.Loads=null;
+        $scope.load.Loads = null;
         var url = config.manifestApi + '/load/save';
         apiService.postData(url, $scope.load, true)
             .then(function () {
@@ -234,7 +310,7 @@ app.controller('editLoadCtrl', function ($scope, $state, $filter, $mdDialog, $wi
 
     $scope.getLoadNumber = function (idAircraft) {
         var array = $scope.load.Loads;
-        if (idAircraft){
+        if (idAircraft) {
             var array = $filter('filter')(array, function (item) {
                 return item.IdAircraft == idAircraft;
             });
