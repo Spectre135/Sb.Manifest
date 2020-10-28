@@ -67,7 +67,7 @@ namespace sb.manifest.api.Auth
                 return principal;
             }
 
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }

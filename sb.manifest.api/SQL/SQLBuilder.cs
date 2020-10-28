@@ -113,7 +113,7 @@ namespace sb.manifest.api.SQL
                            INNER JOIN today t ON t.Id = c.Id 
                            LEFT JOIN onload l ON c.id = l.idcustomer  AND l.idload = @IdLoad
                            LEFT JOIN V_AvaibleTickets at ON at.IdCustomer = c.Id 
-                           LEFT JOIN V_TicketsInLoad til ON til.IdCustomer = c.Id
+                           LEFT JOIN V_OpenTickets til ON til.IdCustomer = c.Id
                     GROUP  BY c.id, 
                               c.firstname, 
                               c.lastname, 
@@ -141,7 +141,7 @@ namespace sb.manifest.api.SQL
                                   ON c.id = l.idcustomer 
                                      AND l.idload = @IdLoad
                            LEFT JOIN V_AvaibleTICKETS at ON at.IdCustomer = c.Id  
-                           LEFT JOIN V_TicketsInLoad til ON til.IdCustomer = c.Id
+                           LEFT JOIN V_OpenTickets til ON til.IdCustomer = c.Id
                            WHERE (c.firstname || ' ' || c.lastname) like @Name
                     GROUP  BY c.id, 
                               c.firstname, 
