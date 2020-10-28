@@ -1023,12 +1023,10 @@ body {
 } */
 
 .slot.selected {
-  background-color: black;
-  color: white;
-  padding-right: 4px;
-  padding-left: 4px;
-  margin-left: -4px;
-  margin-right: -4px;
+  background-color: #000;
+  color: #fff;
+  padding: 2px 4px;
+  margin: -2px -4px;
 }
 
 .slot.selected .slot-name,

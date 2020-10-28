@@ -26,7 +26,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
             });
         return promise;
     };
-    
+
     //init
     $scope.init = function () {
         $scope.getLoadList();
@@ -48,7 +48,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () {});
+        }).catch(function () { });
     };
 
     //delete passenger from load
@@ -83,7 +83,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () {});
+        }).catch(function () { });
     };
 
     //add/edit Load
@@ -105,7 +105,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () {});;
+        }).catch(function () { });;
     };
 
     //check if passenger is already in load  
@@ -120,7 +120,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
                 });
             });
             return response;
-        } catch(err) {}
+        } catch (err) { }
     };
 
     //before drop item we show confirmation dialog
@@ -173,6 +173,20 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
         });
     };
 
+    $scope.selectCustomer = function (IdCustomer, scope, elem, attrs) {
+        if ($scope.selectedIdCustomer == IdCustomer) {
+            var slots = angular.element(document).find('.load .slot[data-idcustomer="' + IdCustomer + '"]');
+            slots.removeClass('selected');
+            $scope.selectedIdCustomer = -1;
+        }
+        else {
+            var slots = angular.element(document).find('.load .slot.selected');
+            slots.removeClass('selected');
+            slots = angular.element(document).find('.load .slot[data-idcustomer="' + IdCustomer + '"]');
+            slots.addClass('selected');
+            $scope.selectedIdCustomer = IdCustomer;
+        }
+    }
 });
 
 app.controller('confirmLoadCtrl', function ($scope, $state, $filter, $mdDialog, $window, dataToPass, apiService, config) {
@@ -205,7 +219,7 @@ app.controller('editLoadCtrl', function ($scope, $state, $filter, $mdDialog, $wi
 
     self.save = function ($event) {
         //before save we clean Loads array if not we have error TypeError: cyclic object value
-        $scope.load.Loads=null;
+        $scope.load.Loads = null;
         var url = config.manifestApi + '/load/save';
         apiService.postData(url, $scope.load, true)
             .then(function () {
@@ -236,7 +250,7 @@ app.controller('editLoadCtrl', function ($scope, $state, $filter, $mdDialog, $wi
 
     $scope.getLoadNumber = function (idAircraft) {
         var array = $scope.load.Loads;
-        if (idAircraft){
+        if (idAircraft) {
             var array = $filter('filter')(array, function (item) {
                 return item.IdAircraft == idAircraft;
             });

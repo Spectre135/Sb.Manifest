@@ -66,8 +66,7 @@
                                 ng-style="{'background-color':g.BackgroundColor, 'border-color':g.BackgroundColor}">
                                 <md-card-content style="cursor: -webkit-grab;">
                                     <div ng-repeat="p in g.LoadList | orderBy: 'ProductSlotName'" class="slot"
-                                        ng-class="p.IdCustomer == selectedIdCustomer ? 'selected' : ''"
-                                        ng-dblclick="selectedIdCustomer == p.IdCustomer ? selectedIdCustomer = -1 :selectedIdCustomer = p.IdCustomer">
+                                        data-idcustomer="{{p.IdCustomer}}" ng-dblclick="selectCustomer(p.IdCustomer)">
                                         <div layout="row">
                                             <div flex="70" class="slot-name">
                                                 <div>{{p.ProductSlotName}}</div>
