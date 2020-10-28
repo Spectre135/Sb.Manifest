@@ -73,7 +73,6 @@ namespace sb.manifest.api.Services
 
             return mResponse;
         }
-
         private void CalculateLoadParam(List<MLoadPerson> list, out decimal profit, out decimal totalWeight)
         {
             profit = 0;
