@@ -19,7 +19,7 @@
             <label>Aircraft</label>
             <md-select ng-required ng-model="load.IdAircraft" name="aircraft" md-on-open="getAircrafts()"
               ng-change="getLoadNumber(load.IdAircraft)" ng-init="setAircraft(load)">
-              <md-option ng-repeat="item in aircraftList" value="{{item.Id}}">
+              <md-option class="separator" ng-repeat="item in aircraftList" value="{{item.Id}}">
                 <b>{{item.Name}}</b> <small>{{item.Type}} <b>{{item.Registration}}</b></small>
               </md-option>
             </md-select>

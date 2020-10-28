@@ -35,7 +35,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
     };
 
     //add people to load
-    $scope.addPeople = function ($event, dto) {
+    $scope.addPeople = function ($event, dto, idProduct) {
         $mdDialog.show({
             locals: {
                 dataToPass: dto

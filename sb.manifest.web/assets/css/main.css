@@ -1096,7 +1096,7 @@ body {
   margin    : 0 12px 8px 0;
 }
 
-.load-add-customer {
+md-option.separator:not(:last-child) {
   border-bottom: solid 1px #ddd;
 }
 
