@@ -55,7 +55,7 @@
     margin-left   : -3px;
 }
 
-@media (min-width: 768px){
+@media (min-width: 768px) {
     #app-txt {
         font-size: 36px !important;
     }

@@ -1024,18 +1024,22 @@ body {
 
 .slot.selected {
   background-color: #000;
-  color: #fff;
-  padding: 2px 4px;
-  margin: -2px -4px;
+  color           : #fff;
+  padding         : 2px 4px;
+  margin          : -2px -4px;
 }
 
 .slot.selected .slot-name,
-.slot.selected .profit{
-  color:#aaa;
+.slot.selected .profit {
+  color: #aaa;
+}
+
+.load {
+  background-color: #fff;
 }
 
 .load.full {
-  background: linear-gradient(180deg, rgba(0, 153, 31, 1) 8px, rgba(0, 153, 31, .15) 9px, rgba(0, 153, 31, 0) 69px);
+  background: linear-gradient(180deg, rgba(0, 153, 31, 1) 8px, rgba(0, 153, 31, .15) 9px, rgba(255, 255, 255, 1) 69px);
 }
 
 .load.full.drop-hover {
@@ -1043,7 +1047,7 @@ body {
 }
 
 .load.negative {
-  background: linear-gradient(180deg, rgba(221, 0, 0, 1) 8px, rgba(221, 0, 0, .15) 9px, rgba(221, 0, 0, 0) 69px);
+  background: linear-gradient(180deg, rgba(221, 0, 0, 1) 8px, rgba(221, 0, 0, .15) 9px, rgba(255, 255, 255, 1) 69px);
 }
 
 .load.negative.drop-hover {
@@ -1078,7 +1082,7 @@ body {
   border-radius   : 4px;
 }
 
-.slot.selected .passenger .tickets{
+.slot.selected .passenger .tickets {
   background-color: rgba(255, 255, 255, 0.33);
 }
 
@@ -1090,6 +1094,19 @@ body {
   text-align: right;
   font-size : 11px;
   margin    : 0 12px 8px 0;
+}
+
+.load-add-customer {
+  border-bottom: solid 1px #ddd;
+}
+
+.load-add-customer-remark {
+  font-size: 12px;
+  color    : #666;
+}
+
+.load-add-customer-remark .warning {
+  color: #d00;
 }
 
 .font16 {
