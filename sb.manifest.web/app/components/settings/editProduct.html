@@ -44,6 +44,11 @@
           <div flex md-color-picker random="true" ng-model="dto.BackgroundColor" open-on-input="true"></div>
         </md-input-container>
 
+        <md-input-container class="md-icon-float md-block" style="width: 100%;">
+          <label ng-style="dto.IsFavorite == 1 && {'color':'black'}">Is favorite</label>
+          <md-switch ng-model="dto.IsFavorite"></md-switch>
+        </md-input-container>
+
         <div class="alert">{{warning}}</div>
 
       </form>

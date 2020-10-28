@@ -365,12 +365,14 @@ namespace sb.manifest.api.SQL
                                  description, 
                                  backgroundcolor, 
                                  isproductslot, 
-                                 price) 
+                                 price,
+                                 isfavorite) 
                     VALUES     (@Name, 
                                 @Description, 
                                 @BackgroundColor, 
                                 @IsProductSlot, 
-                                @Price)";
+                                @Price,
+                                @IsFavorite)";
         }
         public static string GetSaveSalesProductSQL()
         {
@@ -379,7 +381,8 @@ namespace sb.manifest.api.SQL
                             description = @Description, 
                             backgroundcolor = @BackgroundColor, 
                             isproductslot = @IsProductSlot, 
-                            price = @Price
+                            price = @Price,
+                            isfavorite =  @IsFavorite
                      WHERE  id = @Id ";
         }
         #endregion

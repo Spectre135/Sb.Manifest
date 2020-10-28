@@ -100,11 +100,10 @@
                         </div>
                     </div>
                 </md-card-content>
-                <div class="load-shortcuts">
-                    <a href="javascript:;" ng-click="addPeople($event,l,1)">solo 4K</a> |
-                    <a href="javascript:;" ng-click="addPeople($event,l,2)">tandem</a> |
-                    <a href="javascript:;" ng-click="addPeople($event,l,3)">tandem + video</a> |
-                    <a href="javascript:;" ng-click="addPeople($event,l,4)">adrenalin</a>
+                <div class="load-shortcuts row">
+                    <div ng-repeat="p in productList">
+                        <a href="#" onclick="return false;" ng-click="addPeople($event,l,p.Id)">{{p.Name}}</a> |
+                    </div>                  
                 </div>
             </md-card>
         </div>
@@ -118,11 +117,11 @@
         <md-content layout-padding>
             <md-input-container class="md-icon-float md-block">
                 <label>Search</label>
-                <input ng-model="searchText" name="search" ng-keypress="onKeySearch($event)"/>
+                <input ng-model="searchText" name="search" ng-keypress="onKeySearch($event)" />
             </md-input-container>
             <div layout="row" layout-sm="column" layout-align="space-around" ng-if="working">
                 <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-              </div>
+            </div>
             <md-card class="slot-card" data-drag="true" data-jqyoui-options="dragOptions"
                 ng-repeat="g in customers track by $index" ng-model="g[$index]"
                 jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallbackAdd(g)'}">
@@ -133,7 +132,7 @@
                             <span class="name">{{g.Name}}</span></br>
                             <span class="font12 gray" ng-show="g.AvaibleTickets">Tickets left
                                 {{g.TicketName}}({{g.AvaibleTickets}})</span>
-                              <span class="font12 gray" ng-show="g.AvaibleFunds">Avaible funds
+                            <span class="font12 gray" ng-show="g.AvaibleFunds">Avaible funds
                                 {{g.AvaibleFunds | currency}}</span>
                         </div>
                         <div flex="30" style="text-align: end;">
