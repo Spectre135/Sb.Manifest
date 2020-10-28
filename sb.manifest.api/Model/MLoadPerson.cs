@@ -8,6 +8,7 @@ namespace sb.manifest.api.Model
         public int Id { get; set; }
         public string Passenger { get; set; }
         public long IdCustomer { get; set; }
+        public int Weight { get; set; }
         public string ProductSlotName { get; set; }
         public decimal Profit { get; set; }
         public int AvaibleTickets { get; set; }

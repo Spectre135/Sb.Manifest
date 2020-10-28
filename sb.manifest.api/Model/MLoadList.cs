@@ -38,6 +38,9 @@ namespace sb.manifest.api.Model
         [DataField("IdCustomer")]
         public long IdCustomer { get; set; }
 
+        [DataField("Weight")]
+        public int? Weight { get; set; }
+
         [DataField("ProductSlotName")]
         public string ProductSlotName { get; set; }
 

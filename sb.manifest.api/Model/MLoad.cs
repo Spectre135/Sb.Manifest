@@ -43,6 +43,9 @@ namespace sb.manifest.api.Model
         public DateTime? DateDeleted { get; set; }
 
         public List<MGroup> GroupList { get; set; }
+        public decimal? TotalWeight { get; set; }
+        public int? SlotsLeft { get; set; }
+        public decimal? Profit { get; set; }
 
     }
 }

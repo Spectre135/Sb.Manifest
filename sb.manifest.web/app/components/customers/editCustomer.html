@@ -54,6 +54,14 @@
                   <div ng-message="required">{{messages.required}}</div>
                 </div>
               </md-input-container>
+
+              <md-input-container class="md-icon-float md-block" style="width: 50%;">
+                <label>Weight (kg)</label>
+                <input required type="number" step="any" name="weight" ng-model="customer.Weight" ng-pattern="/^[0-9]/" />
+                <div ng-messages="form.weight.$error" role="alert">
+                  <div ng-message="required">Weight is required.</div>
+                </div>
+              </md-input-container>
             </div>
 
 
@@ -63,9 +71,19 @@
                 <input md-maxlength="100" type="text" ng-model="customer.Address" name="address"
                   capitalize-first />
               </md-input-container>
+              
               <md-input-container class="md-icon-float md-block" style="width: 100%;">
                 <label>Postal code</label>
                 <input type="number" ng-model="customer.PostalCode" name="postalcode"/>
+              </md-input-container>
+
+              <md-input-container class="md-icon-float md-block" style="width: 100%;">
+                <label>Country</label>
+                <md-select ng-model="customer.IdCountry" md-on-open="getCountries()" ng-init="setCountry(customer)">
+                  <md-option ng-repeat="item in countries" value="{{item.Id}}">
+                    {{item.Name}}
+                  </md-option>
+                </md-select>
               </md-input-container>
 
             </div>
@@ -76,15 +94,6 @@
                 <label style="margin-bottom: 25px;">Phone number</label>
                 <input type="text" style="margin-bottom: 25px;" ng-model="customer.Phone" name="phone" ng-intl-tel-input
                   data-initial-country="si">
-              </md-input-container>
-
-              <md-input-container class="md-icon-float md-block" style="width: 100%;">
-                <label>Country</label>
-                <md-select ng-model="customer.IdCountry" md-on-open="getCountries()" ng-init="setCountry(customer)">
-                  <md-option ng-repeat="item in countries" value="{{item.Id}}">
-                    {{item.Name}}
-                  </md-option>
-                </md-select>
               </md-input-container>
 
             </div>
@@ -99,14 +108,14 @@
             <div layout-gt-sm="row">
               <md-input-container class="md-icon-float md-block" style="width: 100%;">
                 <label>Limit</label>
-                <input type="text" format="currency" name="limit" ng-model="customer.Limit"/>
+                <input type="text" format-currency name="limit" ng-model="customer.Limit"/>
               </md-input-container>
             </div>
 
             <div layout-gt-sm="row">
               <md-input-container class="md-icon-float md-block" style="width: 100%;">
                 <label>Ticket price</label>
-                <input type="text" format="currency" name="ticketprice" ng-model="customer.TicketPrice"/>
+                <input type="text" format-currency name="ticketprice" ng-model="customer.TicketPrice"/>
               </md-input-container>
             </div>
 

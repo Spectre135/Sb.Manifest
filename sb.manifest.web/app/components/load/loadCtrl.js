@@ -18,60 +18,13 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
     $scope.getLoadList = function () {
         var params = {};
         var url = config.manifestApi + '/load/list';
-        var promise = apiService.getData(url, params, false)
+        var promise = apiService.getData(url, params, true)
             .then(function (data) {
                 $scope.loads = data.DataList;
             });
         return promise;
     };
-
-    //ugly way to calculate slots left and profit
-    $scope.getSlotsLeft = function (seats, idLoad) {
-        try {
-            if ($scope.loads != undefined) {
-                var array = $filter('filter')($scope.loads, function (item) {
-                    return item.Id == idLoad;
-                });
-                angular.forEach(array, function (value, key) {
-                    angular.forEach(value.GroupList, function (value, key) {
-                        if (value) { //undefined values ignore - cause drag and drop when moving
-                            seats = seats - value.LoadList.length;
-                        }
-                    });
-                });
-            }
-            return seats;
-
-        } catch (error) {
-            return seats;
-        }
-    };
-
-    $scope.getLoadProfit = function (idLoad) {
-
-        try {
-            var profit = 0;
-
-            if ($scope.loads != undefined) {
-                var array = $filter('filter')($scope.loads, function (item) {
-                    return item.Id == idLoad;
-                });
-                angular.forEach(array, function (value, key) {
-                    angular.forEach(value.GroupList, function (value, key) {
-                        if (value) { //undefined values ignore - cause drag and drop when moving
-                            angular.forEach(value.LoadList, function (value, key) {
-                                profit = profit + value.Profit;
-                            });
-                        }
-                    });
-                });
-            }
-
-            return profit;
-
-        } catch (error) {}
-    };
-
+    
     //init
     $scope.init = function () {
         $scope.getLoadList();
@@ -153,7 +106,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
         }).catch(function () {});;
     };
 
-    //check if passenger is already in load
+    //check if passenger is already in load  
     function isInLoad(item) {
         try {
             var response = false;
@@ -165,7 +118,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
                 });
             });
             return response;
-        } catch {}
+        } catch(err) {}
     };
 
     //before drop item we show confirmation dialog

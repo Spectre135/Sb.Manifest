@@ -41,5 +41,9 @@ namespace sb.manifest.api.Model
         [ParamField("IsStaffJob")]
         public bool IsStaffJob { get; set; }
 
+        [DataField("EquipmentWeight")]
+        [ParamField("EquipmentWeight")]
+        public int EquipmentWeight { get; set; }
+
     }
 }

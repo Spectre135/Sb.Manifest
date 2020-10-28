@@ -56,6 +56,14 @@
           </md-input-container>
         </div>
 
+        <md-input-container class="md-icon-float md-block">
+          <label>Equipment weight (kg)</label>
+          <input required type="number" step="any" name="equipmentWeight" ng-model="dto.EquipmentWeight" ng-pattern="/^[0-9]/" />
+          <div ng-messages="form.equipmentWeight.$error" role="alert">
+            <div ng-message="required">Equipment weight is required.</div>
+          </div>
+        </md-input-container>
+
         <md-input-container class="md-block">
           <label>Account</label>
           <md-select ng-required ng-model="dto.IdAccount" name="account">

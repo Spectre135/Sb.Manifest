@@ -11,7 +11,7 @@
                         <div class="md-headline blue">{{l.AircraftName}} <b>{{l.Number}}</b>
                             <b style="display: block;">{{l.Description}}</b></div>
                         <span class="md-subhead">{{l.AircraftType}} <b>{{l.AircraftRegistration}}</b></span>
-                        <span class="md-subhead">{{getLoadProfit(l.Id) | currency}} | 780 kg (TODO)</span>
+                        <span class="md-subhead">{{l.Profit | currency}} | {{l.TotalWeight}} kg</span>
                     </md-card-title-text>
                     <md-card-actions layout="column">
                         <md-menu class="td-menu">
@@ -53,9 +53,9 @@
                     <div layout="row" style="width: 100%;">
                         <div flex="15">
                             <div class="slots-left"
-                                ng-class="getSlotsLeft(l.MaxSlots,l.Id) > 0 ? 'positive' : getSlotsLeft(l.MaxSlots,l.Id) == 0 ? 'full' : 'negative'">
+                                ng-class="SlotsLeft > 0 ? 'positive' : SlotsLeft == 0 ? 'full' : 'negative'">
                                 <div class="label-small">slots<br>left</div>
-                                <div class="value">{{getSlotsLeft(l.MaxSlots,l.Id)}}</div>
+                                <div class="value">{{l.SlotsLeft}}</div>
                             </div>
                         </div>
                         <div flex="85" class="slots">
