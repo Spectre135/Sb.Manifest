@@ -16,6 +16,8 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
     $scope.customers = [];
     $scope.dragToAdd = false; //to know if we must add person to load from side menu
 
+    $scope.selectedIdCustomer;
+
     //getLoadList
     $scope.getLoadList = function () {
         var params = {};
@@ -46,7 +48,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () {});
+        }).catch(function () { });
     };
 
     //delete passenger from load
@@ -81,7 +83,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () {});
+        }).catch(function () { });
     };
 
     //add/edit Load
@@ -103,7 +105,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () {});;
+        }).catch(function () { });;
     };
 
     //check if passenger is already in load  
@@ -118,7 +120,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
                 });
             });
             return response;
-        } catch (err) {}
+        } catch (err) { }
     };
 
     //before drop item we show confirmation dialog
@@ -247,6 +249,20 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
         }
     };
 
+    $scope.selectCustomer = function (IdCustomer, scope, elem, attrs) {
+        if ($scope.selectedIdCustomer == IdCustomer) {
+            var slots = angular.element(document).find('.load .slot[data-idcustomer="' + IdCustomer + '"]');
+            slots.removeClass('selected');
+            $scope.selectedIdCustomer = -1;
+        }
+        else {
+            var slots = angular.element(document).find('.load .slot.selected');
+            slots.removeClass('selected');
+            slots = angular.element(document).find('.load .slot[data-idcustomer="' + IdCustomer + '"]');
+            slots.addClass('selected');
+            $scope.selectedIdCustomer = IdCustomer;
+        }
+    }
 });
 
 app.controller('confirmLoadCtrl', function ($scope, $state, $filter, $mdDialog, $window, dataToPass, apiService, config) {
