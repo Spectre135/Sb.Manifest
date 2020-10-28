@@ -33,7 +33,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
     //add people to load
     $scope.addPeople = function ($event, dto) {
         //slots left to handle add people to load
-        dto.SlotsLeft = $scope.getSlotsLeft(dto.MaxSlots, dto.Id);
+        dto.SlotsLeft = $scope.getSlotsLeft(dto.MaxSlots, dto.Id); //TODO tole zdej ne dela
         $mdDialog.show({
             locals: {
                 dataToPass: dto

@@ -8,8 +8,8 @@
                 jqyoui-droppable="{onDrop:'dropCallback()', beforeDrop:'beforeDrop(l)', multiple:true}">
                 <md-card-title style="padding: 9px 7px 5px;">
                     <md-card-title-text>
-                        <div class="md-headline blue">{{l.AircraftName}} {{l.Number}} 
-                        <b style="display: block;">{{l.Description}}</b></div>
+                        <div class="md-headline blue">{{l.AircraftName}} <b>{{l.Number}}</b>
+                            <b style="display: block;">{{l.Description}}</b></div>
                         <span class="md-subhead">{{l.AircraftType}} <b>{{l.AircraftRegistration}}</b></span>
                         <span class="md-subhead">{{l.Profit | currency}} | {{l.TotalWeight}} kg</span>
                     </md-card-title-text>
@@ -52,9 +52,11 @@
                     style="padding: 0px 3px 3px 7px;">
                     <div layout="row" style="width: 100%;">
                         <div flex="15">
-                            <div class="slots-left">Slots<br>left</div>
-                            <div class="font30" ng-style="SlotsLeft  < 0 && {'color':'red'}">
-                                {{l.SlotsLeft}}</div>
+                            <div class="slots-left"
+                                ng-class="l.SlotsLeft > 0 ? 'positive' : l.SlotsLeft == 0 ? 'full' : 'negative'">
+                                <div class="label-small">slots<br>left</div>
+                                <div class="value">{{l.SlotsLeft}}</div>
+                            </div>
                         </div>
                         <div flex="85" class="slots">
                             <md-card class="slot-card" data-drag="true" data-jqyoui-options="dragOptions"
@@ -67,7 +69,7 @@
                                     <div ng-repeat="p in g.LoadList | orderBy: 'ProductSlotName'" class="slot">
                                         <div layout="row">
                                             <div flex="70" class="slot-name">
-                                             <div>{{p.ProductSlotName}}</div>
+                                                <div>{{p.ProductSlotName}}</div>
                                             </div>
                                             <div flex="30" class="profit">
                                                 <span ng-if="p.Profit"
@@ -91,12 +93,18 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- <div  class="dodatno">Delete ..... Move to .....</div> -->
+                                    <!-- <div  class="dodatno">Delete ..... Move to .....</div> -->                                    
                                 </md-card-content>
                             </md-card>
                         </div>
                     </div>
                 </md-card-content>
+                <div class="load-shortcuts">
+                    <a href="#">solo 4K</a> | 
+                    <a href="#">tandem</a> |
+                    <a href="#">tandem + video</a> |
+                    <a href="#">adrenalin</a>
+                </div>
             </md-card>
         </div>
     </md-content>
