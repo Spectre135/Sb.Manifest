@@ -49,8 +49,7 @@
                         </md-menu>
                     </md-card-actions>
                 </md-card-title>
-                <md-card-content layout="row" layout-align="space-between"
-                    style="padding: 0px 3px 3px 7px;">
+                <md-card-content layout="row" layout-align="space-between" style="padding: 0px 3px 3px 7px;">
                     <div layout="row" style="width: 100%;">
                         <div flex="15">
                             <div class="slots-left">
@@ -66,7 +65,9 @@
                                 ng-hide="!g.IdGroup"
                                 ng-style="{'background-color':g.BackgroundColor, 'border-color':g.BackgroundColor}">
                                 <md-card-content style="cursor: -webkit-grab;">
-                                    <div ng-repeat="p in g.LoadList | orderBy: 'ProductSlotName'" class="slot">
+                                    <div ng-repeat="p in g.LoadList | orderBy: 'ProductSlotName'" class="slot"
+                                        ng-class="p.IdCustomer == selectedIdCustomer ? 'selected' : ''"
+                                        ng-dblclick="selectedIdCustomer == p.IdCustomer ? selectedIdCustomer = -1 :selectedIdCustomer = p.IdCustomer">
                                         <div layout="row">
                                             <div flex="70" class="slot-name">
                                                 <div>{{p.ProductSlotName}}</div>
@@ -93,14 +94,14 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- <div  class="dodatno">Delete ..... Move to .....</div> -->                                    
+                                    <!-- <div  class="dodatno">Delete ..... Move to .....</div> -->
                                 </md-card-content>
                             </md-card>
                         </div>
                     </div>
                 </md-card-content>
                 <div class="load-shortcuts">
-                    <a href="#">solo 4K</a> | 
+                    <a href="#">solo 4K</a> |
                     <a href="#">tandem</a> |
                     <a href="#">tandem + video</a> |
                     <a href="#">adrenalin</a>

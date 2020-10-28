@@ -14,6 +14,8 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
     $scope.moved = {}; //array when we move passengers between loads
     $scope.moved.IdCustomer = []; //array when we move passengers between loads
 
+    $scope.selectedIdCustomer;
+
     //getLoadList
     $scope.getLoadList = function () {
         var params = {};

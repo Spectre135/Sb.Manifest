@@ -1022,12 +1022,34 @@ body {
   color: #060;
 } */
 
-.load.full{
-  background: linear-gradient(180deg, rgba(0, 153, 31, 1) 8px,  rgba(0, 153, 31, .15) 9px, rgba(0, 153, 31, 0) 69px);
+.slot.selected {
+  background-color: black;
+  color: white;
+  padding-right: 4px;
+  padding-left: 4px;
+  margin-left: -4px;
+  margin-right: -4px;
 }
 
-.load.negative{
-  background: linear-gradient(180deg, rgba(221, 0, 0, 1) 8px,  rgba(221, 0, 0, .15) 9px, rgba(221, 0, 0, 0) 69px);
+.slot.selected .slot-name,
+.slot.selected .profit{
+  color:#aaa;
+}
+
+.load.full {
+  background: linear-gradient(180deg, rgba(0, 153, 31, 1) 8px, rgba(0, 153, 31, .15) 9px, rgba(0, 153, 31, 0) 69px);
+}
+
+.load.full.drop-hover {
+  background: linear-gradient(180deg, rgba(0, 153, 31, 1) 8px, rgba(0, 153, 31, .15) 9px, rgba(0, 153, 31, .05) 69px);
+}
+
+.load.negative {
+  background: linear-gradient(180deg, rgba(221, 0, 0, 1) 8px, rgba(221, 0, 0, .15) 9px, rgba(221, 0, 0, 0) 69px);
+}
+
+.load.negative.drop-hover {
+  background: linear-gradient(180deg, rgba(221, 0, 0, 1) 8px, rgba(221, 0, 0, .15) 9px, rgba(221, 0, 0, .05) 69px);
 }
 
 .load.full .slots-left .value,
@@ -1058,10 +1080,18 @@ body {
   border-radius   : 4px;
 }
 
+.slot.selected .passenger .tickets{
+  background-color: rgba(255, 255, 255, 0.33);
+}
+
+.slot .passenger .tickets small {
+  font-size: 8px;
+}
+
 .load-shortcuts {
-  text-align   : right;
-  font-size    : 11px;
-  margin: 0 12px 8px 0;
+  text-align: right;
+  font-size : 11px;
+  margin    : 0 12px 8px 0;
 }
 
 .font16 {
