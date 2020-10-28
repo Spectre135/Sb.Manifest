@@ -994,11 +994,16 @@ body {
   border-color: rgba(0, 0, 0, 0.1);
 }
 
-.load .slots-left,
+.load .slots-left .label-small,
 .slot .slot-name,
 .slot .profit {
   font-size: 11px;
   color    : #666;
+}
+
+.load .slots-left {
+  font-size: 24px;
+  margin-right: 8px;
 }
 
 .slot .passenger {
@@ -1013,12 +1018,29 @@ body {
   text-align: end;
 }
 
-.slot .profit .positive {
-  /* color: #060; */
+/* .slot .profit .positive {
+  color: #060;
+} */
+
+.slots-left.full .value,
+.slots-left.negative .value {
+  border-radius: 3px;
+  display: block;
+  text-align: center;
+  color: #fff;
+} 
+
+.slots-left.full .value{
+  background-color: #090;
+}
+
+.slots-left.negative .value {
+  background-color: #d00;
 }
 
 .slot .profit .negative {
   color: #d00;
+  font-weight: 700;
 }
 
 .slot .passenger .tickets {

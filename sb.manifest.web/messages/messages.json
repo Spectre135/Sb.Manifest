@@ -7,8 +7,8 @@
     "addPassenger" : "Add passenger to load",
     "addCustomer" : "Add new customer",
     "required" : "Field is required",
-    "nomoreslots" : "There are not enought slots available !",
+    "nomoreslots" : "There are not enought slots available!",
     "duplicatePassengerInLoad": "Duplicate passenger in load",
-    "warning":"WARNING !",
-    "notfunds":"No enough funds"
+    "warning":"WARNING!",
+    "notfunds":"Not enough funds"
 }
