@@ -1022,19 +1022,27 @@ body {
   color: #060;
 } */
 
-.slots-left.full .value,
-.slots-left.negative .value {
+.load.full{
+  background: linear-gradient(180deg, rgba(0, 153, 31, 1) 8px,  rgba(0, 153, 31, .15) 9px, rgba(0, 153, 31, 0) 69px);
+}
+
+.load.negative{
+  background: linear-gradient(180deg, rgba(221, 0, 0, 1) 8px,  rgba(221, 0, 0, .15) 9px, rgba(221, 0, 0, 0) 69px);
+}
+
+.load.full .slots-left .value,
+.load.negative .slots-left .value {
   border-radius: 3px;
   display      : block;
   text-align   : center;
   color        : #fff;
 }
 
-.slots-left.full .value {
+.load.full .slots-left .value {
   background-color: #090;
 }
 
-.slots-left.negative .value {
+.load.negative .slots-left .value {
   background-color: #d00;
 }
 

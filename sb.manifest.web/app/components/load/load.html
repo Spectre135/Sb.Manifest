@@ -4,14 +4,15 @@
         <div flex-xs style="flex-shrink: 0; min-width: 300px; width: 20%;" layout="column"
             ng-repeat="l in loads | orderBy: 'Id' track by $index">
 
-            <md-card data-drop="true" data-jqyoui-options="dropOptions" ng-model="l.GroupList"
+            <md-card class="load" ng-class="l.SlotsLeft > 0 ? 'positive' : l.SlotsLeft == 0 ? 'full' : 'negative'"
+                data-drop="true" data-jqyoui-options="dropOptions" ng-model="l.GroupList"
                 jqyoui-droppable="{onDrop:'dropCallback()', beforeDrop:'beforeDrop(l)', multiple:true}">
                 <md-card-title style="padding: 9px 7px 5px;">
                     <md-card-title-text>
                         <div class="md-headline blue">{{l.AircraftName}} <b>{{l.Number}}</b>
                             <b style="display: block;">{{l.Description}}</b></div>
                         <span class="md-subhead">{{l.AircraftType}} <b>{{l.AircraftRegistration}}</b></span>
-                        <span class="md-subhead">{{l.Profit | currency}} | {{l.TotalWeight}} kg</span>
+                        <span class="md-subhead">{{l.TotalWeight}} kg &bull; {{l.Profit | currency}}</span>
                     </md-card-title-text>
                     <md-card-actions layout="column">
                         <md-menu class="td-menu">
@@ -48,12 +49,11 @@
                         </md-menu>
                     </md-card-actions>
                 </md-card-title>
-                <md-card-content layout="row" layout-align="space-between" class="load"
+                <md-card-content layout="row" layout-align="space-between"
                     style="padding: 0px 3px 3px 7px;">
                     <div layout="row" style="width: 100%;">
                         <div flex="15">
-                            <div class="slots-left"
-                                ng-class="l.SlotsLeft > 0 ? 'positive' : l.SlotsLeft == 0 ? 'full' : 'negative'">
+                            <div class="slots-left">
                                 <div class="label-small">slots<br>left</div>
                                 <div class="value">{{l.SlotsLeft}}</div>
                             </div>
