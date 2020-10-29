@@ -50,7 +50,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
 
     //add people to load
     $scope.addPeople = function ($event, dto, idProduct) {
-        dto.IdProductSelected=idProduct;
+        dto.IdProductSelected = idProduct;
         $mdDialog.show({
             locals: {
                 dataToPass: dto
@@ -63,7 +63,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () {});
+        }).catch(function () { });
     };
 
     //delete passenger from load
@@ -98,7 +98,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () {});
+        }).catch(function () { });
     };
 
     //add/edit Load
@@ -120,7 +120,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () {});;
+        }).catch(function () { });;
     };
 
     //check if passenger is already in load  
@@ -135,7 +135,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
                 });
             });
             return response;
-        } catch (err) {}
+        } catch (err) { }
     };
 
     //before drop item we show confirmation dialog
@@ -204,7 +204,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
                     $scope.moved = {};
                     $scope.moved.IdCustomer = [];
                     $scope.getLoadList();
-                    setTimeout(reselectCustomer, 500);
+                    reselectCustomer();
                 });
         } else {
             var url = config.manifestApi + '/load/slot/move';
@@ -215,15 +215,17 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
                     $scope.moved.IdCustomer = [];
                     //we must refresh load list
                     $scope.getLoadList();
-                    setTimeout(reselectCustomer, 500);
+                    reselectCustomer();
                 });
         }
     };
 
     function reselectCustomer() {
         if ($scope.selectedIdCustomer > -1) {
-            var slots = angular.element('.load .slot[data-idcustomer="' + $scope.selectedIdCustomer + '"]');
-            slots.addClass('selected');
+            setTimeout(function () {
+                var slots = angular.element('.load .slot[data-idcustomer="' + $scope.selectedIdCustomer + '"]');
+                slots.addClass('selected');
+            }, 500);
         }
     }
 
