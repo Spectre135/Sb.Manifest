@@ -25,12 +25,12 @@
                     <md-card-title-text>
                         <div class="md-headline blue">{{l.AircraftName}} <b>{{l.Number}}</b>
                             <b style="display: block;">{{l.Description}}</b></div>
-                        <span class="md-subhead">{{l.AircraftType}} <b>{{l.AircraftRegistration}}</b></span>
+                        <span class="md-subhead">{{l.AircraftType}} <b style="display: inline-block;">{{l.AircraftRegistration}}</b></span>
                         <span class="md-subhead">{{l.TotalWeight}} kg &bull; {{l.Profit | currency}}</span>
                     </md-card-title-text>
 
                     <md-card-actions layout="column">
-                        <md-menu class="td-menu">
+                        <md-menu>
                             <md-button aria-label="Open menu" class="md-fab md-mini md-gray"
                                 ng-click="$mdMenu.open($event)">
                                 <span><i class="fas fa-ellipsis-v"></i></span>
@@ -105,10 +105,11 @@
                         </md-card>
                     </div>
                 </md-card-content>
-                <div class="load-shortcuts row">
-                    <div ng-repeat="p in productList">
-                        <a href="#" onclick="return false;" ng-click="addPeople($event,l,p.Id)">{{p.Name}}</a> |
-                    </div>                  
+                <div class="load-shortcuts">
+                    <span ng-repeat="p in productList">
+                        <a href="#" onclick="return false;" ng-click="addPeople($event,l,p.Id)">{{p.Name}}</a>
+                        {{($index < productList.length - 1) ? "|" : ""}}
+                    </span>                  
                 </div>
             </md-card>
         </div>
