@@ -984,14 +984,16 @@ body {
 }
 
 #loads-main .loads-helper {
-    width  : 300px;
-    display: none;
-    float  : right;
+    width     : 300px;
+    display   : none;
+    float     : right;
+    box-shadow: 0px -1px 5px rgba(22, 25, 31, 0.8);
+    position  : relative;
 }
 
 #loads-main.open-helper .loads {
     float: left;
-    width: calc(100% - 300px);
+    width: calc(100% - 308px);
 }
 
 #loads-main.open-helper .loads-helper {
@@ -1002,6 +1004,7 @@ body {
     margin      : 0 8px 12px;
     border-width: 0 8px 0 0;
     border-style: solid;
+    padding     : 0;
 }
 
 .slot-card md-card-content {
