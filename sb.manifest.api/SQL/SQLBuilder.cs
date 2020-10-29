@@ -113,12 +113,13 @@ namespace sb.manifest.api.SQL
                            INNER JOIN today t ON t.Id = c.Id 
                            LEFT JOIN onload l ON c.id = l.idcustomer  AND l.idload = @IdLoad
                            LEFT JOIN V_AvaibleTickets at ON at.IdCustomer = c.Id 
-                           LEFT JOIN V_OpenTickets til ON til.IdCustomer = c.Id
+                           LEFT JOIN V_OpenTickets til ON til.IdCustomer = c.Id AND til.IdProductSlot = at.IdProductSlot
                     GROUP  BY c.id, 
                               c.firstname, 
                               c.lastname, 
                               l.idload,
-                              c.IsStaff";
+                              c.IsStaff,
+                              at.IdProductSlot";
         }
         public static string GetActiveSQL()
         {
@@ -141,13 +142,14 @@ namespace sb.manifest.api.SQL
                                   ON c.id = l.idcustomer 
                                      AND l.idload = @IdLoad
                            LEFT JOIN V_AvaibleTICKETS at ON at.IdCustomer = c.Id  
-                           LEFT JOIN V_OpenTickets til ON til.IdCustomer = c.Id
+                           LEFT JOIN V_OpenTickets til ON til.IdCustomer = c.Id AND til.IdProductSlot = at.IdProductSlot
                            WHERE (c.firstname || ' ' || c.lastname) like @Name
                     GROUP  BY c.id, 
                               c.firstname, 
                               c.lastname, 
                               l.idload,
-                              c.IsStaff
+                              c.IsStaff,
+                              at.IdProductSlot
                     LIMIT @Limit";
         }
         public static string GetMoveSlotSQL()

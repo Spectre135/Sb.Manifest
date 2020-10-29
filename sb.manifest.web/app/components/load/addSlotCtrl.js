@@ -74,18 +74,22 @@ app.controller('addSlotCtrl', function ($rootScope, $scope, $mdDialog, $filter, 
     //check if person have enought funds
     try {
 
-      //find person from list customers
+      //check if have tickets for selected product
+      var person = $filter('filter')($scope.customers, function (item) {
+        return item.Id == p && item.IdProductSlot == d.Id && item.AvaibleTickets>0;
+      })[0];
+
+      if (person){
+        return true;
+      }
+
+      //person don't have tickets check for funds
       var person = $filter('filter')($scope.customers, function (item) {
         return item.Id == p;
       })[0];
 
       //skip if staff
       if (person.IsStaff){
-        return true;
-      }
-
-      //check if have tickets for selected product
-      if (person.AvaibleTickets>0 && person.IdProductSlot==d.Id){
         return true;
       }
 
