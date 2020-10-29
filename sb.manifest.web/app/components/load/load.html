@@ -120,7 +120,8 @@
         <md-toolbar class="md-theme-light">
             <h1 class="md-toolbar-tools">Active skydivers</h1>
         </md-toolbar>
-        <md-content layout-padding>
+        <!-- <md-content>  -->
+        <div style="padding: 16px;">
             <md-input-container class="md-icon-float md-block">
                 <label>Search</label>
                 <input ng-model="searchText" name="search" ng-keypress="onKeySearch($event)" />
@@ -153,9 +154,8 @@
             <md-button ng-click="closeSideMenu()" class="md-primary">
                 Close
             </md-button>
-        </md-content>
-
-        </md-sidenav>
+        </div>
+        <!-- </md-content> -->
     </div>
 
 
