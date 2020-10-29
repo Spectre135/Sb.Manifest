@@ -1,6 +1,6 @@
-<div style="padding-bottom: 50px;">
+<div id="loads-main" style="padding-bottom: 50px;">
 
-    <md-content class="md-padding" layout-xs="column" layout="row">
+    <md-content class="md-padding loads" layout-xs="column" layout="row">
         <!-- <div flex-xs flex-gt-xs="25" style="flex-shrink: 0;" layout="column" -->
         <div flex-xs style="flex-shrink: 0; min-width: 280px; width: 18%;" layout="column"
             ng-repeat="l in loads | orderBy: 'Id' track by $index">
@@ -25,7 +25,8 @@
                     <md-card-title-text>
                         <div class="md-headline blue">{{l.AircraftName}} <b>{{l.Number}}</b>
                             <b style="display: block;">{{l.Description}}</b></div>
-                        <span class="md-subhead">{{l.AircraftType}} <b style="display: inline-block;">{{l.AircraftRegistration}}</b></span>
+                        <span class="md-subhead">{{l.AircraftType}} <b
+                                style="display: inline-block;">{{l.AircraftRegistration}}</b></span>
                         <span class="md-subhead">{{l.TotalWeight}} kg &bull; {{l.Profit | currency}}</span>
                     </md-card-title-text>
 
@@ -94,7 +95,7 @@
                                                     ng-class="p.Profit >= 0 ? 'profit positive': 'profit negative'">
                                                     {{p.Profit | currency}}
                                                 </span> -->
-                                            <span class="tickets" ng-if="!p.Profit && p.AvaibleTickets > 0">
+                                            <span class="tickets" ng-if="p.AvaibleTickets > 0">
                                                 <small>TK</small> {{p.AvaibleTickets}}
                                             </span>
                                         </div>
@@ -109,18 +110,18 @@
                     <span ng-repeat="p in productList">
                         <a href="#" onclick="return false;" ng-click="addPeople($event,l,p.Id)">{{p.Name}}</a>
                         {{($index < productList.length - 1) ? "|" : ""}}
-                    </span>                  
+                    </span>
                 </div>
             </md-card>
         </div>
     </md-content>
 
-    <md-sidenav class="md-sidenav-right" style="padding-top: 60px;" md-component-id="right">
-
+    <div class="loads-helper">
         <md-toolbar class="md-theme-light">
             <h1 class="md-toolbar-tools">Active skydivers</h1>
         </md-toolbar>
-        <md-content layout-padding>
+        <!-- <md-content>  -->
+        <div style="padding: 16px;">
             <md-input-container class="md-icon-float md-block">
                 <label>Search</label>
                 <input ng-model="searchText" name="search" ng-keypress="onKeySearch($event)" />
@@ -132,19 +133,20 @@
                 ng-repeat="g in customers track by $index" ng-model="g[$index]"
                 jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallbackAdd(g)'}">
                 <md-card-content style="cursor: -webkit-grab;">
-
-                    <div layout="row" class="passenger">
-                        <div flex="70">
-                            <span class="name">{{g.Name}}</span></br>
-                            <span class="font12 gray" ng-show="g.AvaibleTickets">Tickets left
-                                {{g.TicketName}}({{g.AvaibleTickets}})</span>
-                            <span class="font12 gray" ng-show="g.AvaibleFunds">Avaible funds
-                                {{g.AvaibleFunds | currency}}</span>
-                        </div>
-                        <div flex="30" style="text-align: end;">
-                            <span class="tickets" ng-if="!g.Profit && g.AvaibleTickets > 0">
-                                <small>TK</small> {{g.AvaibleTickets}}
-                            </span>
+                    <div class="slot">
+                        <div layout="row" class="passenger">
+                            <div flex="70">
+                                <span class="name">{{g.Name}}</span></br>
+                                <span class="font12 gray" ng-show="g.AvaibleTickets">Tickets:
+                                    {{g.TicketName}} ({{g.AvaibleTickets}})</span>
+                                <span class="font12 gray" ng-show="g.AvaibleFunds">Avaible funds:
+                                    {{g.AvaibleFunds | currency}}</span>
+                            </div>
+                            <div flex="30" style="text-align: end;">
+                                <span class="tickets" ng-if="!g.Profit && g.AvaibleTickets > 0">
+                                    <small>TK</small> {{g.AvaibleTickets}}
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </md-card-content>
@@ -152,10 +154,9 @@
             <md-button ng-click="closeSideMenu()" class="md-primary">
                 Close
             </md-button>
-        </md-content>
-
-    </md-sidenav>
-
+        </div>
+        <!-- </md-content> -->
+    </div>
 
 
     <div class="md-padding actionButtons" layout="column">
@@ -180,6 +181,5 @@
         </md-fab-speed-dial>
 
     </div>
-</div>
 
-<div ng-init="init()"></div>
+    <div ng-init="init()"></div>
