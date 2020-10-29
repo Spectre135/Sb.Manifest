@@ -204,7 +204,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
                     $scope.moved = {};
                     $scope.moved.IdCustomer = [];
                     $scope.getLoadList();
-                    reselectCustomer();
+                    $scope.getLoadList().then(reselectCustomer);
                 });
         } else {
             var url = config.manifestApi + '/load/slot/move';
@@ -214,8 +214,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
                     $scope.moved = {};
                     $scope.moved.IdCustomer = [];
                     //we must refresh load list
-                    $scope.getLoadList();
-                    reselectCustomer();
+                    $scope.getLoadList().then(reselectCustomer);
                 });
         }
     };
