@@ -981,6 +981,7 @@ body {
 
 #loads-main .loads {
     float: none;
+    /* position  : relative; */
 }
 
 #loads-main .loads-helper {
@@ -988,7 +989,7 @@ body {
     display   : none;
     float     : right;
     box-shadow: 0px -1px 5px rgba(22, 25, 31, 0.8);
-    position  : relative;
+    /* position  : relative; */
 }
 
 #loads-main.open-helper .loads {
@@ -1004,7 +1005,6 @@ body {
     margin      : 0 8px 12px;
     border-width: 0 8px 0 0;
     border-style: solid;
-    padding     : 0;
 }
 
 .slot-card md-card-content {
