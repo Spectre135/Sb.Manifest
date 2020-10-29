@@ -2,7 +2,7 @@
 
 var app = angular.module('SbManifest');
 
-app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter,$window, $mdDialog, $mdSidenav, apiService, config) {
+app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $mdDialog, $mdSidenav, apiService, config) {
 
     $scope.loads;
     $scope.query = {

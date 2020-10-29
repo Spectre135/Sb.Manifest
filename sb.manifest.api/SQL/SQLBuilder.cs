@@ -104,7 +104,7 @@ namespace sb.manifest.api.SQL
                              WHEN l.idload IS NULL THEN 0 
                              ELSE 1 
                            end           OnBoard,
-                           at.AvaibleTickets-til.Tickets AvaibleTickets,
+                           at.AvaibleTickets - IFNULL(til.Tickets,0)  AvaibleTickets,
                            at.ProductName TicketName,
                            at.IdProductSlot,
                            IFNULL(c.[Limit],0) + c.Balance AvaibleFunds,
@@ -131,7 +131,7 @@ namespace sb.manifest.api.SQL
                              WHEN l.idload IS NULL THEN 0 
                              ELSE 1 
                            end           OnBoard,
-                           at.AvaibleTickets-til.Tickets AvaibleTickets,
+                           at.AvaibleTickets - IFNULL(til.Tickets,0)  AvaibleTickets,
                            at.ProductName TicketName,
                            at.IdProductSlot,
                            IFNULL(c.[Limit],0) + c.Balance AvaibleFunds,
@@ -301,12 +301,13 @@ namespace sb.manifest.api.SQL
         #region TicketPost
         public static string InsertCreditTicketsSQL()
         {
-            return @"INSERT INTO TicketPost(IdCustomer,IdProductSlot,IdTransaction, CTickets)
+            return @"INSERT INTO TicketPost(IdCustomer,IdProductSlot,IdTransaction, CTickets,TicketPrice)
                     Select 
                     @IdCustomer,
                     p.Id IdProductSlot,
                     @IdTransaction,
-                    @Quantity CTickets
+                    @Quantity CTickets,
+                    @Price/@Quantity 
                     from ProductSlot p 
                     where p.Id = @IdProduct";
         }

@@ -95,7 +95,7 @@
                                                     ng-class="p.Profit >= 0 ? 'profit positive': 'profit negative'">
                                                     {{p.Profit | currency}}
                                                 </span> -->
-                                            <span class="tickets" ng-if="!p.Profit && p.AvaibleTickets > 0">
+                                            <span class="tickets" ng-if="p.AvaibleTickets > 0">
                                                 <small>TK</small> {{p.AvaibleTickets}}
                                             </span>
                                         </div>
@@ -132,19 +132,20 @@
                 ng-repeat="g in customers track by $index" ng-model="g[$index]"
                 jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallbackAdd(g)'}">
                 <md-card-content style="cursor: -webkit-grab;">
-
-                    <div layout="row" class="passenger">
-                        <div flex="70">
-                            <span class="name">{{g.Name}}</span></br>
-                            <span class="font12 gray" ng-show="g.AvaibleTickets">Tickets left
-                                {{g.TicketName}}({{g.AvaibleTickets}})</span>
-                            <span class="font12 gray" ng-show="g.AvaibleFunds">Avaible funds
-                                {{g.AvaibleFunds | currency}}</span>
-                        </div>
-                        <div flex="30" style="text-align: end;">
-                            <span class="tickets" ng-if="!g.Profit && g.AvaibleTickets > 0">
-                                <small>TK</small> {{g.AvaibleTickets}}
-                            </span>
+                    <div class="slot">
+                        <div layout="row" class="passenger">
+                            <div flex="70">
+                                <span class="name">{{g.Name}}</span></br>
+                                <span class="font12 gray" ng-show="g.AvaibleTickets">Tickets:
+                                    {{g.TicketName}} ({{g.AvaibleTickets}})</span>
+                                <span class="font12 gray" ng-show="g.AvaibleFunds">Avaible funds:
+                                    {{g.AvaibleFunds | currency}}</span>
+                            </div>
+                            <div flex="30" style="text-align: end;">
+                                <span class="tickets" ng-if="!g.Profit && g.AvaibleTickets > 0">
+                                    <small>TK</small> {{g.AvaibleTickets}}
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </md-card-content>
