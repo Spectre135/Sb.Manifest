@@ -64,7 +64,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter,$window, $m
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () {});
+        }).catch(function () { });
     };
 
     //delete passenger from load
@@ -99,7 +99,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter,$window, $m
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () {});
+        }).catch(function () { });
     };
 
     //add/edit Load
@@ -121,7 +121,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter,$window, $m
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () {});;
+        }).catch(function () { });;
     };
 
     //check if passenger is already in load  
@@ -136,7 +136,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter,$window, $m
                 });
             });
             return response;
-        } catch (err) {}
+        } catch (err) { }
     };
 
     //before drop item we show confirmation dialog
@@ -235,11 +235,11 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter,$window, $m
 
     $scope.openSideMenu = function () {
         getActiveToday();
-        $mdSidenav('right').toggle();
+        angular.element('#loads-main').addClass('open-helper');
     };
 
     $scope.closeSideMenu = function () {
-        $mdSidenav('right').close();
+        angular.element('#loads-main').removeClass('open-helper');
     };
 
     function getActiveToday() {

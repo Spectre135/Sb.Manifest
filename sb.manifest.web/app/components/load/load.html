@@ -1,6 +1,6 @@
-<div style="padding-bottom: 50px;">
+<div id="loads-main" style="padding-bottom: 50px;">
 
-    <md-content class="md-padding" layout-xs="column" layout="row">
+    <md-content class="md-padding loads" layout-xs="column" layout="row">
         <!-- <div flex-xs flex-gt-xs="25" style="flex-shrink: 0;" layout="column" -->
         <div flex-xs style="flex-shrink: 0; min-width: 280px; width: 18%;" layout="column"
             ng-repeat="l in loads | orderBy: 'Id' track by $index">
@@ -25,12 +25,13 @@
                     <md-card-title-text>
                         <div class="md-headline blue">{{l.AircraftName}} <b>{{l.Number}}</b>
                             <b style="display: block;">{{l.Description}}</b></div>
-                        <span class="md-subhead">{{l.AircraftType}} <b>{{l.AircraftRegistration}}</b></span>
+                        <span class="md-subhead">{{l.AircraftType}} <b
+                                style="display: inline-block;">{{l.AircraftRegistration}}</b></span>
                         <span class="md-subhead">{{l.TotalWeight}} kg &bull; {{l.Profit | currency}}</span>
                     </md-card-title-text>
 
                     <md-card-actions layout="column">
-                        <md-menu class="td-menu">
+                        <md-menu>
                             <md-button aria-label="Open menu" class="md-fab md-mini md-gray"
                                 ng-click="$mdMenu.open($event)">
                                 <span><i class="fas fa-ellipsis-v"></i></span>
@@ -105,17 +106,17 @@
                         </md-card>
                     </div>
                 </md-card-content>
-                <div class="load-shortcuts row">
-                    <div ng-repeat="p in productList">
-                        <a href="#" onclick="return false;" ng-click="addPeople($event,l,p.Id)">{{p.Name}}</a> |
-                    </div>                  
+                <div class="load-shortcuts">
+                    <span ng-repeat="p in productList">
+                        <a href="#" onclick="return false;" ng-click="addPeople($event,l,p.Id)">{{p.Name}}</a>
+                        {{($index < productList.length - 1) ? "|" : ""}}
+                    </span>
                 </div>
             </md-card>
         </div>
     </md-content>
 
-    <md-sidenav class="md-sidenav-right" style="padding-top: 60px;" md-component-id="right">
-
+    <div class="loads-helper">
         <md-toolbar class="md-theme-light">
             <h1 class="md-toolbar-tools">Active skydivers</h1>
         </md-toolbar>
@@ -153,8 +154,8 @@
             </md-button>
         </md-content>
 
-    </md-sidenav>
-
+        </md-sidenav>
+    </div>
 
 
     <div class="md-padding actionButtons" layout="column">
@@ -179,6 +180,5 @@
         </md-fab-speed-dial>
 
     </div>
-</div>
 
-<div ng-init="init()"></div>
+    <div ng-init="init()"></div>
