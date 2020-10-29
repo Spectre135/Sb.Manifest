@@ -2,7 +2,7 @@
 
 var app = angular.module('SbManifest');
 
-app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog, $mdSidenav, apiService, config) {
+app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter,$window, $mdDialog, $mdSidenav, apiService, config) {
 
     $scope.loads;
     $scope.query = {
@@ -24,15 +24,16 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
         var url = config.manifestApi + '/load/list';
         var promise = apiService.getData(url, params, true)
             .then(function (data) {
-                $scope.loads = data.DataList;
-                getProducts();
+                $scope.loads = data.DataList;        
             });
-        return promise;
+        return promise;    
     };
 
     //init
     $scope.init = function () {
-        $scope.getLoadList();
+        $scope.getLoadList().then(function () {
+            getProducts();
+        });
     };
 
     function getProducts() {
@@ -203,8 +204,9 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
                 .then(function () {
                     $scope.moved = {};
                     $scope.moved.IdCustomer = [];
-                    $scope.getLoadList();
-                    reselectCustomer();
+                    $scope.getLoadList().then(function () {
+                        reselectCustomer();
+                    });
                 });
         } else {
             var url = config.manifestApi + '/load/slot/move';
@@ -214,20 +216,22 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
                     $scope.moved = {};
                     $scope.moved.IdCustomer = [];
                     //we must refresh load list
-                    $scope.getLoadList();
-                    reselectCustomer();
+                    $scope.getLoadList().then(function () {
+                        reselectCustomer();
+                    });
                 });
         }
     };
 
     function reselectCustomer() {
+        console.log($scope.selectedIdCustomer);
         if ($scope.selectedIdCustomer > -1) {
             setTimeout(function () {
                 var slots = angular.element('.load .slot[data-idcustomer="' + $scope.selectedIdCustomer + '"]');
                 slots.addClass('selected');
             }, 500);
         }
-    }
+    };
 
     $scope.openSideMenu = function () {
         getActiveToday();
@@ -284,8 +288,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
             var slots = angular.element('.load .slot[data-idcustomer="' + IdCustomer + '"]');
             slots.removeClass('selected');
             $scope.selectedIdCustomer = -1;
-        }
-        else {
+        } else {
             var slots = angular.element('.load .slot.selected');
             slots.removeClass('selected');
             slots = angular.element('.load .slot[data-idcustomer="' + IdCustomer + '"]');
@@ -293,6 +296,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
             $scope.selectedIdCustomer = IdCustomer;
         }
     };
+
 });
 
 app.controller('confirmLoadCtrl', function ($scope, $state, $filter, $mdDialog, $window, dataToPass, apiService, config) {
