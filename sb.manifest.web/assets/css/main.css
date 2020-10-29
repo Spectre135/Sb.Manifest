@@ -989,6 +989,8 @@ body {
   display      : none;
   float        : right;
   box-shadow   : 0px -1px 5px rgba(22, 25, 31, 0.8);
+  /* overflow  : auto;
+  max-height   : calc(100vh - 60px); */
   /* position  : relative; */
 }
 
@@ -999,6 +1001,10 @@ body {
 
 #loads-main.open-helper .loads-helper {
   display: initial;
+}
+
+#loads-helper-slots {
+  padding: 16px;
 }
 
 .slot-card {

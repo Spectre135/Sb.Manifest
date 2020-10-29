@@ -74,7 +74,7 @@
                             ng-hide="!g.IdGroup"
                             ng-style="{'background-color':g.BackgroundColor, 'border-color':g.BackgroundColor}">
                             <md-card-content style="cursor: -webkit-grab;">
-                                <div ng-repeat="p in g.LoadList | orderBy: 'ProductSlotName'" class="slot"
+                                <div class="slot" ng-repeat="p in g.LoadList | orderBy: 'ProductSlotName'"
                                     data-idcustomer="{{p.IdCustomer}}" ng-dblclick="selectCustomer(p.IdCustomer)">
                                     <div layout="row">
                                         <div flex="70" class="slot-name">
@@ -116,7 +116,7 @@
         <md-toolbar class="md-theme-light">
             <h1 class="md-toolbar-tools">Active skydivers</h1>
         </md-toolbar>
-        <div style="padding: 16px;">
+        <div id="loads-helper-slots">
             <md-input-container class="md-icon-float md-block">
                 <label>Search</label>
                 <input ng-model="searchText" name="search" ng-keypress="onKeySearch($event)" />
@@ -126,18 +126,17 @@
             </div>
             <md-card class="slot-card" data-drag="true" data-jqyoui-options="dragOptions"
                 ng-repeat="g in customers track by $index" ng-model="g[$index]"
-                jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallbackAdd(g)'}">
+                jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallbackAdd(g)'}"
+                data-drop="false">
                 <md-card-content style="cursor: -webkit-grab;">
-                    <div class="slot">
+                    <div class="slot" data-idcustomer="{{g.Id}}" ng-dblclick="selectCustomer(g.Id)">
                         <div layout="row" class="passenger">
                             <div flex="70">
                                 <span class="name">{{g.Name}}</span>
                                 <div class="slot-name">
-                                    <span style="display: inline-block;"
-                                        ng-show="g.AvailableTickets">Tickets:
+                                    <span style="display: inline-block;" ng-show="g.AvailableTickets">Tickets:
                                         {{g.TicketName}} ({{g.AvailableTickets}})</span>
-                                    <span style="display: inline-block;"
-                                        ng-show="g.AvailableFunds">Available funds:
+                                    <span style="display: inline-block;" ng-show="g.AvailableFunds">Available funds:
                                         {{g.AvailableFunds | currency}}</span>
                                 </div>
                             </div>

@@ -289,13 +289,13 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
 
     $scope.selectCustomer = function (IdCustomer, scope, elem, attrs) {
         if ($scope.selectedIdCustomer == IdCustomer) {
-            var slots = angular.element('.load .slot[data-idcustomer="' + IdCustomer + '"]');
+            var slots = angular.element('.load .slot[data-idcustomer="' + IdCustomer + '"], #loads-helper-slots .slot[data-idcustomer="' + IdCustomer + '"]');
             slots.removeClass('selected');
             $scope.selectedIdCustomer = -1;
         } else {
-            var slots = angular.element('.load .slot.selected');
+            var slots = angular.element('.load .slot.selected, #loads-helper-slots .slot.selected');
             slots.removeClass('selected');
-            slots = angular.element('.load .slot[data-idcustomer="' + IdCustomer + '"]');
+            slots = angular.element('.load .slot[data-idcustomer="' + IdCustomer + '"], #loads-helper-slots .slot[data-idcustomer="' + IdCustomer + '"]');
             slots.addClass('selected');
             $scope.selectedIdCustomer = IdCustomer;
         }
