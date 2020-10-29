@@ -27,5 +27,9 @@ namespace sb.manifest.api.Model
         [ParamField("Price")]
         public decimal Price { get; set; }
 
+        [DataField("IsFavorite")]
+        [ParamField("IsFavorite")]
+        public bool IsFavorite { get; set; }
+
     }
 }

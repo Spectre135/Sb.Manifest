@@ -9,7 +9,7 @@ app.controller('addSlotCtrl', function ($rootScope, $scope, $mdDialog, $filter, 
   $scope.dto = dataToPass; //data from parent ctrl
   $scope.addPassengerList = [];
   $scope.productList = [];
-  $scope.productSelected = 1; //default product selected
+  $scope.productSelected = $scope.dto.IdProductSelected!=null ? $scope.dto.IdProductSelected:1; 
   $scope.productSlotList = [];
   $scope.customers = [];
   self.working = false;

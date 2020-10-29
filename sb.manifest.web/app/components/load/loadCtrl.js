@@ -15,7 +15,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
     $scope.moved.IdCustomer = []; //array when we move passengers between loads
     $scope.customers = [];
     $scope.dragToAdd = false; //to know if we must add person to load from side menu
-
+    $scope.productList = [];
     $scope.selectedIdCustomer;
 
     //getLoadList
@@ -25,6 +25,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
         var promise = apiService.getData(url, params, true)
             .then(function (data) {
                 $scope.loads = data.DataList;
+                getProducts();
             });
         return promise;
     };
@@ -34,8 +35,22 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
         $scope.getLoadList();
     };
 
+    function getProducts() {
+        //we only read once
+        if ($scope.productList.length == 0) {
+            var url = config.manifestApi + '/settings/sales/product';
+            apiService.getData(url, null, true)
+                .then(function (data) {
+                    $scope.productList = $filter('filter')(data.DataList, function (item) {
+                        return item.IsFavorite == true;
+                    });
+                });
+        }
+    };
+
     //add people to load
     $scope.addPeople = function ($event, dto, idProduct) {
+        dto.IdProductSelected=idProduct;
         $mdDialog.show({
             locals: {
                 dataToPass: dto
@@ -48,7 +63,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () { });
+        }).catch(function () {});
     };
 
     //delete passenger from load
@@ -83,7 +98,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () { });
+        }).catch(function () {});
     };
 
     //add/edit Load
@@ -105,7 +120,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () { });;
+        }).catch(function () {});;
     };
 
     //check if passenger is already in load  
@@ -120,7 +135,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
                 });
             });
             return response;
-        } catch (err) { }
+        } catch (err) {}
     };
 
     //before drop item we show confirmation dialog
@@ -172,7 +187,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
         $scope.passenger = {};
         $scope.dragToAdd = true;
         $scope.passenger.IdCustomer = item.Id;
-        $scope.passenger.IdProductSlot = 1;//TODO read from list 1-solo 4 for test
+        $scope.passenger.IdProductSlot = 1; //TODO read from list 1-solo 4 for test
         $scope.moved.IdCustomer.push(item.Id); //for check if person already in load
         $scope.PassengerMove = item.Name; //form warning modal
     };
@@ -275,7 +290,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
             slots.addClass('selected');
             $scope.selectedIdCustomer = IdCustomer;
         }
-    }
+    };
 });
 
 app.controller('confirmLoadCtrl', function ($scope, $state, $filter, $mdDialog, $window, dataToPass, apiService, config) {

@@ -105,11 +105,10 @@
                         </md-card>
                     </div>
                 </md-card-content>
-                <div class="load-shortcuts">
-                    <a href="javascript:;" ng-click="addPeople($event,l,1)">solo 4K</a> |
-                    <a href="javascript:;" ng-click="addPeople($event,l,2)">tandem</a> |
-                    <a href="javascript:;" ng-click="addPeople($event,l,3)">tandem + video</a> |
-                    <a href="javascript:;" ng-click="addPeople($event,l,4)">adrenaline</a>
+                <div class="load-shortcuts row">
+                    <div ng-repeat="p in productList">
+                        <a href="#" onclick="return false;" ng-click="addPeople($event,l,p.Id)">{{p.Name}}</a> |
+                    </div>                  
                 </div>
             </md-card>
         </div>
