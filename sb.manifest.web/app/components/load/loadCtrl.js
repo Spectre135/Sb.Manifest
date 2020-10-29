@@ -24,9 +24,9 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         var url = config.manifestApi + '/load/list';
         var promise = apiService.getData(url, params, true)
             .then(function (data) {
-                $scope.loads = data.DataList;        
+                $scope.loads = data.DataList;
             });
-        return promise;    
+        return promise;
     };
 
     //init
@@ -231,8 +231,15 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
     };
 
     $scope.openSideMenu = function () {
+        var a = angular.element('#loads-main .loads');
+        var clientWidth = a[0].clientWidth;
+
         getActiveToday();
         angular.element('#loads-main').addClass('open-helper');
+
+        var newClientWidth = a[0].clientWidth;
+        var delta = clientWidth - newClientWidth;
+        a[0].scrollLeft += delta;
     };
 
     $scope.closeSideMenu = function () {
