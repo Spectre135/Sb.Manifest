@@ -231,11 +231,11 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
 
     $scope.openSideMenu = function () {
         getActiveToday();
-        $mdSidenav('right').toggle();
+        angular.element('#loads-main').addClass('open-helper');
     };
 
     $scope.closeSideMenu = function () {
-        $mdSidenav('right').close();
+        angular.element('#loads-main').removeClass('open-helper');
     };
 
     function getActiveToday() {
