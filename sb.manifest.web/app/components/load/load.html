@@ -2,19 +2,33 @@
 
     <md-content class="md-padding" layout-xs="column" layout="row">
         <!-- <div flex-xs flex-gt-xs="25" style="flex-shrink: 0;" layout="column" -->
-        <div flex-xs style="flex-shrink: 0; min-width: 300px; width: 20%;" layout="column"
+        <div flex-xs style="flex-shrink: 0; min-width: 280px; width: 18%;" layout="column"
             ng-repeat="l in loads | orderBy: 'Id' track by $index">
 
             <md-card class="load" ng-class="l.SlotsLeft > 0 ? 'positive' : l.SlotsLeft == 0 ? 'full' : 'negative'"
                 data-drop="true" data-jqyoui-options="dropOptions" ng-model="l.GroupList"
                 jqyoui-droppable="{onDrop:'dropCallback()', beforeDrop:'beforeDrop(l)', multiple:true}">
-                <md-card-title style="padding: 9px 7px 5px;">
+                <div layout="row" class="load-top">
+                    <div flex="50" class="slots-left">
+                        <span class="value">{{l.SlotsLeft}}</span>
+                        <span class="label-small">slots</span>
+                    </div>
+                    <div flex="50" style="text-align: end;">
+                        <div class="min-left">
+                            <span class="value">{{l.IdAircraft * 2 + l.Number * 20}}</span>
+                            <span class="label-small">min</span>
+                        </div>
+                    </div>
+                </div>
+
+                <md-card-title style="padding: 8px;">
                     <md-card-title-text>
                         <div class="md-headline blue">{{l.AircraftName}} <b>{{l.Number}}</b>
                             <b style="display: block;">{{l.Description}}</b></div>
                         <span class="md-subhead">{{l.AircraftType}} <b>{{l.AircraftRegistration}}</b></span>
                         <span class="md-subhead">{{l.TotalWeight}} kg &bull; {{l.Profit | currency}}</span>
                     </md-card-title-text>
+
                     <md-card-actions layout="column">
                         <md-menu class="td-menu">
                             <md-button aria-label="Open menu" class="md-fab md-mini md-gray"
@@ -50,61 +64,52 @@
                         </md-menu>
                     </md-card-actions>
                 </md-card-title>
-                <md-card-content layout="row" layout-align="space-between" style="padding: 0px 3px 3px 7px;">
-                    <div layout="row" style="width: 100%;">
-                        <div flex="15">
-                            <div class="slots-left">
-                                <div class="label-small">slots<br>left</div>
-                                <div class="value">{{l.SlotsLeft}}</div>
-                            </div>
-                        </div>
-                        <div flex="85" class="slots">
-                            <md-card class="slot-card" data-drag="true" data-jqyoui-options="dragOptions"
-                                ng-repeat="g in l.GroupList | orderBy: 'DateOnLoad' track by $index"
-                                ng-model="l.GroupList[$index]"
-                                jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallback(g)'}"
-                                ng-hide="!g.IdGroup"
-                                ng-style="{'background-color':g.BackgroundColor, 'border-color':g.BackgroundColor}">
-                                <md-card-content style="cursor: -webkit-grab;">
-                                    <div ng-repeat="p in g.LoadList | orderBy: 'ProductSlotName'" class="slot"
-                                        data-idcustomer="{{p.IdCustomer}}" ng-dblclick="selectCustomer(p.IdCustomer)">
-                                        <div layout="row">
-                                            <div flex="70" class="slot-name">
-                                                <div>{{p.ProductSlotName}}</div>
-                                            </div>
-                                            <div flex="30" class="profit">
-                                                <span ng-if="p.Profit"
-                                                    ng-class="p.Profit >= 0 ? 'positive': 'negative'">
-                                                    {{p.Profit | currency}}
-                                                </span>
-                                            </div>
+                <md-card-content style="padding: 0">
+                    <div class="slots">
+                        <md-card class="slot-card" data-drag="true" data-jqyoui-options="dragOptions"
+                            ng-repeat="g in l.GroupList | orderBy: 'DateOnLoad' track by $index"
+                            ng-model="l.GroupList[$index]"
+                            jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallback(g)'}"
+                            ng-hide="!g.IdGroup"
+                            ng-style="{'background-color':g.BackgroundColor, 'border-color':g.BackgroundColor}">
+                            <md-card-content style="cursor: -webkit-grab;">
+                                <div ng-repeat="p in g.LoadList | orderBy: 'ProductSlotName'" class="slot"
+                                    data-idcustomer="{{p.IdCustomer}}" ng-dblclick="selectCustomer(p.IdCustomer)">
+                                    <div layout="row">
+                                        <div flex="70" class="slot-name">
+                                            <div>{{p.ProductSlotName}}</div>
                                         </div>
-                                        <div layout="row" class="passenger">
-                                            <div flex="70">
-                                                <span class="name">{{p.Passenger}}</span>
-                                            </div>
-                                            <div flex="30" style="text-align: end;">
-                                                <!-- <span ng-if="p.Profit"
+                                        <div flex="30" class="profit">
+                                            <span ng-if="p.Profit" ng-class="p.Profit >= 0 ? 'positive': 'negative'">
+                                                {{p.Profit | currency}}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div layout="row" class="passenger">
+                                        <div flex="70">
+                                            <span class="name">{{p.Passenger}}</span>
+                                        </div>
+                                        <div flex="30" style="text-align: end;">
+                                            <!-- <span ng-if="p.Profit"
                                                     ng-class="p.Profit >= 0 ? 'profit positive': 'profit negative'">
                                                     {{p.Profit | currency}}
                                                 </span> -->
-                                                <span class="tickets" ng-if="!p.Profit && p.AvaibleTickets > 0">
-                                                    <small>TK</small> {{p.AvaibleTickets}}
-                                                </span>
-                                            </div>
+                                            <span class="tickets" ng-if="!p.Profit && p.AvaibleTickets > 0">
+                                                <small>TK</small> {{p.AvaibleTickets}}
+                                            </span>
                                         </div>
                                     </div>
-                                    <!-- <div  class="dodatno">Delete ..... Move to .....</div> -->
-                                </md-card-content>
-                            </md-card>
-                        </div>
+                                </div>
+                                <!-- <div  class="dodatno">Delete ..... Move to .....</div> -->
+                            </md-card-content>
+                        </md-card>
                     </div>
                 </md-card-content>
                 <div class="load-shortcuts">
                     <a href="javascript:;" ng-click="addPeople($event,l,1)">solo 4K</a> |
                     <a href="javascript:;" ng-click="addPeople($event,l,2)">tandem</a> |
                     <a href="javascript:;" ng-click="addPeople($event,l,3)">tandem + video</a> |
-                    <a href="javascript:;" ng-click="addPeople($event,l,4)">adrenalin</a>
+                    <a href="javascript:;" ng-click="addPeople($event,l,4)">adrenaline</a>
                 </div>
             </md-card>
         </div>
@@ -118,11 +123,11 @@
         <md-content layout-padding>
             <md-input-container class="md-icon-float md-block">
                 <label>Search</label>
-                <input ng-model="searchText" name="search" ng-keypress="onKeySearch($event)"/>
+                <input ng-model="searchText" name="search" ng-keypress="onKeySearch($event)" />
             </md-input-container>
             <div layout="row" layout-sm="column" layout-align="space-around" ng-if="working">
                 <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-              </div>
+            </div>
             <md-card class="slot-card" data-drag="true" data-jqyoui-options="dragOptions"
                 ng-repeat="g in customers track by $index" ng-model="g[$index]"
                 jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallbackAdd(g)'}">
@@ -133,7 +138,7 @@
                             <span class="name">{{g.Name}}</span></br>
                             <span class="font12 gray" ng-show="g.AvaibleTickets">Tickets left
                                 {{g.TicketName}}({{g.AvaibleTickets}})</span>
-                              <span class="font12 gray" ng-show="g.AvaibleFunds">Avaible funds
+                            <span class="font12 gray" ng-show="g.AvaibleFunds">Avaible funds
                                 {{g.AvaibleFunds | currency}}</span>
                         </div>
                         <div flex="30" style="text-align: end;">
