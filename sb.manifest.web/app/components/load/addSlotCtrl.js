@@ -76,7 +76,7 @@ app.controller('addSlotCtrl', function ($rootScope, $scope, $mdDialog, $filter, 
 
       //check if have tickets for selected product
       var person = $filter('filter')($scope.customers, function (item) {
-        return item.Id == p && item.IdProductSlot == d.Id && item.AvaibleTickets>0;
+        return item.Id == p && item.IdProductSlot == d.Id && item.AvailableTickets>0;
       })[0];
 
       if (person){
@@ -93,9 +93,9 @@ app.controller('addSlotCtrl', function ($rootScope, $scope, $mdDialog, $filter, 
         return true;
       }
 
-      //avaible funds(limit-balance) - cost of ticket if - then warning      
+      //available funds(limit-balance) - cost of ticket if - then warning      
       //TODO user can add person or not ???
-      if ((person.AvaibleFunds - d.Income) > 0) {
+      if ((person.AvailableFunds - d.Income) > 0) {
         return true;
       }
 

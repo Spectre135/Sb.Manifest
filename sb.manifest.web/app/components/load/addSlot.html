@@ -43,11 +43,11 @@
               <div><b>{{item.Name}}</b></div>
               <div class="load-add-customer-remark">
                 <span class="warning" ng-show="item.OnBoard">Already in</span>
-                <span ng-show="item.AvaibleTickets && !item.OnBoard">
-                  Ticket: {{item.TicketName}} ({{item.AvaibleTickets}})</span>
-                <span ng-show="item.AvaibleTickets && item.AvaibleFunds && !item.OnBoard">|</span>
-                <span ng-class="item.AvaibleFunds <= 0 ? 'warning' : ''" ng-show="item.AvaibleFunds && !item.OnBoard">
-                  Available funds: {{item.AvaibleFunds | currency}}</span>
+                <span ng-show="item.AvailableTickets && !item.OnBoard">
+                  Ticket: {{item.TicketName}} ({{item.AvailableTickets}})</span>
+                <span ng-show="item.AvailableTickets && item.AvailableFunds && !item.OnBoard">|</span>
+                <span ng-class="item.AvailableFunds <= 0 ? 'warning' : ''" ng-show="item.AvailableFunds && !item.OnBoard">
+                  Available funds: {{item.AvailableFunds | currency}}</span>
               </div>
             </md-option>
           </md-select>

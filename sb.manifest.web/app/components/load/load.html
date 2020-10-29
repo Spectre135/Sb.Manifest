@@ -91,12 +91,8 @@
                                             <span class="name">{{p.Passenger}}</span>
                                         </div>
                                         <div flex="30" style="text-align: end;">
-                                            <!-- <span ng-if="p.Profit"
-                                                    ng-class="p.Profit >= 0 ? 'profit positive': 'profit negative'">
-                                                    {{p.Profit | currency}}
-                                                </span> -->
-                                            <span class="tickets" ng-if="p.AvaibleTickets > 0">
-                                                <small>TK</small> {{p.AvaibleTickets}}
+                                            <span class="tickets" ng-if="p.AvailableTickets > 0">
+                                                <small>TK</small> {{p.AvailableTickets}}
                                             </span>
                                         </div>
                                     </div>
@@ -135,15 +131,19 @@
                     <div class="slot">
                         <div layout="row" class="passenger">
                             <div flex="70">
-                                <span class="name">{{g.Name}}</span></br>
-                                <span class="font12 gray" ng-show="g.AvaibleTickets">Tickets:
-                                    {{g.TicketName}} ({{g.AvaibleTickets}})</span>
-                                <span class="font12 gray" ng-show="g.AvaibleFunds">Avaible funds:
-                                    {{g.AvaibleFunds | currency}}</span>
+                                <span class="name">{{g.Name}}</span>
+                                <div class="slot-name">
+                                    <span style="display: inline-block;"
+                                        ng-show="g.AvailableTickets">Tickets:
+                                        {{g.TicketName}} ({{g.AvailableTickets}})</span>
+                                    <span style="display: inline-block;"
+                                        ng-show="g.AvailableFunds">Available funds:
+                                        {{g.AvailableFunds | currency}}</span>
+                                </div>
                             </div>
                             <div flex="30" style="text-align: end;">
-                                <span class="tickets" ng-if="!g.Profit && g.AvaibleTickets > 0">
-                                    <small>TK</small> {{g.AvaibleTickets}}
+                                <span class="tickets" ng-if="!g.Profit && g.AvailableTickets > 0">
+                                    <small>TK</small> {{g.AvailableTickets}}
                                 </span>
                             </div>
                         </div>
