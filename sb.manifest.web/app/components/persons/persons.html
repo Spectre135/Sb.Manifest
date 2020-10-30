@@ -35,7 +35,7 @@
                         <th md-column md-order-by="FirstName"><span>First name</span></th>
                         <th md-column md-order-by="LastName"><span>Last name</span></th>
                         <th md-column md-order-by="IdCountry"><span>Country</span></th>
-                        <th md-column md-numeric right md-order-by="AvaibleTickets"><span>Avaible tickets</span></th>
+                        <th md-column md-numeric right md-order-by="AvailableTickets"><span>Available tickets</span></th>
                         <th md-column md-numeric right md-order-by="Limit"><span>Limit</span></th>
                         <th md-column md-numeric right md-order-by="TicketPrice"><span>TicketPrice</span></th>
                         <th md-column md-numeric right md-order-by="Balance"><span>Balance</span></th>
@@ -51,7 +51,7 @@
                         <td md-cell>
                             <img ng-src="{{getFlagSrc(p.CountryIso)}}" />
                             {{p.Country}}</td>
-                        <td md-cell right>{{p.TicketName}} {{p.AvaibleTickets}}</td>
+                        <td md-cell right>{{p.TicketName}} {{p.AvailableTickets}}</td>
                         <td md-cell right>{{p.Limit | currency}}</td>
                         <td md-cell right>{{p.TicketPrice | currency}}</td>
                         <td md-cell right ng-style="p.Balance >= 0 && {'color':'green'} || {'color': 'red'}">

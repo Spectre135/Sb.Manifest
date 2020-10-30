@@ -48,7 +48,7 @@ namespace sb.manifest.api.Model
         public decimal Profit { get; set; }
 
         [DataField("AvaibleTickets")]
-        public int AvaibleTickets { get; set; }
+        public int AvailableTickets { get; set; }
 
         [DataField("DateC")]
         public DateTime? DateConfirmed{ get; set; }

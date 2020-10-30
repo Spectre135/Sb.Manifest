@@ -93,9 +93,9 @@ app.controller('addSlotCtrl', function ($rootScope, $scope, $mdDialog, $filter, 
         return true;
       }
 
-      //avaible funds(limit-balance) - cost of ticket if - then warning      
+      //available funds(limit-balance) - cost of ticket if - then warning      
       //TODO user can add person or not ???
-      if ((person.AvaibleFunds - d.Income) > 0) {
+      if ((person.AvailableFunds - d.Income) > 0) {
         return true;
       }
 

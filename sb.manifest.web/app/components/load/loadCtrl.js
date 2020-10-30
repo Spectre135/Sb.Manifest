@@ -68,7 +68,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
     };
 
     //delete passenger from load
-    $scope.showConfirm = function (passenger, productSlot, LoadNo) {
+    $scope.removePeople = function (passenger, productSlot, LoadNo) {
         // Appending dialog to document.body to cover sidenav in docs app
         var confirm = $mdDialog.confirm()
             .title('Would you like to delete ' + passenger + '?')
@@ -177,9 +177,18 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             slots.removeClass('selected');
             // $scope.selectedIdPerson = -1;
         }
+
+        var loadBin = angular.element('.load-bin.visible');
+        loadBin.removeClass('visible');
+        
         var deferred = $q.defer();
-        //we show confirm dialog only load number is changed
-        if ($scope.loadMoveId != item.Id) {
+
+        // remove
+        if (item == -1) {
+            alert('remove ' + $scope.PassengerMove + ' from ' + $scope.loadMoveId);
+        }
+        // move to
+        else if ($scope.loadMoveId != item.Id) {
             //object to be saved after confirmation
             $scope.moved.IdLoadFrom = $scope.loadMoveId;
             $scope.moved.IdLoadTo = item.Id;
@@ -211,6 +220,9 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             $scope.moved.IdPerson.push(value.IdPerson);
             $scope.PassengerMove.push(value.Passenger);
         });
+        
+        var loadBin = angular.element('.load-bin[data-idload="' + $scope.loadMoveId + '"]');
+        loadBin.addClass('visible');
     };
 
     //when we start drag item to Add into load
@@ -261,8 +273,15 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
     };
 
     $scope.openSideMenu = function () {
+        var a = angular.element('#loads-main .loads');
+        var clientWidth = a[0].clientWidth;
+
         getActiveToday();
         angular.element('#loads-main').addClass('open-helper');
+
+        var newClientWidth = a[0].clientWidth;
+        var delta = clientWidth - newClientWidth;
+        a[0].scrollLeft += delta;
     };
 
     $scope.closeSideMenu = function () {
@@ -316,7 +335,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             slots.removeClass('selected');
             $scope.selectedIdPerson = -1;
         } else {
-            var slots = angular.element('.load .slot.selected');
+            var slots = angular.element('.load .slot.selected, #loads-helper-slots .slot.selected');
             slots.removeClass('selected');
             slots = angular.element('.load .slot[data-IdPerson="' + IdPerson + '"]');
             slots.addClass('selected');

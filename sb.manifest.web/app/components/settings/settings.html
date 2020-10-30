@@ -25,9 +25,11 @@
                             <table md-table>
                                 <thead md-head md-order="myOrder">
                                     <tr md-row>
+                                        <th md-column class="item-color"></th>
                                         <th md-column md-order-by="Name"><span>Name</span></th>
                                         <th md-column md-order-by="Description"><span>Description</span></th>
                                         <th md-column md-order-by="IsProductSlot"><span>Show in Product slot</span></th>
+                                        <th md-column md-order-by="IsFavorite"><span>Is favorite</span></th>
                                         <th md-column md-numeric right md-order-by="Price"><span>Price</span></th>
                                     </tr>
                                 </thead>
@@ -35,11 +37,18 @@
                                     <tr md-row md-select-id="lista" md-auto-select ng-click="editProduct($event,p)"
                                         ng-repeat="p in list | filter: search | orderBy: myOrder | limitTo: myLimit: (myPage - 1) * myLimit"
                                         class="md-row" style="cursor: pointer;">
+                                        <td md-cell class="item-color">
+                                            <span class="item-color" ng-style="{'background-color':p.BackgroundColor}"></span>
+                                        </td>
                                         <td md-cell>{{p.Name}}</td>
                                     <td md-cell>{{p.Description}}</td>
                                     <td md-cell>
                                         <md-checkbox ng-disabled="true" aria-label="Show in Product slot"
                                             ng-model="p.IsProductSlot"></md-checkbox>
+                                    </td>
+                                    <td md-cell>
+                                        <md-checkbox ng-disabled="true" aria-label="Is favorite"
+                                            ng-model="p.IsFavorite"></md-checkbox>
                                     </td>
                                     <td md-cell right>{{p.Price | currency}}</td>
                                     </tr>

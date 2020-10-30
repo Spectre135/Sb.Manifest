@@ -11,7 +11,7 @@ namespace sb.manifest.api.Model
         public int Weight { get; set; }
         public string ProductSlotName { get; set; }
         public decimal Profit { get; set; }
-        public int AvaibleTickets { get; set; }
+        public int AvailableTickets { get; set; }
         public int IdGroup { get; set; }
         public string BackgroundColor { get; set; }
 
