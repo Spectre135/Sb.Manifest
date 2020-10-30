@@ -1003,7 +1003,7 @@ body.group-mode-on .group-mode-on-alert {
 
 .load-bin.drop-hover {
   display         : none;
-  background-color: rgba(221, 0, 0, .05);
+  background-color: rgba(211, 47, 47, .07);
 }
 
 .load-bin.visible {
@@ -1161,20 +1161,24 @@ body.group-mode-on .slot-card[data-drag='true'] {
 
 .load.full {
   /* background: linear-gradient(180deg, rgba(0, 153, 31, 1) 45px, rgba(0, 153, 31, .15) 46px, rgba(255, 255, 255, 1) 107px); */
-  background: linear-gradient(180deg, rgba(96, 147, 108, 1) 45px, rgba(96, 147, 108, .15) 46px, rgba(255, 255, 255, 1) 107px);
+  /* background: linear-gradient(180deg, rgba(96, 147, 108, 1) 45px, rgba(96, 147, 108, .15) 46px, rgba(255, 255, 255, 1) 107px); */
+  background: linear-gradient(180deg, rgba(117, 164, 120, 1) 45px, rgba(117, 164, 120, .15) 46px, rgba(255, 255, 255, 1) 107px);
+
 }
 
 .load.full.drop-hover {
   /* background: linear-gradient(180deg, rgba(0, 153, 31, 1) 45px, rgba(0, 153, 31, .15) 46px, rgba(0, 153, 31, .05) 107px); */
-  background: linear-gradient(180deg, rgba(96, 147, 108, 1) 45px, rgba(96, 147, 108, .15) 46px, rgba(0, 153, 31, .05) 107px);
+  background: linear-gradient(180deg, rgba(117, 164, 120, 1) 45px, rgba(117, 164, 120, .15) 46px, rgba(117, 164, 120, .1) 107px);
 }
 
 .load.overbooked {
-  background: linear-gradient(180deg, rgba(221, 0, 0, 1) 45px, rgba(221, 0, 0, .15) 46px, rgba(255, 255, 255, 1) 107px);
+  /* background: linear-gradient(180deg, rgba(221, 0, 0, 1) 45px, rgba(221, 0, 0, .15) 46px, rgba(255, 255, 255, 1) 107px); */
+  background: linear-gradient(180deg, rgba(211, 47, 47, 1) 45px, rgba(211, 47, 47, .15) 46px, rgba(255, 255, 255, 1) 107px);
+
 }
 
 .load.overbooked.drop-hover {
-  background: linear-gradient(180deg, rgba(221, 0, 0, 1) 45px, rgba(221, 0, 0, .15) 46px, rgba(221, 0, 0, .05) 107px);
+  background: linear-gradient(180deg, rgba(211, 47, 47, 1) 45px, rgba(211, 47, 47, .15) 46px, rgba(211, 47, 47, .07) 107px);
 }
 
 .load .slots-left .label-small {
