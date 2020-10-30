@@ -330,7 +330,9 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
 
             angular.element('body').addClass('select-group');
         }
-    }
+
+        console.log($scope.selectedGroup);
+    };
 
     $scope.addGroup = function ($event) {
         if ($scope.selectedGroup >= 0) {
@@ -343,7 +345,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
                 g.html('');
             }
         }
-    }
+    };
 });
 
 app.controller('confirmLoadCtrl', function ($scope, $state, $filter, $mdDialog, $window, dataToPass, apiService, config) {

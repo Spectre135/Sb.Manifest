@@ -33,6 +33,7 @@ app.controller('reportCtrl', function ($scope, $state, $window, apiService, conf
     };
 
     //line chart
+  
     var meseci = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     var labels1 = [0, 10, 30, 130, 1300, 2345, 1800, 1950, 1500, 855, 0, 0];
     var labels2 = [0, 910, 930, 4130, 4300, 8345, 7800, 6950, 4500, 3955, 0, 0];
