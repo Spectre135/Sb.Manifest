@@ -979,6 +979,14 @@ body {
   font-size: 12px;
 }
 
+.load-bin {
+  display: none;
+}
+
+.load-bin.visible {
+  display: initial;
+}
+
 #loads-main .loads {
   float        : none;
   /* position  : relative; */

@@ -109,6 +109,12 @@
                     </span>
                 </div>
             </md-card>
+            <md-card class="load-bin" data-drop="true" data-jqyoui-options="dropOptions" data-idload="{{l.Id}}"
+                jqyoui-droppable="{onDrop:'dropCallback()', beforeDrop:'beforeDrop(-1)', multiple:true}">
+                <md-card-content>
+                    <i class="fas fa-2x fa-trash-alt"></i>
+                </md-card-content>
+            </md-card>
         </div>
     </md-content>
 
@@ -126,8 +132,7 @@
             </div>
             <md-card class="slot-card" data-drag="true" data-jqyoui-options="dragOptions"
                 ng-repeat="g in customers track by $index" ng-model="g[$index]"
-                jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallbackAdd(g)'}"
-                data-drop="false">
+                jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallbackAdd(g)'}" data-drop="false">
                 <md-card-content style="cursor: -webkit-grab;">
                     <div class="slot" data-idcustomer="{{g.Id}}" ng-dblclick="selectCustomer(g.Id)">
                         <div layout="row" class="passenger">

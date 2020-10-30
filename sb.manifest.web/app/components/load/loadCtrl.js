@@ -68,7 +68,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
     };
 
     //delete passenger from load
-    $scope.showConfirm = function (passenger, productSlot, LoadNo) {
+    $scope.removePeople = function (passenger, productSlot, LoadNo) {
         // Appending dialog to document.body to cover sidenav in docs app
         var confirm = $mdDialog.confirm()
             .title('Would you like to delete ' + passenger + '?')
@@ -146,9 +146,18 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             slots.removeClass('selected');
             // $scope.selectedIdCustomer = -1;
         }
+
+        var loadBin = angular.element('.load-bin.visible');
+        loadBin.removeClass('visible');
+        
         var deferred = $q.defer();
-        //we show confirm dialog only load number is changed
-        if ($scope.loadMoveId != item.Id) {
+
+        // remove
+        if (item == -1) {
+            alert('remove ' + $scope.PassengerMove + ' from ' + $scope.loadMoveId);
+        }
+        // move to
+        else if ($scope.loadMoveId != item.Id) {
             //object to be saved after confirmation
             $scope.moved.IdLoadFrom = $scope.loadMoveId;
             $scope.moved.IdLoadTo = item.Id;
@@ -180,6 +189,9 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             $scope.moved.IdCustomer.push(value.IdCustomer);
             $scope.PassengerMove.push(value.Passenger);
         });
+        
+        var loadBin = angular.element('.load-bin[data-idload="' + $scope.loadMoveId + '"]');
+        loadBin.addClass('visible');
     };
 
     //when we start drag item to Add into load
