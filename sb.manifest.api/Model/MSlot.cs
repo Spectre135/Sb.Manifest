@@ -25,7 +25,7 @@ namespace sb.manifest.api.Model
         [DataField("IsStaff")]
         public bool IsStaff { get; set; }
 
-        [DataField("AvaibleTickets")]
+        [DataField("AvailableTickets")]
         public int? AvailableTickets { get; set; }
 
         [DataField("TicketName")]
@@ -34,7 +34,7 @@ namespace sb.manifest.api.Model
         [DataField("IdProductSlot")]
         public int? IdProductSlot { get; set; }
 
-        [DataField("AvaibleFunds")]
+        [DataField("AvailableFunds")]
         public decimal? AvailableFunds { get; set; }
     }
 }

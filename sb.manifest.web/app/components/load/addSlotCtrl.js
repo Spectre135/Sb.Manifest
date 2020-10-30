@@ -9,7 +9,7 @@ app.controller('addSlotCtrl', function ($rootScope, $scope, $mdDialog, $filter, 
   $scope.dto = dataToPass; //data from parent ctrl
   $scope.addPassengerList = [];
   $scope.productList = [];
-  $scope.productSelected = $scope.dto.IdProductSelected!=null ? $scope.dto.IdProductSelected:1; 
+  $scope.productSelected = $scope.dto.IdProductSelected != null ? $scope.dto.IdProductSelected : 1;
   $scope.productSlotList = [];
   $scope.persons = [];
   self.working = false;
@@ -49,11 +49,15 @@ app.controller('addSlotCtrl', function ($rootScope, $scope, $mdDialog, $filter, 
 
   $scope.addPassenger = function (p, d) {
     //check if person have enought funds
+    var person = $filter('filter')($scope.persons, function (item) {
+      return item.Id == p;
+    })[0];
+
+    if (!person.IsStaff) {
+      self.warning = null;
+    }
     if (!checkFunds(p, d)) {
-      var name = $filter('filter')($scope.persons, function (item) {
-        return item.Id == p;
-      })[0].Name;
-      self.warning = $rootScope.messages.notfunds + ' ' + name;
+      self.warning = $rootScope.messages.notfunds + ' ' + person.Name;
     }
     //add person to slot
     var o = {};
@@ -76,10 +80,10 @@ app.controller('addSlotCtrl', function ($rootScope, $scope, $mdDialog, $filter, 
 
       //check if have tickets for selected product
       var person = $filter('filter')($scope.persons, function (item) {
-        return item.Id == p && item.IdProductSlot == d.Id && item.AvaibleTickets>0;
+        return item.Id == p && item.IdProductSlot == d.Id && item.AvaibleTickets > 0;
       })[0];
 
-      if (person){
+      if (person) {
         return true;
       }
 
@@ -89,7 +93,7 @@ app.controller('addSlotCtrl', function ($rootScope, $scope, $mdDialog, $filter, 
       })[0];
 
       //skip if staff
-      if (person.IsStaff){
+      if (person.IsStaff) {
         return true;
       }
 
@@ -100,7 +104,7 @@ app.controller('addSlotCtrl', function ($rootScope, $scope, $mdDialog, $filter, 
       }
 
       return false;
-      
+
     } catch (err) {}
   };
 

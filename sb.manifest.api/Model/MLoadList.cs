@@ -35,7 +35,7 @@ namespace sb.manifest.api.Model
         [DataField("Passenger")]
         public string Passenger { get; set; }
 
-        [DataField("IdCustomer")]
+        [DataField("IdPerson")]
         public long IdPerson { get; set; }
 
         [DataField("Weight")]
@@ -47,7 +47,7 @@ namespace sb.manifest.api.Model
         [DataField("Profit")]
         public decimal Profit { get; set; }
 
-        [DataField("AvaibleTickets")]
+        [DataField("AvailableTickets")]
         public int AvailableTickets { get; set; }
 
         [DataField("DateC")]

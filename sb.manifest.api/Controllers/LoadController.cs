@@ -102,9 +102,9 @@ namespace sb.manifest.api.Controllers
         }
 
         /// <summary>
-        /// Move skykdiver/passenger from to load
+        /// Move or Remove skykdiver/passenger from to load
         /// </summary>
-        /// <param name="mMove">List of customers to be moved with MMove model</param>
+        /// <param name="mMove">List of persons to be moved or removed with MMove model</param>
         [HttpPost("load/slot/move")]
         public IActionResult MoveSlot([FromBody] MMove mMove)
         {
@@ -164,7 +164,7 @@ namespace sb.manifest.api.Controllers
 
         /// <summary>
         /// Get list of jumpers who can be add to load- excluded who are on board already 
-        /// <param name="search">Search string First name and Last name of customer</param>
+        /// <param name="search">Search string First name and Last name of person</param>
         /// <param name="size"> Max rows returned</param>
         /// <param name="idLoad"></param>
         /// </summary>

@@ -2,7 +2,7 @@
 
 var app = angular.module('SbManifest');
 
-app.controller('settingsCtrl', function ($scope, $state, $mdDialog, apiService, config) {
+app.controller('settingsCtrl', function ($scope, $rootScope, $state, $mdDialog, apiService, config) {
 
     $scope.list = $state.params.list;
     $scope.myPage = $state.params.page;
@@ -50,6 +50,17 @@ app.controller('settingsCtrl', function ($scope, $state, $mdDialog, apiService, 
         });
     };
 
+    //delete Product
+    $scope.deleteProduct = function ($event, dto) {
+        $rootScope.confirmDialog('Confirm delete', 'Would you like to delete product ' + dto.Name + '?', 'Delete', 'Cancel')
+            .then(function onSuccess(result) {
+                var url = config.manifestApi + '/settings/sales/product/delete';
+                apiService.postData(url, dto, true).then(function () {
+                    $scope.getProducts();
+                });
+            });
+    };
+
     //add/edit new Product Slot
     $scope.editProductSlot = function ($event, dto) {
         $mdDialog.show({
@@ -73,6 +84,16 @@ app.controller('settingsCtrl', function ($scope, $state, $mdDialog, apiService, 
         var url = config.manifestApi + '/settings/sales/product/slot';
         var params = {};
         getData(url, params);
+    };
+    //delete ProductSlot
+    $scope.deleteProductSlot = function ($event, dto) {
+        $rootScope.confirmDialog('Confirm delete', 'Would you like to delete product slot ' + dto.Name + '?', 'Delete', 'Cancel')
+            .then(function onSuccess(result) {
+                var url = config.manifestApi + '/settings/sales/product/slot/delete';
+                apiService.postData(url, dto, true).then(function () {
+                    $scope.getProductSlot();
+                });
+            });
     };
 
     //get Aircrafts list
@@ -98,6 +119,17 @@ app.controller('settingsCtrl', function ($scope, $state, $mdDialog, apiService, 
                 $scope.getAircrafts();
             }
         });
+    };
+
+    //delete Aircraft
+    $scope.deleteAircraft = function ($event, dto) {
+        $rootScope.confirmDialog('Confirm delete', 'Would you like to delete Aircraft ' + dto.Registration + ' ' +  dto.Name + '?', 'Delete', 'Cancel')
+            .then(function onSuccess(result) {
+                var url = config.manifestApi + '/settings/aircraft/delete';
+                apiService.postData(url, dto, true).then(function () {
+                    $scope.getAircrafts();
+                });
+            });
     };
 
     //init
@@ -167,7 +199,7 @@ app.controller('editProductSlotCtrl', function ($scope, $mdDialog, dataToPass, a
     };
 
     //init
-    $scope.init = function(){
+    $scope.init = function () {
         getProducts();
     };
 });

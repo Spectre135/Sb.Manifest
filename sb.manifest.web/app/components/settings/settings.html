@@ -7,7 +7,7 @@
                         <md-card style="padding: 20px;">
 
                             <md-button aria-label="edit" class="md-fab md-mini md-gray" ng-click="editProduct($event)">
-                                <md-tooltip md-direction="right">{{messages.addProduct}</md-tooltip>
+                                <md-tooltip md-direction="right">{{messages.addProduct}}</md-tooltip>
                                 <span><i style="margin-top: 12px;" class="fas fa-plus font16"></i></span>
                             </md-button>
 
@@ -34,9 +34,9 @@
                                     </tr>
                                 </thead>
                                 <tbody md-body>
-                                    <tr md-row md-select-id="lista" md-auto-select ng-click="editProduct($event,p)"
+                                    <tr md-row md-select-id="lista" md-auto-select
                                         ng-repeat="p in list | filter: search | orderBy: myOrder | limitTo: myLimit: (myPage - 1) * myLimit"
-                                        class="md-row" style="cursor: pointer;">
+                                        class="md-row showhim" style="cursor: pointer;">
                                         <td md-cell class="item-color">
                                             <span class="item-color" ng-style="{'background-color':p.BackgroundColor}"></span>
                                         </td>
@@ -51,6 +51,29 @@
                                             ng-model="p.IsFavorite"></md-checkbox>
                                     </td>
                                     <td md-cell right>{{p.Price | currency}}</td>
+                                    <td style="width: 20px;">
+
+                                        <md-menu class="td-menu showme">
+                                            <md-button aria-label="Open menu" class="md-icon-button"
+                                                ng-click="setSelected(p.Id);$mdMenu.open($event)">
+                                                <span><i class="fas fa-ellipsis-v"></i></span>
+                                            </md-button>
+                                            <md-menu-content width="4">
+                                                <md-menu-item>
+                                                    <md-button ng-click="editProduct($event,p)">
+                                                        <span><i class="fas fa-edit"></i></span>
+                                                        &nbsp;&nbsp;Edit
+                                                    </md-button>
+                                                </md-menu-item>
+                                                <md-menu-item>
+                                                    <md-button ng-click="deleteProduct($event,p)">
+                                                        <span><i class="fas fa-trash-alt"></i></span>
+                                                        &nbsp;&nbsp;Delete
+                                                    </md-button>
+                                                </md-menu-item>
+                                            </md-menu-content>
+                                        </md-menu>
+                                    </td>
                                     </tr>
                                     </tbody>
                                     </table>
@@ -69,7 +92,7 @@
 
                             <md-button aria-label="edit" class="md-fab md-mini md-gray"
                                 ng-click="editProductSlot($event)">
-                                <md-tooltip md-direction="right">{{messages.addProductSlot}</md-tooltip>
+                                <md-tooltip md-direction="right">{{messages.addProductSlot}}</md-tooltip>
                                 <span><i style="margin-top: 12px;" class="fas fa-plus font16"></i></span>
                             </md-button>
     
@@ -97,9 +120,9 @@
                                     </tr>
                                 </thead>
                                 <tbody md-body>
-                                    <tr md-row md-select-id="lista" md-auto-select ng-click="editProductSlot($event,p)"
+                                    <tr md-row md-select-id="lista" md-auto-select
                                         ng-repeat="p in list | filter: search | orderBy: myOrder | limitTo: myLimit: (myPage - 1) * myLimit"
-                                        class="md-row" style="cursor: pointer;">
+                                        class="md-row showhim" style="cursor: pointer;">
                                         <td md-cell>{{p.ProductName}}</td>
                                     <td md-cell>{{p.Name}}</td>
                                     <td md-cell>{{p.Description}}</td>
@@ -112,6 +135,28 @@
                                         {{p.Income | currency}}</td>
                                     <td md-cell right ng-style="p.Outcome > 0 && {'color':'red'}">
                                         {{p.Outcome | currency}}</td>
+                                        <td style="width: 20px;">
+                                            <md-menu class="td-menu showme">
+                                                <md-button aria-label="Open menu" class="md-icon-button"
+                                                    ng-click="setSelected(p.Id);$mdMenu.open($event)">
+                                                    <span><i class="fas fa-ellipsis-v"></i></span>
+                                                </md-button>
+                                                <md-menu-content width="4">
+                                                    <md-menu-item>
+                                                        <md-button ng-click="editProductSlot($event,p)">
+                                                            <span><i class="fas fa-edit"></i></span>
+                                                            &nbsp;&nbsp;Edit
+                                                        </md-button>
+                                                    </md-menu-item>
+                                                    <md-menu-item>
+                                                        <md-button ng-click="deleteProductSlot($event,p)">
+                                                            <span><i class="fas fa-trash-alt"></i></span>
+                                                            &nbsp;&nbsp;Delete
+                                                        </md-button>
+                                                    </md-menu-item>
+                                                </md-menu-content>
+                                            </md-menu>
+                                        </td>
                                     </tr>
                                     </tbody>
                                     </table>
@@ -127,9 +172,9 @@
                     <md-content>
                         <md-card style="padding: 20px;">
 
-                            <md-button class="md-icon-button" ng-click="editAircraft($event)">
-                                <md-tooltip md-direction="right">{{messages.addAircraft}}</md-tooltip>
-                                <span><i class="fas fa-plus font18"></i></span>
+                            <md-button aria-label="edit" class="md-fab md-mini md-gray" ng-click="editAircraft($event)">
+                                <md-tooltip md-direction="right">{{messages.addProductSlot}}</md-tooltip>
+                                <span><i style="margin-top: 12px;" class="fas fa-plus font16"></i></span>
                             </md-button>
 
                             <div layout="row" layout-align="end end" style="height:43px;">
@@ -158,9 +203,9 @@
                                         </tr>
                                     </thead>
                                     <tbody md-body>
-                                        <tr md-row md-select-id="lista" md-auto-select ng-click="editAircraft($event,p)"
+                                        <tr md-row md-select-id="lista" md-auto-select
                                             ng-repeat="p in list | filter: search | orderBy: myOrder | limitTo: myLimit: (myPage - 1) * myLimit"
-                                            class="md-row" style="cursor: pointer;">
+                                            class="md-row showhim" style="cursor: pointer;">
                                             <td md-cell>{{p.Registration}}</td>
                                             <td md-cell>{{p.Type}}</td>
                                             <td md-cell>{{p.Name}}</td>
@@ -170,6 +215,28 @@
                                             <td md-cell>
                                                 <md-checkbox ng-disabled="true" aria-label="Aircraft active"
                                                     ng-model="p.Active"></md-checkbox>
+                                            </td>
+                                            <td style="width: 20px;">
+                                                <md-menu class="td-menu showme">
+                                                    <md-button aria-label="Open menu" class="md-icon-button"
+                                                        ng-click="setSelected(p.Id);$mdMenu.open($event)">
+                                                        <span><i class="fas fa-ellipsis-v"></i></span>
+                                                    </md-button>
+                                                    <md-menu-content width="4">
+                                                        <md-menu-item>
+                                                            <md-button ng-click="editAircraft($event,p)">
+                                                                <span><i class="fas fa-edit"></i></span>
+                                                                &nbsp;&nbsp;Edit
+                                                            </md-button>
+                                                        </md-menu-item>
+                                                        <md-menu-item>
+                                                            <md-button ng-click="deleteAircraft($event,p)">
+                                                                <span><i class="fas fa-trash-alt"></i></span>
+                                                                &nbsp;&nbsp;Delete
+                                                            </md-button>
+                                                        </md-menu-item>
+                                                    </md-menu-content>
+                                                </md-menu>
                                             </td>
                                         </tr>
                                     </tbody>

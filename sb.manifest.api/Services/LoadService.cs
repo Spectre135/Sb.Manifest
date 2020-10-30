@@ -102,7 +102,7 @@ namespace sb.manifest.api.Services
         }
         #endregion
 
-        #region Move and Add Slot
+        #region Move,Remove and Add Slot
         public void AddSlot(IConfiguration config, List<MOnBoard> list)
         {
             using LoadDAO dao = new LoadDAO();
