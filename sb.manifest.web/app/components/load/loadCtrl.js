@@ -12,11 +12,11 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
     };
     $scope.rows;
     $scope.moved = {}; //array when we move passengers between loads
-    $scope.moved.IdCustomer = []; //array when we move passengers between loads
-    $scope.customers = [];
+    $scope.moved.IdPerson = []; //array when we move passengers between loads
+    $scope.persons = [];
     $scope.dragToAdd = false; //to know if we must add person to load from side menu
     $scope.productList = [];
-    $scope.selectedIdCustomer;
+    $scope.selectedIdPerson;
     $scope.selectedGroup;
 
     //getLoadList
@@ -65,7 +65,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () { });
+        }).catch(function () {});
     };
 
     //delete passenger from load
@@ -100,7 +100,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () { });
+        }).catch(function () {});
     };
 
     //add/edit Load
@@ -123,7 +123,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () { });;
+        }).catch(function () {});;
     };
 
     //check if passenger is already in load  
@@ -132,21 +132,52 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             var response = false;
             angular.forEach(item.GroupList, function (value, key) {
                 angular.forEach(value.LoadList, function (value, key) {
-                    if ($.inArray(value.IdCustomer, $scope.moved.IdCustomer) > -1) {
+                    if ($.inArray(value.IdPerson, $scope.moved.IdPerson) > -1) {
                         response = true;
                     }
                 });
             });
             return response;
-        } catch (err) { }
+        } catch (err) {}
     };
 
     //before drop item we show confirmation dialog
     $scope.beforeDrop = function (event, ui, item) {
-        if ($scope.selectedIdCustomer > -1) {
+        if ($scope.selectedIdPerson > -1) {
             var slots = angular.element('.load .slot.selected');
             slots.removeClass('selected');
-            // $scope.selectedIdCustomer = -1;
+            // $scope.selectedIdPerson = -1;
+        }
+        var deferred = $q.defer();
+        //we show confirm dialog only load number is changed
+        if ($scope.loadMoveId != item.Id) {
+            //object to be saved after confirmation
+            $scope.moved.IdLoadFrom = $scope.loadMoveId;
+            $scope.moved.IdLoadTo = item.Id;
+
+            if (!isInLoad(item)) {
+                deferred.resolve();
+            } else {
+                var confirm = $mdDialog.alert()
+                    .title($rootScope.messages.warning)
+                    .textContent($scope.PassengerMove + ' already In')
+                    .ok('ok')
+                $mdDialog.show(confirm).then(function () {
+                    $mdDialog.hide();
+                }, function () {
+                    $mdDialog.hide();
+                });
+            }
+        }
+        return deferred.promise;
+    };
+
+    //before drop item we show confirmation dialog
+    $scope.beforeDrop = function (event, ui, item) {
+        if ($scope.selectedIdPerson > -1) {
+            var slots = angular.element('.load .slot.selected');
+            slots.removeClass('selected');
+            // $scope.selectedIdPerson = -1;
         }
 
         var deferred = $q.defer();
@@ -192,11 +223,11 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         }
 
         $scope.PassengerMove = [];
-        $scope.moved.IdCustomer = [];
+        $scope.moved.IdPerson = [];
         angular.forEach(item.LoadList, function (value, key) {
             $scope.loadMove = value.Number;
             $scope.loadMoveId = value.Id;
-            $scope.moved.IdCustomer.push(value.IdCustomer);
+            $scope.moved.IdPerson.push(value.IdPerson);
             $scope.PassengerMove.push(value.Passenger);
         });
 
@@ -209,9 +240,9 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         $scope.addPassengerList = [];
         $scope.passenger = {};
         $scope.dragToAdd = true;
-        $scope.passenger.IdCustomer = item.Id;
+        $scope.passenger.IdPerson = item.Id;
         $scope.passenger.IdProductSlot = 1; //TODO read from list 1-solo 4 for test
-        $scope.moved.IdCustomer.push(item.Id); //for check if person already in load
+        $scope.moved.IdPerson.push(item.Id); //for check if person already in load
         $scope.PassengerMove = item.Name; //form warning modal
     };
 
@@ -225,9 +256,8 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             apiService.postData(url, $scope.addPassengerList, true)
                 .then(function () {
                     $scope.moved = {};
-                    $scope.moved.IdCustomer = [];
-                    $scope.getLoadList();
-                    $scope.getLoadList().then(reselectCustomer);
+                    $scope.moved.IdPerson = [];
+                    $scope.getLoadList().then(reselectPerson);
                 });
         } else {
             var url = config.manifestApi + '/load/slot/move';
@@ -235,17 +265,17 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
                 .then(function () {
                     //init
                     $scope.moved = {};
-                    $scope.moved.IdCustomer = [];
+                    $scope.moved.IdPerson = [];
                     //we must refresh load list
-                    $scope.getLoadList().then(reselectCustomer);
+                    $scope.getLoadList().then(reselectPerson);
                 });
         }
     };
 
-    function reselectCustomer() {
-        if ($scope.selectedIdCustomer > -1) {
+    function reselectPerson() {
+        if ($scope.selectedIdPerson > -1) {
             setTimeout(function () {
-                var slots = angular.element('.load .slot[data-idcustomer="' + $scope.selectedIdCustomer + '"]');
+                var slots = angular.element('.load .slot[data-IdPerson="' + $scope.selectedIdPerson + '"]');
                 slots.addClass('selected');
             }, 500);
         }
@@ -272,14 +302,14 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         var url = config.manifestApi + '/load/active/today';
         var promise = apiService.getData(url, null, false)
             .then(function (data) {
-                $scope.customers = noDuplicates($scope.customers.concat(data.DataList));
+                $scope.persons = noDuplicates($scope.persons.concat(data.DataList));
             }).finally(function () {
                 self.working = false;
             });
         return promise;
     };
 
-    function getCustomerList() {
+    function getPersonsList() {
         $scope.working = true;
         var url = config.manifestApi + '/load/active/';
         var params = {
@@ -288,7 +318,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         };
         var promise = apiService.getData(url, params, false)
             .then(function (data) {
-                $scope.customers = noDuplicates($scope.customers.concat(data.DataList));
+                $scope.persons = noDuplicates($scope.persons.concat(data.DataList));
             }).finally(function () {
                 $scope.working = false;
             });
@@ -299,26 +329,26 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         $event.stopPropagation();
         var array = {};
         if ($scope.searchText) {
-            array = $filter('filter')($scope.customers, {
+            array = $filter('filter')($scope.persons, {
                 Name: $scope.searchText
             });
             if (array.length == 0) {
-                getCustomerList();
+                getPersonsList();
             }
         }
     };
 
-    $scope.selectCustomer = function (idCustomer) {
-        if ($scope.selectedIdCustomer == idCustomer) {
-            var slots = angular.element('.load .slot[data-idcustomer="' + idCustomer + '"], #loads-helper-slots .slot[data-idcustomer="' + idCustomer + '"]');
+    $scope.selectPerson = function (IdPerson, scope, elem, attrs) {
+        if ($scope.selectedIdPerson == IdPerson) {
+            var slots = angular.element('.load .slot[data-IdPerson="' + IdPerson + '"], #loads-helper-slots .slot[data-IdPerson="' + IdPerson + '"]');
             slots.removeClass('selected');
-            $scope.selectedIdCustomer = -1;
+            $scope.selectedIdPerson = -1;
         } else {
             var slots = angular.element('.load .slot.selected, #loads-helper-slots .slot.selected');
             slots.removeClass('selected');
-            slots = angular.element('.load .slot[data-idcustomer="' + idCustomer + '"], #loads-helper-slots .slot[data-idcustomer="' + idCustomer + '"]');
+            slots = angular.element('.load .slot[data-IdPerson="' + IdPerson + '"], #loads-helper-slots .slot[data-IdPerson="' + IdPerson + '"]');
             slots.addClass('selected');
-            $scope.selectedIdCustomer = idCustomer;
+            $scope.selectedIdPerson = IdPerson;
         }
     };
 

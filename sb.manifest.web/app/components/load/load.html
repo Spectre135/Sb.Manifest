@@ -75,7 +75,7 @@
                             ng-style="{'background-color':g.BackgroundColor, 'border-color':g.BackgroundColor}">
                             <md-card-content>
                                 <div class="slot" ng-repeat="p in g.LoadList | orderBy: 'ProductSlotName'"
-                                    data-idcustomer="{{p.IdCustomer}}" ng-dblclick="selectCustomer(p.IdCustomer)"
+                                    data-idcustomer="{{p.IdPerson}}" ng-dblclick="selectCustomer(p.IdPerson)"
                                     ng-mousedown="addGroup($event)">
                                     <div layout="row">
                                         <div flex="70" class="slot-name">
@@ -143,7 +143,7 @@
             </div>
 
             <md-card class="slot-card" data-drag="true" data-jqyoui-options="dragOptions"
-                ng-repeat="g in customers track by $index" ng-model="g[$index]"
+                ng-repeat="g in persons track by $index" ng-model="g[$index]"
                 jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallbackAdd(g)'}" data-drop="false">
                 <md-card-content>
                     <div class="slot" data-idcustomer="{{g.Id}}" ng-dblclick="selectCustomer(g.Id)">

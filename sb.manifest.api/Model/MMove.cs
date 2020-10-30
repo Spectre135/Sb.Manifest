@@ -11,6 +11,6 @@ namespace sb.manifest.api.Model
         [ParamField("IdLoadTo")]
         public int IdLoadTo { get; set; }
 
-        public int[] IdCustomer { get; set; }
+        public int[] IdPerson { get; set; }
     }
 }

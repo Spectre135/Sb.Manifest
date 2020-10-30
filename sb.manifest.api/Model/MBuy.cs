@@ -5,7 +5,7 @@ namespace sb.manifest.api.Model
     public class MBuy
     {
         [ParamField("IdCustomer")]
-        public int IdCustomer { get; set; }
+        public int IdPerson { get; set; }
 
         [ParamField("IdProduct")]
         public int IdProduct { get; set; }

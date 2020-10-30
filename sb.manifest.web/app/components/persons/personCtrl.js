@@ -2,14 +2,14 @@
 
 var app = angular.module('SbManifest');
 
-app.controller('customerCtrl', function ($scope, $state, $mdDialog, apiService, config) {
+app.controller('personCtrl', function ($scope, $state, $mdDialog, apiService, config) {
     $scope.list = $state.params.list;
     $scope.query = $state.params.query;
     $scope.rows = $state.params.rows;
 
-    //get Customers list
-    $scope.getCustomerList = function () {
-        var url = config.manifestApi + '/customer/list';
+    //get persons list
+    $scope.getPersonList = function () {
+        var url = config.manifestApi + '/person/list';
         $scope.query.asc = !$scope.query.asc;
         var params = {
             search: $scope.search,
@@ -39,14 +39,14 @@ app.controller('customerCtrl', function ($scope, $state, $mdDialog, apiService, 
             targetEvent: $event,
             clickOutsideToClose: false
         }).then(function () {
-            $scope.getCustomerList();
+            $scope.getpersonList();
         }).catch(function () {});;
     };
 
     //Purchase products
     $scope.purchase = function ($event, dto) {
-        //dodamo idCustomer za purchase metodo
-        dto.IdCustomer = dto.Id;
+        //dodamo idperson za purchase metodo
+        dto.Idperson = dto.Id;
         $mdDialog.show({
             locals: {
                 dataToPass: dto
@@ -60,33 +60,33 @@ app.controller('customerCtrl', function ($scope, $state, $mdDialog, apiService, 
         }).then(function () {}).catch(function () {});
     };
 
-    //add/edit Customer
-    $scope.editCustomer = function ($event, dto) {
+    //add/edit person
+    $scope.editPerson = function ($event, dto) {
         $mdDialog.show({
             locals: {
                 dataToPass: dto
             },
-            controller: 'editCustomerCtrl',
+            controller: 'editPersonCtrl',
             controllerAs: 'ctrl',
-            templateUrl: 'app/components/customers/editCustomer.html',
+            templateUrl: 'app/components/persons/editPerson.html',
             parent: angular.element(document.body),
             targetEvent: $event,
             clickOutsideToClose: false
         }).then(function () {
-            $scope.getCustomerList();
+            $scope.getpersonList();
         }).catch(function () {});
     };
 
     //submit search button on Enter key
     $scope.onKeyPressSearch = function ($event) {
         if ($event.charCode === 13) { //if enter then hit the search button
-            $scope.getCustomerList();
+            $scope.getpersonList();
         }
     };
 
-    //show customer details
-    $scope.detailsCustomer = function (dto) {
-        $state.go('detailsCustomer', {
+    //show person details
+    $scope.detailPerson = function (dto) {
+        $state.go('detailPerson', {
             dto: dto,
             list: $scope.list,
             query: $scope.query,
@@ -95,28 +95,28 @@ app.controller('customerCtrl', function ($scope, $state, $mdDialog, apiService, 
     };
     //init
     $scope.init = function () {
-        $scope.getCustomerList();
+        $scope.getPersonList();
     };
 
 });
 
-app.controller('editCustomerCtrl', function ($scope, $mdDialog, dataToPass, apiService, config) {
+app.controller('editPersonCtrl', function ($scope, $mdDialog, dataToPass, apiService, config) {
 
     var self = this;
     $scope.warning = null;
-    $scope.customer = dataToPass;
-    $scope.label = $scope.customer == null ? 'Add new customer' : $scope.customer.Name;
+    $scope.person = dataToPass;
+    $scope.label = $scope.person == null ? 'Add new person' : $scope.person.Name;
     $scope.countries;
-    $scope.customer.BirthDate = $scope.customer.BirthDate == null ? new Date(1950, 0, 1) : $scope.customer.BirthDate;
+    $scope.person.BirthDate = $scope.person.BirthDate == null ? new Date(1950, 0, 1) : $scope.person.BirthDate;
 
     self.cancel = function ($event) {
         $mdDialog.cancel();
     };
 
     self.save = function ($event) {
-        $scope.customer.BirthDate = convertLocalDate($scope.customer.BirthDate);
-        var url = config.manifestApi + '/customer/save';
-        apiService.postData(url, $scope.customer, true)
+        $scope.person.BirthDate = convertLocalDate($scope.person.BirthDate);
+        var url = config.manifestApi + '/person/save';
+        apiService.postData(url, $scope.person, true)
             .then(function () {
                 $mdDialog.hide();
             });
@@ -140,7 +140,7 @@ app.controller('editCustomerCtrl', function ($scope, $mdDialog, dataToPass, apiS
 
 });
 
-app.controller('detailsCustomerCtrl', function ($scope, $state, $mdDialog, apiService, config) {
+app.controller('detailPersonCtrl', function ($scope, $state, $mdDialog, apiService, config) {
 
     //parent parameters we needed to return on exact page
     $scope.pList = $state.params.list;
@@ -158,11 +158,11 @@ app.controller('detailsCustomerCtrl', function ($scope, $state, $mdDialog, apiSe
 
     //get Ticket Post list
     $scope.getTicketPostList = function () {
-        var url = config.manifestApi + '/customer/ticketpost/list';
+        var url = config.manifestApi + '/person/ticketpost/list';
         $scope.query.asc = !$scope.query.asc;
         var params = {
             search: $scope.search,
-            idCustomer: $scope.dto.Id,
+            idPerson: $scope.dto.Id,
             pageIndex: $scope.query.page,
             pageSizeSelected: $scope.query.limit,
             sortKey: $scope.query.order,
@@ -178,11 +178,11 @@ app.controller('detailsCustomerCtrl', function ($scope, $state, $mdDialog, apiSe
 
     //get Jump activity
     $scope.getLoadList = function () {
-        var url = config.manifestApi + '/customer/load/list';
+        var url = config.manifestApi + '/person/load/list';
         $scope.query.asc = !$scope.query.asc;
         var params = {
             search: $scope.search,
-            idCustomer: $scope.dto.Id,
+            idPerson: $scope.dto.Id,
             pageIndex: $scope.query.page,
             pageSizeSelected: $scope.query.limit,
             sortKey: $scope.query.order,
@@ -205,8 +205,8 @@ app.controller('detailsCustomerCtrl', function ($scope, $state, $mdDialog, apiSe
 
     //Purchase products
     $scope.purchase = function ($event) {
-        //dodamo idCustomer za purchase metodo
-        $scope.dto.IdCustomer = $scope.dto.Id;
+        //dodamo idPerson za purchase metodo
+        $scope.dto.IdPerson = $scope.dto.Id;
         $mdDialog.show({
             locals: {
                 dataToPass: $scope.dto
@@ -225,9 +225,9 @@ app.controller('detailsCustomerCtrl', function ($scope, $state, $mdDialog, apiSe
         $scope.getLoadList();
     };
 
-    //back to all customer list
+    //back to all person list
     $scope.back = function () {
-        $state.go('customers', {
+        $state.go('persons', {
             list: $scope.pList,
             rows: $scope.pRows,
             query: $scope.pQuery

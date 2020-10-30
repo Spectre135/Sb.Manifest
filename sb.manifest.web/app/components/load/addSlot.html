@@ -38,10 +38,10 @@
               <md-progress-circular md-mode="indeterminate"></md-progress-circular>
             </div>
             <md-option ng-value="item.Id" class="separator"
-              ng-repeat="item in customers | filter:ctrl.searchText | filter:unique | staffilter:p.IsStaffJob"
+              ng-repeat="item in persons | filter:ctrl.searchText | filter:unique | staffilter:p.IsStaffJob"
               ng-disabled="item.OnBoard">
               <div><b>{{item.Name}}</b></div>
-              <div class="load-add-customer-remark">
+              <div class="load-add-person-remark">
                 <span class="warning" ng-show="item.OnBoard">Already in</span>
                 <span ng-show="item.AvailableTickets && !item.OnBoard">
                   Ticket: {{item.TicketName}} ({{item.AvailableTickets}})</span>
