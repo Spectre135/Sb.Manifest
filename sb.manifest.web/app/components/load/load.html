@@ -5,7 +5,7 @@
         <div flex-xs style="flex-shrink: 0; min-width: 280px; width: 18%;" layout="column"
             ng-repeat="l in loads | orderBy: 'Id' track by $index">
 
-            <md-card class="load" ng-class="l.SlotsLeft > 0 ? 'positive' : l.SlotsLeft == 0 ? 'full' : 'negative'"
+            <md-card class="load" ng-class="l.SlotsLeft > 0 ? '' : l.SlotsLeft == 0 ? 'full' : 'overbooked'"
                 data-drop="true" data-jqyoui-options="dropOptions" ng-model="l.GroupList"
                 jqyoui-droppable="{onDrop:'dropCallback()', beforeDrop:'beforeDrop(l)', multiple:true}">
                 <div layout="row" class="load-top">
@@ -73,9 +73,10 @@
                             jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallback(g)'}"
                             ng-hide="!g.IdGroup"
                             ng-style="{'background-color':g.BackgroundColor, 'border-color':g.BackgroundColor}">
-                            <md-card-content style="cursor: -webkit-grab;">
+                            <md-card-content>
                                 <div class="slot" ng-repeat="p in g.LoadList | orderBy: 'ProductSlotName'"
-                                    data-idcustomer="{{p.IdCustomer}}" ng-dblclick="selectCustomer(p.IdCustomer)">
+                                    data-idcustomer="{{p.IdCustomer}}" ng-dblclick="selectCustomer(p.IdCustomer)"
+                                    ng-mousedown="addGroup($event)">
                                     <div layout="row">
                                         <div flex="70" class="slot-name">
                                             <div>{{p.ProductSlotName}}</div>
@@ -88,7 +89,8 @@
                                     </div>
                                     <div layout="row" class="passenger">
                                         <div flex="70">
-                                            <span class="name">{{p.Passenger}}</span>
+                                            <span class="name"><span
+                                                    class="group-placeholder"></span>{{p.Passenger}}</span>
                                         </div>
                                         <div flex="30" style="text-align: end;">
                                             <span class="tickets" ng-if="p.AvailableTickets > 0">
@@ -112,17 +114,26 @@
             <md-card class="load-bin" data-drop="true" data-jqyoui-options="dropOptions" data-idload="{{l.Id}}"
                 jqyoui-droppable="{onDrop:'dropCallback()', beforeDrop:'beforeDrop(-1)', multiple:true}">
                 <md-card-content>
-                    <i class="fas fa-2x fa-trash-alt"></i>
+                    <i class="fas fa-3x fa-trash-alt"></i>
                 </md-card-content>
             </md-card>
         </div>
     </md-content>
 
     <div class="loads-helper">
-        <md-toolbar class="md-theme-light">
-            <h1 class="md-toolbar-tools">Active skydivers</h1>
-        </md-toolbar>
-        <div id="loads-helper-slots">
+
+        <div id="loads-helper-groups">
+            <span ng-repeat="g in [0,1,2,3,4,5,6,7]">
+                <span class="group g{{g}}" ng-click="selectGroup(g)">{{g}}</span>
+            </span>
+
+           <a href="#" onclick="return false;"  ng-click="openSideMenu()"
+                    class="btn-more">
+            <i class="fas fa-ellipsis-v"></i>
+        </a>
+        </div>
+
+        <div class="loads-helper-slots">
             <md-input-container class="md-icon-float md-block">
                 <label>Search</label>
                 <input ng-model="searchText" name="search" ng-keypress="onKeySearch($event)" />
@@ -130,10 +141,11 @@
             <div layout="row" layout-sm="column" layout-align="space-around" ng-if="working">
                 <md-progress-circular md-mode="indeterminate"></md-progress-circular>
             </div>
+
             <md-card class="slot-card" data-drag="true" data-jqyoui-options="dragOptions"
                 ng-repeat="g in customers track by $index" ng-model="g[$index]"
                 jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallbackAdd(g)'}" data-drop="false">
-                <md-card-content style="cursor: -webkit-grab;">
+                <md-card-content>
                     <div class="slot" data-idcustomer="{{g.Id}}" ng-dblclick="selectCustomer(g.Id)">
                         <div layout="row" class="passenger">
                             <div flex="70">
@@ -159,29 +171,24 @@
             </md-button>
         </div>
     </div>
+</div>
 
 
-    <div class="md-padding actionButtons" layout="column">
-        <md-fab-speed-dial md-open="true" md-direction="left"
-            class="md-fling md-fab-bottom-right md-hover-full speed-dial">
-            <md-fab-trigger>
-                <md-button class="md-primary md-fab md-gray">
-                    <span><i class="fas fa-ellipsis-h font18"></i></span>
-                </md-button>
-            </md-fab-trigger>
+<div class="md-padding actionButtons" layout="column">
+    <md-fab-speed-dial md-open="true" md-direction="left" class="md-fling md-fab-bottom-right md-hover-full speed-dial">
+        <md-fab-trigger>
+            <md-button class="md-primary md-fab md-gray">
+                <span><i class="fas fa-ellipsis-h font18"></i></span>
+            </md-button>
+        </md-fab-trigger>
 
-            <md-fab-actions>
-                <md-button class="md-primary md-fab" ng-click="openSideMenu()">
-                    <span><i class="fas fa-user-plus font18"></i></span>
-                    <md-tooltip md-direction="left">{{messages.addLoad}}</md-tooltip>
-                </md-button>
-                <md-button class="md-primary md-fab" ng-click="editLoad($event)">
-                    <span><i class="fas fa-plane-departure font18"></i></span>
-                    <md-tooltip md-direction="left">{{messages.addLoad}}</md-tooltip>
-                </md-button>
-            </md-fab-actions>
-        </md-fab-speed-dial>
+        <md-fab-actions>
+            <md-button class="md-primary md-fab" ng-click="editLoad($event)">
+                <span><i class="fas fa-plane-departure font18"></i></span>
+                <md-tooltip md-direction="left">{{messages.addLoad}}</md-tooltip>
+            </md-button>
+        </md-fab-actions>
+    </md-fab-speed-dial>
+</div>
 
-    </div>
-
-    <div ng-init="init()"></div>
+<div ng-init="init()"></div>

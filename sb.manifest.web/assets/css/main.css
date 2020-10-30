@@ -983,6 +983,11 @@ body {
   display: none;
 }
 
+.load-bin.drop-hover {
+  display         : none;
+  background-color: rgba(221, 0, 0, .05);
+}
+
 .load-bin.visible {
   display: initial;
 }
@@ -993,32 +998,47 @@ body {
 }
 
 #loads-main .loads-helper {
-  width        : 300px;
-  display      : none;
+  width        : 46px;
   float        : right;
   box-shadow   : 0px -1px 5px rgba(22, 25, 31, 0.8);
-  /* overflow  : auto;
-  max-height   : calc(100vh - 60px); */
-  /* position  : relative; */
+  border-radius: 0 0 0 12px;
+}
+
+#loads-main .loads {
+  float: left;
+  width: calc(100% - 52px);
 }
 
 #loads-main.open-helper .loads {
-  float: left;
   width: calc(100% - 308px);
 }
 
 #loads-main.open-helper .loads-helper {
-  display: initial;
+  width        : 300px;
+  border-radius: 0;
 }
 
-#loads-helper-slots {
-  padding: 16px;
+.loads-helper-slots {
+  padding: 8px;
+  display: none;
+}
+
+#loads-main.open-helper .loads-helper .loads-helper-slots {
+  display: block;
 }
 
 .slot-card {
   margin      : 0 8px 12px;
   border-width: 0 8px 0 0;
   border-style: solid;
+}
+
+.slot-card[data-drag='true'] {
+  cursor: grab;
+}
+
+body.select-group .slot-card[data-drag='true'] {
+  cursor: pointer;
 }
 
 .slot-card md-card-content {
@@ -1041,7 +1061,7 @@ body {
 }
 
 .load.full .load-top,
-.load.negative .load-top {
+.load.overbooked .load-top {
   border-bottom-color: transparent;
 }
 
@@ -1107,11 +1127,11 @@ body {
   background: linear-gradient(180deg, rgba(96, 147, 108, 1) 45px, rgba(96, 147, 108, .15) 46px, rgba(0, 153, 31, .05) 107px);
 }
 
-.load.negative {
+.load.overbooked {
   background: linear-gradient(180deg, rgba(221, 0, 0, 1) 45px, rgba(221, 0, 0, .15) 46px, rgba(255, 255, 255, 1) 107px);
 }
 
-.load.negative.drop-hover {
+.load.overbooked.drop-hover {
   background: linear-gradient(180deg, rgba(221, 0, 0, 1) 45px, rgba(221, 0, 0, .15) 46px, rgba(221, 0, 0, .05) 107px);
 }
 
@@ -1124,7 +1144,7 @@ body {
 }
 
 .load.full .slots-left,
-.load.negative .slots-left {
+.load.overbooked .slots-left {
   /* border-radius: 3px;
   text-align   : center; */
   color: #fff;
@@ -1135,7 +1155,7 @@ body {
   background-color: #090;
 }
 
-.load.negative .slots-left .value {
+.load.overbooked .slots-left .value {
   background-color: #d00;
 } */
 
@@ -1163,6 +1183,101 @@ body {
   /* text-align: right; */
   font-size: 10.5px;
   margin   : 0 8px 8px;
+}
+
+#loads-helper-groups {
+  padding: 8px;
+}
+
+#loads-helper-groups .btn-more {
+  display      : block;
+  text-align   : center;
+  margin       : 8px 0 0;
+  color        : black;
+  width        : calc(1.5em + 6px);
+  border-radius: 1em;
+  padding      : 2px;
+  transition   : all .3s cubic-bezier(.55, 0, .55, .2);
+  font-size    : 14px;
+}
+
+#loads-helper-groups .btn-more:hover {
+  background-color: rgba(0, 0, 0, .04);
+  box-shadow      : 0 2px 5px 0 rgba(0, 0, 0, .26);
+}
+
+#loads-main.open-helper #loads-helper-groups .btn-more {
+  display: none;
+}
+
+#loads-helper-groups .group,
+.load .passenger .group-placeholder .group {
+  font-weight  : 700;
+  display      : inline-block;
+  text-align   : center;
+  border-radius: 1em;
+  color        : #fff;
+  outline      : none;
+  cursor       : pointer;
+}
+
+#loads-helper-groups .group {
+  font-size: 15px;
+  width    : calc(1.5em + 6px);
+  border   : solid 3px #fafafa;
+}
+
+#loads-helper-groups .group:hover {
+  border-color: rgba(255, 255, 255, 0.66);
+}
+
+.load .passenger .group-placeholder .group {
+  width       : 1.5em;
+  margin-right: 4px;
+}
+
+#loads-helper-groups .group.selected {
+  border-color: rgba(0, 0, 0, 0.33);
+}
+
+#loads-helper-groups .group.g0 {
+  background-color: rgba(0, 0, 0, 0.1);
+  color           : transparent;
+}
+
+#loads-helper-groups .group.g1,
+.load .passenger .group-placeholder .group.g1 {
+  background-color: #d32f2f;
+}
+
+#loads-helper-groups .group.g2,
+.load .passenger .group-placeholder .group.g2 {
+  background-color: #ffa000;
+}
+
+#loads-helper-groups .group.g3,
+.load .passenger .group-placeholder .group.g3 {
+  background-color: #afb42b;
+}
+
+#loads-helper-groups .group.g4,
+.load .passenger .group-placeholder .group.g4 {
+  background-color: #388e3c;
+}
+
+#loads-helper-groups .group.g5,
+.load .passenger .group-placeholder .group.g5 {
+  background-color: #1976d2;
+}
+
+#loads-helper-groups .group.g6,
+.load .passenger .group-placeholder .group.g6 {
+  background-color: #7b1fa2;
+}
+
+#loads-helper-groups .group.g7,
+.load .passenger .group-placeholder .group.g7 {
+  background-color: #5d4037;
 }
 
 md-option.separator:not(:last-child) {

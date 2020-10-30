@@ -22,49 +22,48 @@
                         <span class="font20">{{d.Profit | currency}}</span>
                 </md-whiteframe>
             </div>
-</div>
-</md-content>
+        </md-content>
 
-<md-content class="md-padding" layout-xs="column" layout="row">
+        <md-content class="md-padding" layout-xs="column" layout="row">
 
-    <div flex-xs flex-gt-xs="25" layout="column">
-        <md-card>
-            <canvas id="loadsChart"></canvas>
-            <md-card-title>
-                <md-card-title-text>
-                    <md-divider></md-divider>
-                    <span>Total jumps</span>
-                    <span class="font30">{{loads}}</span>
-                </md-card-title-text>
-            </md-card-title>
+            <div flex-xs flex-gt-xs="25" layout="column">
+                <md-card>
+                    <canvas id="loadsChart"></canvas>
+                    <md-card-title>
+                        <md-card-title-text>
+                            <md-divider></md-divider>
+                            <span>Total jumps</span>
+                            <span class="font30">{{loads}}</span>
+                        </md-card-title-text>
+                    </md-card-title>
 
-        </md-card>
-    </div>
+                </md-card>
+            </div>
 
-    <div flex-xs flex-gt-xs="25" layout="column">
-        <md-card>
-            <canvas id="profitChart"></canvas>
-            <md-card-title>
-                <md-card-title-text>
-                    <md-divider></md-divider>
-                    <span>Total income</span>
-                    <span class="font30">{{profit | currency}}</span>
-                </md-card-title-text>
-            </md-card-title>
+            <div flex-xs flex-gt-xs="25" layout="column">
+                <md-card>
+                    <canvas id="profitChart"></canvas>
+                    <md-card-title>
+                        <md-card-title-text>
+                            <md-divider></md-divider>
+                            <span>Total income</span>
+                            <span class="font30">{{profit | currency}}</span>
+                        </md-card-title-text>
+                    </md-card-title>
 
-        </md-card>
-    </div>
+                </md-card>
+            </div>
 
 
-    <div flex-xs flex-gt-xs="50" layout="column">
-        <md-card>
-            <canvas id="lineChart"></canvas>
-        </md-card>
-    </div>
+            <div flex-xs flex-gt-xs="50" layout="column">
+                <md-card>
+                    <canvas id="lineChart"></canvas>
+                </md-card>
+            </div>
 
-</md-content>
+        </md-content>
 
-</md-card>
+    </md-card>
 
 </div>
 

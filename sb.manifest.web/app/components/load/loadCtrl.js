@@ -17,6 +17,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
     $scope.dragToAdd = false; //to know if we must add person to load from side menu
     $scope.productList = [];
     $scope.selectedIdCustomer;
+    $scope.selectedGroup;
 
     //getLoadList
     $scope.getLoadList = function () {
@@ -104,6 +105,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
 
     //add/edit Load
     $scope.editLoad = function ($event, dto) {
+        console.log($event);
         //init if null to pass the loads array for get max load number
         if (!dto) {
             dto = {};
@@ -147,14 +149,12 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             // $scope.selectedIdCustomer = -1;
         }
 
-        var loadBin = angular.element('.load-bin.visible');
-        loadBin.removeClass('visible');
-        
         var deferred = $q.defer();
 
         // remove
         if (item == -1) {
             alert('remove ' + $scope.PassengerMove + ' from ' + $scope.loadMoveId);
+            reselectCustomer();
         }
         // move to
         else if ($scope.loadMoveId != item.Id) {
@@ -176,11 +176,21 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
                 });
             }
         }
+
+        var loadBin = angular.element('.load-bin.visible');
+        loadBin.removeClass('visible');
+
         return deferred.promise;
     };
 
     //when we start drag item to know what item
     $scope.startCallback = function (event, ui, item) {
+        if ($scope.selectedGroup >= 0) {
+            event.preventDefault();
+            event.stopPropagation();
+            return;
+        }
+
         $scope.PassengerMove = [];
         $scope.moved.IdCustomer = [];
         angular.forEach(item.LoadList, function (value, key) {
@@ -189,7 +199,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             $scope.moved.IdCustomer.push(value.IdCustomer);
             $scope.PassengerMove.push(value.Passenger);
         });
-        
+
         var loadBin = angular.element('.load-bin[data-idload="' + $scope.loadMoveId + '"]');
         loadBin.addClass('visible');
     };
@@ -233,7 +243,6 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
     };
 
     function reselectCustomer() {
-        console.log($scope.selectedIdCustomer);
         if ($scope.selectedIdCustomer > -1) {
             setTimeout(function () {
                 var slots = angular.element('.load .slot[data-idcustomer="' + $scope.selectedIdCustomer + '"]');
@@ -299,20 +308,51 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         }
     };
 
-    $scope.selectCustomer = function (IdCustomer, scope, elem, attrs) {
-        if ($scope.selectedIdCustomer == IdCustomer) {
-            var slots = angular.element('.load .slot[data-idcustomer="' + IdCustomer + '"], #loads-helper-slots .slot[data-idcustomer="' + IdCustomer + '"]');
+    $scope.selectCustomer = function (idCustomer) {
+        if ($scope.selectedIdCustomer == idCustomer) {
+            var slots = angular.element('.load .slot[data-idcustomer="' + idCustomer + '"], #loads-helper-slots .slot[data-idcustomer="' + idCustomer + '"]');
             slots.removeClass('selected');
             $scope.selectedIdCustomer = -1;
         } else {
             var slots = angular.element('.load .slot.selected, #loads-helper-slots .slot.selected');
             slots.removeClass('selected');
-            slots = angular.element('.load .slot[data-idcustomer="' + IdCustomer + '"], #loads-helper-slots .slot[data-idcustomer="' + IdCustomer + '"]');
+            slots = angular.element('.load .slot[data-idcustomer="' + idCustomer + '"], #loads-helper-slots .slot[data-idcustomer="' + idCustomer + '"]');
             slots.addClass('selected');
-            $scope.selectedIdCustomer = IdCustomer;
+            $scope.selectedIdCustomer = idCustomer;
         }
     };
 
+    $scope.selectGroup = function (group) {
+        if ($scope.selectedGroup >= 0) {
+            var g = angular.element('#loads-helper-groups .group.g' + $scope.selectedGroup);
+            g.removeClass('selected');
+        }
+        if ($scope.selectedGroup == group) {
+            $scope.selectedGroup = -1;
+
+            angular.element('body').removeClass('select-group');
+        }
+        else {
+            var g = angular.element('#loads-helper-groups .group.g' + group);
+            g.addClass('selected');
+            $scope.selectedGroup = group;
+
+            angular.element('body').addClass('select-group');
+        }
+    }
+
+    $scope.addGroup = function ($event) {
+        if ($scope.selectedGroup >= 0) {
+            var g = angular.element($event.currentTarget).find('.passenger .group-placeholder');
+            var html = '<span class="group g' + $scope.selectedGroup + '">' + $scope.selectedGroup + '</span>';
+            if ($scope.selectedGroup > 0 && g.html() != html) {
+                g.html(html);
+            }
+            else {
+                g.html('');
+            }
+        }
+    }
 });
 
 app.controller('confirmLoadCtrl', function ($scope, $state, $filter, $mdDialog, $window, dataToPass, apiService, config) {
