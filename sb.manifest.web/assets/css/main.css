@@ -1018,12 +1018,12 @@ body {
   border-radius: 0;
 }
 
-.loads-helper-slots {
+#loads-helper-slots {
   padding: 8px;
   display: none;
 }
 
-#loads-main.open-helper .loads-helper .loads-helper-slots {
+#loads-main.open-helper #loads-helper-slots {
   display: block;
 }
 

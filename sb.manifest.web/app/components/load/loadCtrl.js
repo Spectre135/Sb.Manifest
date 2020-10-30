@@ -236,7 +236,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
     function reselectPerson() {
         if ($scope.selectedIdPerson > -1) {
             setTimeout(function () {
-                var slots = angular.element('.load .slot[data-IdPerson="' + $scope.selectedIdPerson + '"]');
+                var slots = angular.element('.load .slot[data-idperson="' + $scope.selectedIdPerson + '"]');
                 slots.addClass('selected');
             }, 500);
         }
@@ -301,13 +301,13 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
 
     $scope.selectPerson = function (IdPerson, scope, elem, attrs) {
         if ($scope.selectedIdPerson == IdPerson) {
-            var slots = angular.element('.load .slot[data-IdPerson="' + IdPerson + '"], #loads-helper-slots .slot[data-IdPerson="' + IdPerson + '"]');
+            var slots = angular.element('.load .slot[data-idperson="' + IdPerson + '"], #loads-helper-slots .slot[data-idperson="' + IdPerson + '"]');
             slots.removeClass('selected');
             $scope.selectedIdPerson = -1;
         } else {
             var slots = angular.element('.load .slot.selected, #loads-helper-slots .slot.selected');
             slots.removeClass('selected');
-            slots = angular.element('.load .slot[data-IdPerson="' + IdPerson + '"], #loads-helper-slots .slot[data-IdPerson="' + IdPerson + '"]');
+            slots = angular.element('.load .slot[data-idperson="' + IdPerson + '"], #loads-helper-slots .slot[data-idperson="' + IdPerson + '"]');
             slots.addClass('selected');
             $scope.selectedIdPerson = IdPerson;
         }
