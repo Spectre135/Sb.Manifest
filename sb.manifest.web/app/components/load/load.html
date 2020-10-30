@@ -1,10 +1,7 @@
-<div id="loads-main" style="padding-bottom: 50px;">
-
+<div id="loads-main">
+    <div class="group-mode-on-alert" ng-click="selectGroup(selectedGroup)">Group mode is ON</div>
     <md-content class="md-padding loads" layout-xs="column" layout="row">
-        <!-- <div flex-xs flex-gt-xs="25" style="flex-shrink: 0;" layout="column" -->
-        <div flex-xs style="flex-shrink: 0; min-width: 280px; width: 18%;" layout="column"
-            ng-repeat="l in loads | orderBy: 'Id' track by $index">
-
+        <div flex-xs class="load-flex-container" layout="column" ng-repeat="l in loads | orderBy: 'Id' track by $index">
             <md-card class="load" ng-class="l.SlotsLeft > 0 ? '' : l.SlotsLeft == 0 ? 'full' : 'overbooked'"
                 data-drop="true" data-jqyoui-options="dropOptions" ng-model="l.GroupList"
                 jqyoui-droppable="{onDrop:'dropCallback()', beforeDrop:'beforeDrop(l)', multiple:true}">
@@ -111,12 +108,20 @@
                     </span>
                 </div>
             </md-card>
+
             <md-card class="load-bin" data-drop="true" data-jqyoui-options="dropOptions" data-idload="{{l.Id}}"
                 jqyoui-droppable="{onDrop:'dropCallback()', beforeDrop:'beforeDrop(-1)', multiple:true}">
                 <md-card-content>
                     <i class="fas fa-3x fa-trash-alt"></i>
                 </md-card-content>
             </md-card>
+        </div>
+
+        <div flex-xs class="load-flex-container btn-add-load">
+            <md-button class="md-primary md-fab" ng-click="editLoad($event)">
+                <i class="fas fa-5x fa-plus"></i>
+                <md-tooltip md-direction="left">{{messages.addLoad}}</md-tooltip>
+            </md-button>
         </div>
     </md-content>
 
@@ -127,10 +132,9 @@
                 <span class="group g{{g}}" ng-click="selectGroup(g)">{{g}}</span>
             </span>
 
-           <a href="#" onclick="return false;"  ng-click="openSideMenu()"
-                    class="btn-more">
-            <i class="fas fa-ellipsis-v"></i>
-        </a>
+            <a href="#" onclick="return false;" ng-click="openSideMenu()" class="btn-more">
+                <i class="fas fa-ellipsis-v"></i>
+            </a>
         </div>
 
         <div id="loads-helper-slots">
@@ -173,14 +177,13 @@
     </div>
 </div>
 
-
-<div class="md-padding actionButtons" layout="column">
+<!-- <div class="actionButtons" layout="column">
     <md-fab-speed-dial md-open="true" md-direction="left" class="md-fling md-fab-bottom-right md-hover-full speed-dial">
         <md-fab-trigger>
             <md-button class="md-primary md-fab md-gray">
                 <span><i class="fas fa-ellipsis-h font18"></i></span>
             </md-button>
-        </md-fab-trigger>
+        </md-fab-trigger> 
 
         <md-fab-actions>
             <md-button class="md-primary md-fab" ng-click="editLoad($event)">
@@ -188,7 +191,7 @@
                 <md-tooltip md-direction="left">{{messages.addLoad}}</md-tooltip>
             </md-button>
         </md-fab-actions>
-    </md-fab-speed-dial>
-</div>
+    </md-fab-speed-dial> 
+</div> -->
 
 <div ng-init="init()"></div>
