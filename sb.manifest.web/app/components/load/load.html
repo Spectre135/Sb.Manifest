@@ -75,7 +75,7 @@
                             ng-style="{'background-color':g.BackgroundColor, 'border-color':g.BackgroundColor}">
                             <md-card-content>
                                 <div class="slot" ng-repeat="p in g.LoadList | orderBy: 'ProductSlotName'"
-                                    data-idcustomer="{{p.IdPerson}}" ng-dblclick="selectCustomer(p.IdPerson)"
+                                    data-idperson="{{p.IdPerson}}" ng-dblclick="selectPerson(p.IdPerson)"
                                     ng-mousedown="addGroup($event)">
                                     <div layout="row">
                                         <div flex="70" class="slot-name">
@@ -133,7 +133,7 @@
         </a>
         </div>
 
-        <div class="loads-helper-slots">
+        <div id="loads-helper-slots">
             <md-input-container class="md-icon-float md-block">
                 <label>Search</label>
                 <input ng-model="searchText" name="search" ng-keypress="onKeySearch($event)" />
@@ -146,7 +146,7 @@
                 ng-repeat="g in persons track by $index" ng-model="g[$index]"
                 jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallbackAdd(g)'}" data-drop="false">
                 <md-card-content>
-                    <div class="slot" data-idcustomer="{{g.Id}}" ng-dblclick="selectCustomer(g.Id)">
+                    <div class="slot" data-idperson="{{g.Id}}" ng-dblclick="selectPerson(g.Id)">
                         <div layout="row" class="passenger">
                             <div flex="70">
                                 <span class="name">{{g.Name}}</span>
