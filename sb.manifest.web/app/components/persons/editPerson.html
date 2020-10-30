@@ -20,7 +20,7 @@
             <div layout-gt-sm="row">
               <md-input-container class="md-icon-float md-block" style="width: 100%;">
                 <label>First Name</label>
-                <input required md-maxlength="50" type="text" ng-model="customer.FirstName" name="first"
+                <input required md-maxlength="50" type="text" ng-model="person.FirstName" name="first"
                   capitalize-first />
                 <div ng-messages="form.first.$error" role="alert">
                   <div ng-message="required">{{messages.required}}</div>
@@ -29,7 +29,7 @@
 
               <md-input-container class="md-icon-float md-block" style="width: 100%;">
                 <label>Last Name</label>
-                <input required md-maxlength="50" type="text" ng-model="customer.LastName" name="last"
+                <input required md-maxlength="50" type="text" ng-model="person.LastName" name="last"
                   capitalize-first />
                 <div ng-messages="form.last.$error" role="alert">
                   <div ng-message="required">{{messages.required}}</div>
@@ -41,7 +41,7 @@
 
               <md-input-container class="md-icon-float md-block" style="width: 100%;">
                 <label>Email</label>
-                <input required md-maxlength="50" type="email" ng-model="customer.Email" name="email" />
+                <input required md-maxlength="50" type="email" ng-model="person.Email" name="email" />
                 <div ng-messages="form.email.$error" role="alert">
                   <div ng-message="required">{{messages.required}}</div>
                 </div>
@@ -49,7 +49,7 @@
 
               <md-input-container class="md-icon-float md-block" style="width: 100%;">
                 <label>Birth date</label>
-                <md-datepicker ng-required="true" ng-model="customer.BirthDate" name="birth"></md-datepicker>
+                <md-datepicker ng-required="true" ng-model="person.BirthDate" name="birth"></md-datepicker>
                 <div ng-messages="form.birth.$error" role="alert">
                   <div ng-message="required">{{messages.required}}</div>
                 </div>
@@ -57,7 +57,7 @@
 
               <md-input-container class="md-icon-float md-block" style="width: 50%;">
                 <label>Weight (kg)</label>
-                <input required type="number" step="any" name="weight" ng-model="customer.Weight" ng-pattern="/^[0-9]/" />
+                <input required type="number" step="any" name="weight" ng-model="person.Weight" ng-pattern="/^[0-9]/" />
                 <div ng-messages="form.weight.$error" role="alert">
                   <div ng-message="required">Weight is required.</div>
                 </div>
@@ -68,18 +68,18 @@
             <div layout-gt-sm="row">
               <md-input-container class="md-icon-float md-block" style="width: 100%;">
                 <label>Address</label>
-                <input md-maxlength="100" type="text" ng-model="customer.Address" name="address"
+                <input md-maxlength="100" type="text" ng-model="person.Address" name="address"
                   capitalize-first />
               </md-input-container>
               
               <md-input-container class="md-icon-float md-block" style="width: 100%;">
                 <label>Postal code</label>
-                <input type="number" ng-model="customer.PostalCode" name="postalcode"/>
+                <input type="number" ng-model="person.PostalCode" name="postalcode"/>
               </md-input-container>
 
               <md-input-container class="md-icon-float md-block" style="width: 100%;">
                 <label>Country</label>
-                <md-select ng-model="customer.IdCountry" md-on-open="getCountries()" ng-init="setCountry(customer)">
+                <md-select ng-model="person.IdCountry" md-on-open="getCountries()" ng-init="setCountry(person)">
                   <md-option ng-repeat="item in countries" value="{{item.Id}}">
                     {{item.Name}}
                   </md-option>
@@ -92,7 +92,7 @@
 
               <md-input-container class="md-icon-float md-block" style="width: 100%;">
                 <label style="margin-bottom: 25px;">Phone number</label>
-                <input type="text" style="margin-bottom: 25px;" ng-model="customer.Phone" name="phone" ng-intl-tel-input
+                <input type="text" style="margin-bottom: 25px;" ng-model="person.Phone" name="phone" ng-intl-tel-input
                   data-initial-country="si">
               </md-input-container>
 
@@ -108,14 +108,14 @@
             <div layout-gt-sm="row">
               <md-input-container class="md-icon-float md-block" style="width: 100%;">
                 <label>Limit</label>
-                <input type="text" format-currency name="limit" ng-model="customer.Limit"/>
+                <input type="text" format-currency name="limit" ng-model="person.Limit"/>
               </md-input-container>
             </div>
 
             <div layout-gt-sm="row">
               <md-input-container class="md-icon-float md-block" style="width: 100%;">
                 <label>Ticket price</label>
-                <input type="text" format-currency name="ticketprice" ng-model="customer.TicketPrice"/>
+                <input type="text" format-currency name="ticketprice" ng-model="person.TicketPrice"/>
               </md-input-container>
             </div>
 

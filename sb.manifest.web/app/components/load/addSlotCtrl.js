@@ -11,7 +11,7 @@ app.controller('addSlotCtrl', function ($rootScope, $scope, $mdDialog, $filter, 
   $scope.productList = [];
   $scope.productSelected = $scope.dto.IdProductSelected!=null ? $scope.dto.IdProductSelected:1; 
   $scope.productSlotList = [];
-  $scope.customers = [];
+  $scope.persons = [];
   self.working = false;
 
   self.cancel = function ($event) {
@@ -50,7 +50,7 @@ app.controller('addSlotCtrl', function ($rootScope, $scope, $mdDialog, $filter, 
   $scope.addPassenger = function (p, d) {
     //check if person have enought funds
     if (!checkFunds(p, d)) {
-      var name = $filter('filter')($scope.customers, function (item) {
+      var name = $filter('filter')($scope.persons, function (item) {
         return item.Id == p;
       })[0].Name;
       self.warning = $rootScope.messages.notfunds + ' ' + name;
@@ -58,10 +58,10 @@ app.controller('addSlotCtrl', function ($rootScope, $scope, $mdDialog, $filter, 
     //add person to slot
     var o = {};
     o.IdLoad = $scope.dto.Id; //IdLoad
-    o.IdCustomer = p;
+    o.IdPerson = p;
     o.IdProductSlot = d.Id;
     if ($filter('filter')($scope.addPassengerList, function (item) {
-        return item.IdCustomer == p;
+        return item.IdPerson == p;
       }).length > 0) {
       self.warning = $rootScope.messages.duplicatePassengerInLoad;
     }
@@ -75,7 +75,7 @@ app.controller('addSlotCtrl', function ($rootScope, $scope, $mdDialog, $filter, 
     try {
 
       //check if have tickets for selected product
-      var person = $filter('filter')($scope.customers, function (item) {
+      var person = $filter('filter')($scope.persons, function (item) {
         return item.Id == p && item.IdProductSlot == d.Id && item.AvaibleTickets>0;
       })[0];
 
@@ -84,7 +84,7 @@ app.controller('addSlotCtrl', function ($rootScope, $scope, $mdDialog, $filter, 
       }
 
       //person don't have tickets check for funds
-      var person = $filter('filter')($scope.customers, function (item) {
+      var person = $filter('filter')($scope.persons, function (item) {
         return item.Id == p;
       })[0];
 
@@ -104,7 +104,7 @@ app.controller('addSlotCtrl', function ($rootScope, $scope, $mdDialog, $filter, 
     } catch (err) {}
   };
 
-  function getCustomerList() {
+  function getPersonList() {
     self.working = true;
     var url = config.manifestApi + '/load/active/';
     var params = {
@@ -114,7 +114,7 @@ app.controller('addSlotCtrl', function ($rootScope, $scope, $mdDialog, $filter, 
     };
     var promise = apiService.getData(url, params, false)
       .then(function (data) {
-        $scope.customers = noDuplicates($scope.customers.concat(data.DataList));
+        $scope.persons = noDuplicates($scope.persons.concat(data.DataList));
       }).finally(function () {
         self.working = false;
       });
@@ -129,7 +129,7 @@ app.controller('addSlotCtrl', function ($rootScope, $scope, $mdDialog, $filter, 
     };
     var promise = apiService.getData(url, params, false)
       .then(function (data) {
-        $scope.customers = noDuplicates($scope.customers.concat(data.DataList));
+        $scope.persons = noDuplicates($scope.persons.concat(data.DataList));
       }).finally(function () {
         self.working = false;
       });
@@ -140,11 +140,11 @@ app.controller('addSlotCtrl', function ($rootScope, $scope, $mdDialog, $filter, 
     $event.stopPropagation();
     var array = {};
     if (self.searchText) {
-      array = $filter('filter')($scope.customers, {
+      array = $filter('filter')($scope.persons, {
         Name: self.searchText
       });
       if (array.length == 0) {
-        getCustomerList();
+        getPersonList();
       }
     }
   };

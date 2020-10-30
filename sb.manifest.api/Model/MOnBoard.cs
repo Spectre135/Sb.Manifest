@@ -6,8 +6,8 @@ namespace sb.manifest.api.Model
     public class MOnBoard
     {
         [DataField("IdCustomer")]
-        [ParamField("IdCustomer")]
-        public long IdCustomer { get; set; }
+        [ParamField("IdPerson")]
+        public long IdPerson { get; set; }
 
         [DataField("IdLoad")]
         [ParamField("IdLoad")]

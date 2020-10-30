@@ -3,7 +3,7 @@
 var app = angular.module('SbManifest');
 
 // configure app routes
-app.config( function ($stateProvider, $urlRouterProvider, $locationProvider) {
+app.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
     $urlRouterProvider.otherwise('/main/home');
     $locationProvider.hashPrefix('');
 
@@ -42,7 +42,7 @@ app.config( function ($stateProvider, $urlRouterProvider, $locationProvider) {
             templateUrl: 'app/components/user/changepass.html',
             controller: 'settingsCtrl',
             params: {
-                response:null,
+                response: null,
                 user: null
             },
             resolve: {
@@ -80,37 +80,38 @@ app.config( function ($stateProvider, $urlRouterProvider, $locationProvider) {
             controller: 'loadCtrl'
 
         })
-        .state('customers', {
-            url: '/customers',
+        .state('persons', {
+            url: '/persons',
             parent: 'main',
             resolve: {
                 redirectIfNotAuthenticated: _redirectIfNotAuthenticated
             },
-            templateUrl: 'app/components/customers/customers.html',
-            controller: 'customerCtrl',
+            templateUrl: 'app/components/persons/persons.html',
+            controller: 'personCtrl',
             params: {
-                list:null,
-                query: {order: '',
-                        limit: 5,
-                        page: 1,
-                        filter: '',
-                        asc: false
+                list: null,
+                query: {
+                    order: '',
+                    limit: 5,
+                    page: 1,
+                    filter: '',
+                    asc: false
                 },
                 rows: null
             }
 
         })
-        .state('detailsCustomer', {
-            url: '/customers',
+        .state('detailPerson', {
+            url: '/persons',
             parent: 'main',
             resolve: {
                 redirectIfNotAuthenticated: _redirectIfNotAuthenticated
             },
-            templateUrl: 'app/components/customers/customer.html',
-            controller: 'detailsCustomerCtrl',
+            templateUrl: 'app/components/persons/person.html',
+            controller: 'detailPersonCtrl',
             params: {
                 dto: null,
-                list:null,
+                list: null,
                 query: null,
                 rows: null
             }
@@ -159,9 +160,9 @@ function _skipIfAuthenticated($q) {
     var defer = $q.defer();
 
     if (sessionStorage.getItem('Authorization') != null) {
-        defer.reject(); 
+        defer.reject();
     } else {
-        defer.resolve(); 
+        defer.resolve();
     }
     return defer.promise;
 };
@@ -169,10 +170,10 @@ function _skipIfAuthenticated($q) {
 function _redirectIfNotAuthenticated($q, $state, $timeout) {
     var defer = $q.defer();
     if (sessionStorage.getItem('Authorization') != null) {
-        defer.resolve(); 
+        defer.resolve();
     } else {
         $timeout(function () {
-            $state.go('prijava'); 
+            $state.go('prijava');
         });
         defer.reject();
     }

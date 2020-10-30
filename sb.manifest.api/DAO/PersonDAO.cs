@@ -7,29 +7,29 @@ using System.Collections.Generic;
 
 namespace sb.manifest.api.DAO
 {
-    public class CustomerDAO :AbstractDAO
+    public class PersonDAO :AbstractDAO
     {
-        public MResponse GetCustomers(IConfiguration config, string search, int from, int to, string orderby, bool asc)
+        public MResponse GetPersons(IConfiguration config, string search, int from, int to, string orderby, bool asc)
         {
-            return GetPagingData<MCustomer>(config, SQLBuilder.GetCustomersListSQL(), search, from, to, orderby, asc);
+            return GetPagingData<MPerson>(config, SQLBuilder.GetPersonsListSQL(), search, from, to, orderby, asc);
         }
-        public void Save(IConfiguration config, MCustomer mCustomer)
+        public void Save(IConfiguration config, MPerson mPerson)
         {
-            string sql = SQLBuilder.GetInsertCustomerSQL();
-            List<KeyValuePair<string, object>> alParmValues = LoadParametersValue<MCustomer>(mCustomer);
+            string sql = SQLBuilder.GetInsertPersonSQL();
+            List<KeyValuePair<string, object>> alParmValues = LoadParametersValue<MPerson>(mPerson);
 
             //SQLite nima MERGE zato hendalmo skozi različna SQL-a
-            if (mCustomer.Id > 0)
+            if (mPerson.Id > 0)
             {
-                sql = SQLBuilder.GetSaveCustomerSQL();
-                alParmValues.Add(new KeyValuePair<string, object>("@Id", mCustomer.Id));
+                sql = SQLBuilder.GetSavePersonSQL();
+                alParmValues.Add(new KeyValuePair<string, object>("@Id", mPerson.Id));
             }
 
             SaveData(config, sql, alParmValues);
         }
         public MResponse GetTicketPosts(IConfiguration config, string search, int idCustomer, int from, int to, string orderby, bool asc)
         {
-            //vedno delamo za id Customer
+            //vedno delamo za id Person
             List<KeyValuePair<string, object>> alParmValues = new List<KeyValuePair<string, object>>
             {
                 new KeyValuePair<string, object>("@IdCustomer", idCustomer)
@@ -38,12 +38,12 @@ namespace sb.manifest.api.DAO
         }
         public MResponse GetLoadsHistory(IConfiguration config, string search, int idCustomer, int from, int to, string orderby, bool asc)
         {
-            //vedno delamo za id Customer
+            //vedno delamo za id Person
             List<KeyValuePair<string, object>> alParmValues = new List<KeyValuePair<string, object>>
             {
                 new KeyValuePair<string, object>("@IdCustomer", idCustomer)
             };
-            return GetPagingData<MLoadList>(config, SQLBuilder.GetLoadsHistoryByCustomerSQL(), search, from, to, orderby, asc, alParmValues);
+            return GetPagingData<MLoadList>(config, SQLBuilder.GetLoadsHistoryByPersonSQL(), search, from, to, orderby, asc, alParmValues);
         }
     }
 }

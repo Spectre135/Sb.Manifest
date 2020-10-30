@@ -2,22 +2,22 @@
     <md-card style="padding:10px;">
         <md-toolbar class="md-table-toolbar md-default">
             <md-card-title-text style="padding-bottom: 15px;">
-                <span class="md-title">Customers</span>
+                <span class="md-title">Persons</span>
             </md-card-title-text>
             <md-divider></md-divider>
         </md-toolbar>
 
         <div layout="row">
             <div flex="70">
-                <md-button aria-label="Open menu" class="md-fab md-mini md-gray" ng-click="editCustomer($event,{})">
-                    <md-tooltip md-direction="right">{{messages.addCustomer}}</md-tooltip>
+                <md-button aria-label="Open menu" class="md-fab md-mini md-gray" ng-click="editPerson($event,{})">
+                    <md-tooltip md-direction="right">{{messages.addperson}}</md-tooltip>
                     <span><i style="margin-left: 5px;" class="fas fa-user-plus font16"></i></span>
                 </md-button>
             </div>
 
             <div flex="30">
                 <md-input-container class="md-icon-float md-block">
-                    <md-icon class="name" style="margin-left: 15px;cursor: pointer;" ng-click="getCustomerList()"><i
+                    <md-icon class="name" style="margin-left: 15px;cursor: pointer;" ng-click="getPersonList()"><i
                             class="fas fa-search"></i></md-icon>
                     <label style="padding-left: 36px;z-index: 99;">Search</label>
                     <input ng-model="search" name="search" ng-keypress="onKeyPressSearch($event)" />
@@ -29,7 +29,7 @@
         <!--[if IE]> <div style="margin-top:20px;"> <![endif]-->
         <md-table-container>
             <table md-table md-progress="promise">
-                <thead md-head md-order="query.order" md-on-reorder="getCustomerList">
+                <thead md-head md-order="query.order" md-on-reorder="getPersonList">
                     <tr md-row>
                         <th md-column md-order-by="Id"><span>Id</span></th>
                         <th md-column md-order-by="FirstName"><span>First name</span></th>
@@ -65,13 +65,13 @@
                                 </md-button>
                                 <md-menu-content width="4">
                                     <md-menu-item>
-                                        <md-button ng-click="detailsCustomer(p)">
+                                        <md-button ng-click="detailPerson(p)">
                                             <span><i class="fas fa-info-circle"></i></span>
                                             &nbsp;&nbsp;Details
                                         </md-button>
                                     </md-menu-item>
                                     <md-menu-item>
-                                        <md-button ng-click="editCustomer($event,p)">
+                                        <md-button ng-click="editPerson($event,p)">
                                             <span><i class="fas fa-edit"></i></span>
                                             &nbsp;&nbsp;Edit
                                         </md-button>
@@ -104,7 +104,7 @@
         </md-table-container>
         <!--[if IE]> </div> <![endif]-->
         <md-table-pagination md-page="query.page" md-limit="query.limit" md-limit-options="[5, 10, 15]"
-            md-total="{{rows}}" md-on-paginate="getCustomerList">
+            md-total="{{rows}}" md-on-paginate="getPersonList">
         </md-table-pagination>
     </md-card>
 </div>

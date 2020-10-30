@@ -41,7 +41,7 @@ namespace sb.manifest.api.DAO
                     alParmValues.Add(new KeyValuePair<string, object>("@IdTransaction", i.IdTransaction));
                     alParmValues.Add(new KeyValuePair<string, object>("@Account", 1001));
                     alParmValues.Add(new KeyValuePair<string, object>("@IdCompany", 1));
-                    alParmValues.Add(new KeyValuePair<string, object>("@IdCustomer",i.IdCustomer));
+                    alParmValues.Add(new KeyValuePair<string, object>("@IdCustomer",i.IdPerson));
                     alParmValues.Add(new KeyValuePair<string, object>("@IdLoad", i.IdLoad));
                     alParmValues.Add(new KeyValuePair<string, object>("@Description", i.Description));
                     alParmValues.Add(new KeyValuePair<string, object>("@Debit", i.Amount));
@@ -53,7 +53,7 @@ namespace sb.manifest.api.DAO
                     alParmValues.Add(new KeyValuePair<string, object>("@IdTransaction", i.IdTransaction));
                     alParmValues.Add(new KeyValuePair<string, object>("@Account", i.Account));
                     alParmValues.Add(new KeyValuePair<string, object>("@IdCompany", 1));
-                    alParmValues.Add(new KeyValuePair<string, object>("@IdCustomer", i.IdCustomer));
+                    alParmValues.Add(new KeyValuePair<string, object>("@IdCustomer", i.IdPerson));
                     alParmValues.Add(new KeyValuePair<string, object>("@IdLoad", i.IdLoad));
                     alParmValues.Add(new KeyValuePair<string, object>("@Description", i.Description));
                     alParmValues.Add(new KeyValuePair<string, object>("@Debit", 0));

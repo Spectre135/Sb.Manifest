@@ -3,7 +3,7 @@ using System;
 
 namespace sb.manifest.api.Model
 {
-    public class MCustomer
+    public class MPerson
     {
         [DataField("Id")]
         public long Id { get; set; }

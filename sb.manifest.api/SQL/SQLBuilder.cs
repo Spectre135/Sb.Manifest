@@ -5,12 +5,12 @@ namespace sb.manifest.api.SQL
     public class SQLBuilder
     {
 
-        #region Customers
-        public static string GetCustomersListSQL()
+        #region Person
+        public static string GetPersonsListSQL()
         {
             return "SELECT * FROM v_customer WHERE 1=1 "; //WHERE 1=1 ker dodajamo pogoje za search
         }
-        public static string GetInsertCustomerSQL()
+        public static string GetInsertPersonSQL()
         {
             return @"INSERT INTO customer 
                                 (firstname, 
@@ -36,7 +36,7 @@ namespace sb.manifest.api.SQL
                                 @Limit,
                                 @TicketPrice) ";
         }
-        public static string GetSaveCustomerSQL()
+        public static string GetSavePersonSQL()
         {
             return @"UPDATE customer 
                      SET    firstname = @FirstName, 
@@ -70,13 +70,13 @@ namespace sb.manifest.api.SQL
         }
         public static string GetInsertPassengersToLoadSQL()
         {
-            return "INSERT INTO OnLoad(IdCustomer,IdLoad,IdProductSlot,IdGroup) VALUES(@IdCustomer,@IdLoad,@IdProductSlot,@IdGroup)";
+            return "INSERT INTO OnLoad(IdCustomer,IdLoad,IdProductSlot,IdGroup) VALUES(@IdPerson,@IdLoad,@IdProductSlot,@IdGroup)";
         }
         public static string GetLoadListSQL()
         {
             return "SELECT * FROM v_loadlist WHERE Status=0 ";
         }
-        public static string GetLoadsHistoryByCustomerSQL()
+        public static string GetLoadsHistoryByPersonSQL()
         {
             return "SELECT * FROM v_loadlist WHERE IdCustomer = @IdCustomer";
         }

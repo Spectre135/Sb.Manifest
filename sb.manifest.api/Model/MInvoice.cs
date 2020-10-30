@@ -12,13 +12,13 @@ namespace sb.manifest.api.Model
         public int Account { get; set; }
 
         [DataField("IdCustomer")]
-        public long IdCustomer { get; set; }
+        public long IdPerson { get; set; }
 
         [DataField("IdLoad")]
         public long IdLoad { get; set; }
 
         [DataField("Customer")]
-        public string Customer { get; set; }
+        public string Person { get; set; }
 
         [DataField("Description")]
         public string Description { get; set; }

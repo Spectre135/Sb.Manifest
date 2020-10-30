@@ -75,7 +75,7 @@
                             ng-style="{'background-color':g.BackgroundColor, 'border-color':g.BackgroundColor}">
                             <md-card-content style="cursor: -webkit-grab;">
                                 <div ng-repeat="p in g.LoadList | orderBy: 'ProductSlotName'" class="slot"
-                                    data-idcustomer="{{p.IdCustomer}}" ng-dblclick="selectCustomer(p.IdCustomer)">
+                                    data-idperson="{{p.IdPerson}}" ng-dblclick="selectPerson(p.IdPerson)">
                                     <div layout="row">
                                         <div flex="70" class="slot-name">
                                             <div>{{p.ProductSlotName}}</div>
@@ -130,7 +130,7 @@
                 <md-progress-circular md-mode="indeterminate"></md-progress-circular>
             </div>
             <md-card class="slot-card" data-drag="true" data-jqyoui-options="dragOptions"
-                ng-repeat="g in customers track by $index" ng-model="g[$index]"
+                ng-repeat="g in persons track by $index" ng-model="g[$index]"
                 jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallbackAdd(g)'}">
                 <md-card-content style="cursor: -webkit-grab;">
                     <div class="slot">
@@ -160,23 +160,31 @@
 
 
     <div class="md-padding actionButtons" layout="column">
+
+
         <md-fab-speed-dial md-open="true" md-direction="left"
             class="md-fling md-fab-bottom-right md-hover-full speed-dial">
+            <!--
             <md-fab-trigger>
                 <md-button class="md-primary md-fab md-gray">
                     <span><i class="fas fa-ellipsis-h font18"></i></span>
                 </md-button>
             </md-fab-trigger>
-
+            -->
             <md-fab-actions>
+
                 <md-button class="md-primary md-fab" ng-click="openSideMenu()">
                     <span><i class="fas fa-user-plus font18"></i></span>
                     <md-tooltip md-direction="left">{{messages.addLoad}}</md-tooltip>
                 </md-button>
+
                 <md-button class="md-primary md-fab" ng-click="editLoad($event)">
                     <span><i class="fas fa-plane-departure font18"></i></span>
                     <md-tooltip md-direction="left">{{messages.addLoad}}</md-tooltip>
                 </md-button>
+
+            </div>
+
             </md-fab-actions>
         </md-fab-speed-dial>
 

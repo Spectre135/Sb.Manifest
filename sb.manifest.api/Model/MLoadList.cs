@@ -36,7 +36,7 @@ namespace sb.manifest.api.Model
         public string Passenger { get; set; }
 
         [DataField("IdCustomer")]
-        public long IdCustomer { get; set; }
+        public long IdPerson { get; set; }
 
         [DataField("Weight")]
         public int? Weight { get; set; }

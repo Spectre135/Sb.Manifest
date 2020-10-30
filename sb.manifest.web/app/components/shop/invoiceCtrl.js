@@ -11,7 +11,7 @@ app.controller('invoiceCtrl', function ($scope, $state, $window, $mdDialog, data
     $scope.getInvoiceData = function () {
         $scope.working = true;
         var url = config.manifestApi + '/post/invoice';
-        var params = { 'idCustomer': $scope.dto.Id };
+        var params = { 'idPerson': $scope.dto.Id };
 
         apiService.getData(url, params, false)
             .then(function (data) {
