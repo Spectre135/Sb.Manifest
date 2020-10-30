@@ -28,7 +28,7 @@ var jsAssets = [
     'app/min/mainCtrl.js',
     'app/min/homeCtrl.js',
     'app/min/loadCtrl.js',
-    'app/min/customerCtrl.js',
+    'app/min/personCtrl.js',
     'app/min/addSlotCtrl.js',
     'app/min/paymentsCtrl.js',
     'app/min/invoiceCtrl.js',
