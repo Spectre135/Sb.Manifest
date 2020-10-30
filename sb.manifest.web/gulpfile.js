@@ -28,7 +28,7 @@ var jsAssets = [
     'app/min/mainCtrl.js',
     'app/min/homeCtrl.js',
     'app/min/loadCtrl.js',
-    'app/min/customerCtrl.js',
+    'app/min/personCtrl.js',
     'app/min/addSlotCtrl.js',
     'app/min/paymentsCtrl.js',
     'app/min/invoiceCtrl.js',
@@ -147,6 +147,6 @@ gulp.task('test', done => {
     done();
 });
 
-gulp.task('prod', gulp.series(['pocisti-vse', 'min-js', 'preimenuj', 'kopiraj-assets','pocisti-css','min-css', 'kopiraj-app', 'kopiraj-base', 'kopiraj-messages']), function () {
+gulp.task('prod', gulp.series(['pocisti-vse', 'min-js', 'preimenuj', 'kopiraj-assets', 'pocisti-css', 'min-css', 'kopiraj-app', 'kopiraj-base', 'kopiraj-messages']), function () {
     // do something
 });
