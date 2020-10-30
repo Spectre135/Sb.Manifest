@@ -68,22 +68,6 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         }).catch(function () {});
     };
 
-    //delete passenger from load
-    $scope.removePeople = function (passenger, productSlot, LoadNo) {
-        // Appending dialog to document.body to cover sidenav in docs app
-        var confirm = $mdDialog.confirm()
-            .title('Would you like to delete ' + passenger + '?')
-            .textContent('You will delete ' + passenger + '-' + productSlot + '\n\rfrom Load ' + LoadNo)
-            .ok('Delete')
-            .cancel('Cancel');
-
-        $mdDialog.show(confirm).then(function () {
-            $scope.status = 'Deleted';
-        }, function () {
-            $mdDialog.hide();
-        });
-    };
-
     //confirm load
     $scope.confirmLoad = function ($event, dto) {
         var now = new Date();
@@ -148,44 +132,17 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             slots.removeClass('selected');
             // $scope.selectedIdPerson = -1;
         }
-        var deferred = $q.defer();
-        //we show confirm dialog only load number is changed
-        if ($scope.loadMoveId != item.Id) {
-            //object to be saved after confirmation
-            $scope.moved.IdLoadFrom = $scope.loadMoveId;
-            $scope.moved.IdLoadTo = item.Id;
-
-            if (!isInLoad(item)) {
-                deferred.resolve();
-            } else {
-                var confirm = $mdDialog.alert()
-                    .title($rootScope.messages.warning)
-                    .textContent($scope.PassengerMove + ' already In')
-                    .ok('ok')
-                $mdDialog.show(confirm).then(function () {
-                    $mdDialog.hide();
-                }, function () {
-                    $mdDialog.hide();
-                });
-            }
-        }
-        return deferred.promise;
-    };
-
-    //before drop item we show confirmation dialog
-    $scope.beforeDrop = function (event, ui, item) {
-        if ($scope.selectedIdPerson > -1) {
-            var slots = angular.element('.load .slot.selected');
-            slots.removeClass('selected');
-            // $scope.selectedIdPerson = -1;
-        }
 
         var deferred = $q.defer();
 
         // remove
         if (item == -1) {
-            alert('remove ' + $scope.PassengerMove + ' from ' + $scope.loadMoveId);
-            reselectCustomer();
+            $scope.moved.IdLoadFrom = $scope.loadMoveId;
+            $rootScope.confirmDialog('Confirm remove',
+            'You will remove ' + $scope.PassengerMove + '\n\rfrom Load ' + $scope.loadMoveId,'Remove','Cancel')
+            .then( function onSuccess(result) {
+                return deferred.resolve();
+            });
         }
         // move to
         else if ($scope.loadMoveId != item.Id) {
@@ -201,6 +158,8 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
                     .textContent($scope.PassengerMove + ' already In')
                     .ok('ok')
                 $mdDialog.show(confirm).then(function () {
+                    $scope.moved = {};
+                    $scope.moved.IdPerson = [];
                     $mdDialog.hide();
                 }, function () {
                     $mdDialog.hide();
@@ -257,6 +216,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
                 .then(function () {
                     $scope.moved = {};
                     $scope.moved.IdPerson = [];
+                    $scope.dragToAdd=false;
                     $scope.getLoadList().then(reselectPerson);
                 });
         } else {
@@ -266,6 +226,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
                     //init
                     $scope.moved = {};
                     $scope.moved.IdPerson = [];
+                    $scope.loadMoveId=0;
                     //we must refresh load list
                     $scope.getLoadList().then(reselectPerson);
                 });
@@ -302,7 +263,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         var url = config.manifestApi + '/load/active/today';
         var promise = apiService.getData(url, null, false)
             .then(function (data) {
-                $scope.persons = noDuplicates($scope.persons.concat(data.DataList));
+                $scope.persons = noDuplicatesId($scope.persons.concat(data.DataList));
             }).finally(function () {
                 self.working = false;
             });

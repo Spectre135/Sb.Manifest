@@ -90,7 +90,7 @@ namespace sb.manifest.api.Controllers
         /// <summary>
         /// Persons load list history with paging
         /// </summary>
-        /// <param name="search">Search string First name and Last name of customer</param>
+        /// <param name="search">Search string First name and Last name of person</param>
         /// <param name="idPerson">Person id</param>
         /// <param name="pageIndex"> Page of</param>
         /// <param name="pageSizeSelected">Records on page </param>

@@ -62,6 +62,32 @@ namespace sb.manifest.api.Controllers
         }
 
         /// <summary>
+        /// Delete sales product
+        /// Function add/edit product
+        /// </summary>
+        /// <param name="mSalesProduct">Model of MSalesProduct</param>
+        [HttpPost("settings/sales/product/delete")]
+        public IActionResult DeleteSalesProduct([FromBody] MSalesProduct mSalesProduct)
+        {
+            try
+            {
+                SettingsService service = new SettingsService();
+                service.DeleteSalesProduct(config, mSalesProduct);
+                return Ok();
+
+            }
+            catch (SQLConstraintsException ex)
+            {
+                return StatusCode(StatusCodes.Status406NotAcceptable, ex);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+
+        }
+
+        /// <summary>
         /// Get product slot 
         /// How much slot needed for selected product
         /// </summary>
@@ -104,6 +130,32 @@ namespace sb.manifest.api.Controllers
         }
 
         /// <summary>
+        /// Delete product slot
+        /// Function delete product slot
+        /// </summary>
+        /// <param name="mProductSlot">Model of MProductSlot</param>
+        [HttpPost("settings/sales/product/slot/delete")]
+        public IActionResult DeleteProductSlot([FromBody] MProductSlot mProductSlot)
+        {
+            try
+            {
+                SettingsService service = new SettingsService();
+                service.DeleteProductSlot(config, mProductSlot);
+                return Ok();
+
+            }
+            catch (SQLConstraintsException ex)
+            {
+                return StatusCode(StatusCodes.Status406NotAcceptable, ex);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+
+        }
+
+        /// <summary>
         /// Get Aircrafts
         /// </summary>
         [HttpGet("settings/aircraft")]
@@ -136,6 +188,32 @@ namespace sb.manifest.api.Controllers
                 service.SaveAircraft(config, mAircraft);
                 return Ok();
 
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+
+        }
+
+        /// <summary>
+        /// Delete aircraft
+        /// Function delete aircraft
+        /// </summary>
+        /// <param name="mAircraft">Model of MAircraft</param>
+        [HttpPost("settings/aircraft/delete")]
+        public IActionResult DeleteAircrafts([FromBody] MAircraft mAircraft)
+        {
+            try
+            {
+                SettingsService service = new SettingsService();
+                service.DeleteAircraft(config, mAircraft);
+                return Ok();
+
+            }
+            catch (SQLConstraintsException ex)
+            {
+                return StatusCode(StatusCodes.Status406NotAcceptable, ex);
             }
             catch (Exception ex)
             {

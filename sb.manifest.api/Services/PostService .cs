@@ -15,10 +15,10 @@ namespace sb.manifest.api.Services
             return dao.GetPosts(config, search, (pageIndex - 1) * pageSelected, (pageIndex * pageSelected), sortKey, asc);
 
         }
-        public MResponse GetInvoice(IConfiguration config, long idCustomer)
+        public MResponse GetInvoice(IConfiguration config, long idPerson)
         {
             using PostDAO dao = new PostDAO();
-            return dao.GetInvoice(config, idCustomer);
+            return dao.GetInvoice(config, idPerson);
 
         }
         public void PayInvoice(IConfiguration config, List<MInvoice> invoices)

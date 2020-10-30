@@ -15,7 +15,7 @@ var app = angular.module('SbManifest', [
     'mdColorPicker'
 ]);
 
-app.run(function ($state, $rootScope, $mdDialog, apiService) {
+app.run(function ($state, $rootScope, $q, $mdDialog, apiService) {
 
     window.myAppErrorLog = [];
 
@@ -46,6 +46,23 @@ app.run(function ($state, $rootScope, $mdDialog, apiService) {
             .ariaLabel('Alert Dialog')
             .ok('Zapri!')
         );
+    };
+
+    //confirm dialog
+    $rootScope.confirmDialog = function (title, message, ok, cancel) {
+        var deferred = $q.defer();
+        var confirm = $mdDialog.confirm()
+            .title(title)
+            .textContent(message)
+            .ok(ok)
+            .cancel(cancel);
+
+        $mdDialog.show(confirm).then(function () {
+            return deferred.resolve();
+        }, function () {
+            $mdDialog.hide();
+        });
+        return deferred.promise;
     };
 
     //selected row for highlight on md-table click row

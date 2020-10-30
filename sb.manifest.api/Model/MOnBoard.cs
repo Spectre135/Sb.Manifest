@@ -5,7 +5,7 @@ namespace sb.manifest.api.Model
     //Passengers on load
     public class MOnBoard
     {
-        [DataField("IdCustomer")]
+        [DataField("IdPerson")]
         [ParamField("IdPerson")]
         public long IdPerson { get; set; }
 

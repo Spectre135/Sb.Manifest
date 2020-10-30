@@ -8,11 +8,11 @@ namespace sb.manifest.api.SQL
         #region Person
         public static string GetPersonsListSQL()
         {
-            return "SELECT * FROM v_customer WHERE 1=1 "; //WHERE 1=1 ker dodajamo pogoje za search
+            return "SELECT * FROM v_person WHERE 1=1 "; //WHERE 1=1 ker dodajamo pogoje za search
         }
         public static string GetInsertPersonSQL()
         {
-            return @"INSERT INTO customer 
+            return @"INSERT INTO person
                                 (firstname, 
                                  lastname, 
                                  email, 
@@ -38,7 +38,7 @@ namespace sb.manifest.api.SQL
         }
         public static string GetSavePersonSQL()
         {
-            return @"UPDATE customer 
+            return @"UPDATE person 
                      SET    firstname = @FirstName, 
                             lastname = @LastName, 
                             birthdate = Date(@BirthDate), 
@@ -70,7 +70,7 @@ namespace sb.manifest.api.SQL
         }
         public static string GetInsertPassengersToLoadSQL()
         {
-            return "INSERT INTO OnLoad(IdCustomer,IdLoad,IdProductSlot,IdGroup) VALUES(@IdPerson,@IdLoad,@IdProductSlot,@IdGroup)";
+            return "INSERT INTO OnLoad(IdPerson,IdLoad,IdProductSlot,IdGroup) VALUES(@IdPerson,@IdLoad,@IdProductSlot,@IdGroup)";
         }
         public static string GetLoadListSQL()
         {
@@ -78,7 +78,7 @@ namespace sb.manifest.api.SQL
         }
         public static string GetLoadsHistoryByPersonSQL()
         {
-            return "SELECT * FROM v_loadlist WHERE IdCustomer = @IdCustomer";
+            return "SELECT * FROM v_loadlist WHERE IdPerson = @IdPerson";
         }
         public static string GetLoadSQL()
         {
@@ -93,7 +93,7 @@ namespace sb.manifest.api.SQL
             return @"WITH today as (
                     select c.Id,l.IdLoad 
                     from OnLoad l
-                    inner join customer c on c.id=l.IdCustomer
+                    inner join Person c on c.id=l.IdPerson
                     where l.date > date('now')
                     )
                     SELECT c.id, 
@@ -104,16 +104,16 @@ namespace sb.manifest.api.SQL
                              WHEN l.idload IS NULL THEN 0 
                              ELSE 1 
                            end           OnBoard,
-                           at.AvaibleTickets - IFNULL(til.Tickets,0)  AvaibleTickets,
+                           at.AvailableTickets - IFNULL(til.Tickets,0)  AvailableTickets,
                            at.ProductName TicketName,
                            at.IdProductSlot,
-                           IFNULL(c.[Limit],0) + c.Balance AvaibleFunds,
+                           IFNULL(c.[Limit],0) + c.Balance AvailableFunds,
                            c.IsStaff
-                    FROM   v_customer c 
+                    FROM   v_person c 
                            INNER JOIN today t ON t.Id = c.Id 
-                           LEFT JOIN onload l ON c.id = l.idcustomer  AND l.idload = @IdLoad
-                           LEFT JOIN V_AvaibleTickets at ON at.IdCustomer = c.Id 
-                           LEFT JOIN V_OpenTickets til ON til.IdCustomer = c.Id AND til.IdProductSlot = at.IdProductSlot
+                           LEFT JOIN onload l ON c.id = l.idPerson  AND l.idload = @IdLoad
+                           LEFT JOIN V_AvailableTickets at ON at.IdPerson = c.Id 
+                           LEFT JOIN V_OpenTickets til ON til.IdPerson = c.Id AND til.IdProductSlot = at.IdProductSlot
                     GROUP  BY c.id, 
                               c.firstname, 
                               c.lastname, 
@@ -132,17 +132,17 @@ namespace sb.manifest.api.SQL
                              WHEN l.idload IS NULL THEN 0 
                              ELSE 1 
                            end           OnBoard,
-                           at.AvaibleTickets - IFNULL(til.Tickets,0)  AvaibleTickets,
+                           at.AvailableTickets - IFNULL(til.Tickets,0)  AvailableTickets,
                            at.ProductName TicketName,
                            at.IdProductSlot,
-                           IFNULL(c.[Limit],0) + c.Balance AvaibleFunds,
+                           IFNULL(c.[Limit],0) + c.Balance AvailableFunds,
                            c.IsStaff
-                    FROM   v_customer c 
+                    FROM   v_person c 
                            LEFT JOIN onload l 
-                                  ON c.id = l.idcustomer 
+                                  ON c.id = l.idperson 
                                      AND l.idload = @IdLoad
-                           LEFT JOIN V_AvaibleTICKETS at ON at.IdCustomer = c.Id  
-                           LEFT JOIN V_OpenTickets til ON til.IdCustomer = c.Id AND til.IdProductSlot = at.IdProductSlot
+                           LEFT JOIN V_AvailableTickets at ON at.IdPerson = c.Id  
+                           LEFT JOIN V_OpenTickets til ON til.IdPerson = c.Id AND til.IdProductSlot = at.IdProductSlot
                            WHERE (c.firstname || ' ' || c.lastname) like @Name
                     GROUP  BY c.id, 
                               c.firstname, 
@@ -154,7 +154,11 @@ namespace sb.manifest.api.SQL
         }
         public static string GetMoveSlotSQL()
         {
-            return @"UPDATE OnLoad set IdLoad = @IdLoadTo,Date=datetime('now', 'localtime') WHERE IdCustomer = @IdCustomer AND IdLoad = @IdLoadFrom";
+            return @"UPDATE OnLoad set IdLoad = @IdLoadTo,Date=datetime('now', 'localtime') WHERE IdPerson = @IdPerson AND IdLoad = @IdLoadFrom";
+        }
+        public static string GetRemoveSlotSQL()
+        {
+            return @"DELETE from OnLoad WHERE IdPerson = @IdPerson AND IdLoad = @IdLoadFrom";
         }
         #endregion
 
@@ -167,14 +171,14 @@ namespace sb.manifest.api.SQL
         {
             return @"INSERT INTO post(
                       IdTransaction, Account, IdCompany, 
-                      IdCustomer, IdLoad, Description, 
+                      IdPerson, IdLoad, Description, 
                       Debit, Credit
                     ) --Odpremo terjatev do kupca konto 120/760 
                     SELECT 
-                      (@IdTransaction || pl.IdCustomer), 
+                      (@IdTransaction || pl.IdPerson), 
                       acc1.DAccount, 
                       1, 
-                      pl.IdCustomer, 
+                      pl.IdPerson, 
                       pl.IdLoad, 
                       ps.Name Details, 
                       ps.Income, 
@@ -183,16 +187,16 @@ namespace sb.manifest.api.SQL
                       OnLoad pl 
                       INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot 
                       INNER JOIN TAccount acc1 ON acc1.Id = ps.IdAccount AND acc1.DAccount IS NOT NULL 
-                      LEFT JOIN v_Avaibletickets at ON at.IdCustomer = pl.IdCustomer AND at.IdProductSlot = pl.IdProductSlot 
+                      LEFT JOIN v_availabletickets at ON at.IdPerson = pl.IdPerson AND at.IdProductSlot = pl.IdProductSlot 
                     WHERE 
                       IdLoad = @IdLoad 
-                    AND at.AvaibleTickets is null
+                    AND at.AvailableTickets is null
                     UNION 
                     SELECT 
-                      (@IdTransaction || pl.IdCustomer), 
+                      (@IdTransaction || pl.IdPerson), 
                       acc1.CAccount, 
                       1, 
-                      pl.IdCustomer, 
+                      pl.IdPerson, 
                       pl.IdLoad, 
                       ps.Name Details, 
                       ps.Outcome, 
@@ -201,17 +205,17 @@ namespace sb.manifest.api.SQL
                       OnLoad pl 
                       INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot 
                       INNER JOIN TAccount acc1 ON acc1.Id = ps.IdAccount AND acc1.CAccount IS NOT NULL 
-                      LEFT JOIN v_Avaibletickets at ON at.IdCustomer = pl.IdCustomer AND at.IdProductSlot = pl.IdProductSlot 
+                      LEFT JOIN v_AvailableTickets at ON at.IdPerson = pl.IdPerson AND at.IdProductSlot = pl.IdProductSlot 
                     WHERE 
                       IdLoad = @IdLoad 
-                    AND at.AvaibleTickets is null
+                    AND at.AvailableTickets is null
                     UNION 
                       --V primeru da kupec ima sredstva na kontu 230 potem poplačamo terjatev iz teh sredstev
                     SELECT 
-                      (@IdTransaction || pl.IdCustomer), 
+                      (@IdTransaction || pl.IdPerson), 
                       acc.DAccount Account, 
                       1, 
-                      pl.IdCustomer, 
+                      pl.IdPerson, 
                       pl.IdLoad, 
                       ps.Name Details, 
                       ps.Income, 
@@ -219,19 +223,19 @@ namespace sb.manifest.api.SQL
                     FROM 
                       OnLoad pl 
                       INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot 
-                      INNER JOIN v_customer c ON c.Id = pl.IdCustomer 
+                      INNER JOIN v_person c ON c.Id = pl.IdPerson 
                       INNER JOIN TAccount acc ON acc.DAccount in (230) 
-                      LEFT JOIN v_Avaibletickets at ON at.IdCustomer = pl.IdCustomer AND at.IdProductSlot = pl.IdProductSlot 
+                      LEFT JOIN v_AvailableTickets at ON at.IdPerson = pl.IdPerson AND at.IdProductSlot = pl.IdProductSlot 
                     WHERE 
                       c.Balance > 0 
                       AND pl.IdLoad = @IdLoad 
-                      AND at.AvaibleTickets is null
+                      AND at.AvailableTickets is null
                     UNION 
                     SELECT 
-                      (@IdTransaction || pl.IdCustomer), 
+                      (@IdTransaction || pl.IdPerson), 
                       acc.CAccount Account, 
                       1, 
-                      pl.IdCustomer, 
+                      pl.IdPerson, 
                       pl.IdLoad, 
                       ps.Name Details, 
                       ps.Outcome, 
@@ -239,12 +243,12 @@ namespace sb.manifest.api.SQL
                     FROM 
                       OnLoad pl 
                       INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot 
-                      INNER JOIN v_customer c ON c.Id = pl.IdCustomer 
+                      INNER JOIN V_Person c ON c.Id = pl.IdPerson 
                       INNER JOIN TAccount acc ON acc.DAccount in (230) 
-                      LEFT JOIN v_Avaibletickets at ON at.IdCustomer = pl.IdCustomer AND at.IdProductSlot = pl.IdProductSlot 
+                      LEFT JOIN v_AvailableTickets at ON at.IdPerson = pl.IdPerson AND at.IdProductSlot = pl.IdProductSlot 
                     WHERE 
                       c.Balance > 0 
-                      AND at.AvaibleTickets is null
+                      AND at.AvailableTickets is null
                       AND pl.IdLoad = @IdLoad";
         }
         public static string InsertPostBuyTransactionSQL()
@@ -253,34 +257,34 @@ namespace sb.manifest.api.SQL
                                     (idtransaction, 
                                      account, 
                                      idcompany, 
-                                     idcustomer, 
+                                     idperson, 
                                      description, 
                                      debit, 
                                      credit) --Odpremo terjatev do kupca konto 120/760   
                         SELECT ( @IdTransaction 
-                                 || @IdCustomer ), 
+                                 || @IdPerson ), 
                                120, 
                                1, 
-                               @IdCustomer, 
+                               @IdPerson, 
                                @Details, 
                                @Price  Income, 
                                0       Outcome 
                         UNION ALL
                         SELECT ( @IdTransaction 
-                                 || @IdCustomer ), 
+                                 || @IdPerson ), 
                                760, 
                                1, 
-                               @IdCustomer, 
+                               @IdPerson, 
                                @Details, 
                                0   Income, 
                                @Price Outcome
                         -- Zapremo transakcijo s plačilom
                         UNION ALL
                         SELECT ( @IdTransaction 
-                                 || @IdCustomer ), 
+                                 || @IdPerson ), 
                                acc1.caccount, 
                                1, 
-                               @IdCustomer, 
+                               @IdPerson, 
                                @Details, 
                                0  Income,            
                                @Price Outcome
@@ -288,10 +292,10 @@ namespace sb.manifest.api.SQL
                         WHERE  acc1.id = @IdPayMethod 
                         UNION ALL
                         SELECT ( @IdTransaction 
-                                 || @IdCustomer ), 
+                                 || @IdPerson ), 
                                acc1.daccount, 
                                1, 
-                               @IdCustomer, 
+                               @IdPerson, 
                                @Details, 
                                @Price Income,
                                0  Outcome
@@ -303,9 +307,9 @@ namespace sb.manifest.api.SQL
         #region TicketPost
         public static string InsertCreditTicketsSQL()
         {
-            return @"INSERT INTO TicketPost(IdCustomer,IdProductSlot,IdTransaction, CTickets,TicketPrice)
+            return @"INSERT INTO TicketPost(IdPerson,IdProductSlot,IdTransaction, CTickets,TicketPrice)
                     Select 
-                    @IdCustomer,
+                    @IdPerson,
                     p.Id IdProductSlot,
                     @IdTransaction,
                     @Quantity CTickets,
@@ -315,20 +319,20 @@ namespace sb.manifest.api.SQL
         }
         public static string DebitTicketSQL()
         {
-            return @"INSERT INTO TicketPost(IdCustomer,IdProductSlot,IdLoad, DTickets)
+            return @"INSERT INTO TicketPost(IdPerson,IdProductSlot,IdLoad, DTickets)
                     Select 
-                    pl.IdCustomer,
+                    pl.IdPerson,
                     ps.Id,
                     pl.IdLoad,
                     1 DTickets
                     FROM OnLoad pl 
                     INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot 
-                    INNER JOIN v_Avaibletickets t ON t.IdCustomer = pl.IdCustomer                  
+                    INNER JOIN v_AvailableTickets t ON t.IdPerson = pl.IdPerson                 
                     where pl.IdLoad = @IdLoad";
         }
         public static string GetTicketPostListSQL()
         {
-            return "SELECT * FROM v_ticketpost WHERE IdCustomer = @IdCustomer "; 
+            return "SELECT * FROM v_ticketpost WHERE IdPerson = @IdPerson "; 
         }
         #endregion
 
@@ -339,11 +343,11 @@ namespace sb.manifest.api.SQL
                         IdTr(IdTransaction,Account) AS (
                         select IdTransaction,Account
                         from v_post 
-                        where idCustomer = @IdCustomer
+                        where IdPerson = @IdPerson
                         and Account in (120) 
                         group by IdTransaction
                         having SUM(Credit-Debit) < 0 )
-                    SELECT p.IdTransaction,p.Account, p.IdCustomer, p.Customer, p.Description, (p.Debit - p.Credit) Amount,p.Date,l.Id IdLoad,l.Number LoadNo, a.Registration Aircraft
+                    SELECT p.IdTransaction,p.Account, p.IdPerson, p.Person, p.Description, (p.Debit - p.Credit) Amount,p.Date,l.Id IdLoad,l.Number LoadNo, a.Registration Aircraft
                     FROM v_post p
                     INNER JOIN IdTr ON IdTr.IdTransaction = p.IdTransaction AND IdTr.Account = p.Account
                     LEFT JOIN Load l ON l.Id = p.IdLoad
@@ -351,8 +355,8 @@ namespace sb.manifest.api.SQL
         }
         public static string InsertPostPayInvoiceSQL()
         {
-            return @"INSERT INTO post(IdTransaction, Account, IdCompany, IdCustomer, IdLoad, Description, Debit, Credit)
-                            VALUES(@IdTransaction, @Account, @IdCompany, @IdCustomer, @IdLoad, @Description, @Debit, @Credit)";
+            return @"INSERT INTO post(IdTransaction, Account, IdCompany, IdPerson, IdLoad, Description, Debit, Credit)
+                            VALUES(@IdTransaction, @Account, @IdCompany, @IdPerson, @IdLoad, @Description, @Debit, @Credit)";
         }
         #endregion
 
@@ -388,6 +392,10 @@ namespace sb.manifest.api.SQL
                             isfavorite =  @IsFavorite
                      WHERE  id = @Id ";
         }
+        public static string GetDeleteSalesProductSQL()
+        {
+            return @"DELETE from product WHERE  id = @Id ";
+        }
         #endregion
 
         #region ProductSlot
@@ -413,6 +421,10 @@ namespace sb.manifest.api.SQL
                                equipmentweight = @EquipmentWeight
                         WHERE  id = @Id ";
         }
+        public static string GetDeleteProductSlotSQL()
+        {
+            return @"DELETE from productslot WHERE  id = @Id ";
+        }
         #endregion
 
         #region Aircraft
@@ -436,6 +448,10 @@ namespace sb.manifest.api.SQL
                                     RotationTime= @RotationTime, 
                                     Active = @Active 
                     WHERE Id = @Id";
+        }
+        public static string GetDeleteAircraftSQL()
+        {
+            return @"DELETE from Aircraft WHERE Id = @Id";
         }
         #endregion
 

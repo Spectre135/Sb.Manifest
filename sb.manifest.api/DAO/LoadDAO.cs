@@ -96,9 +96,10 @@ namespace sb.manifest.api.DAO
 
                 foreach (int idPerson in mMove.IdPerson)
                 {
+
                     alParmValues = LoadParametersValue<MMove>(mMove);
-                    alParmValues.Add(new KeyValuePair<string, object>("@IdCustomer", idPerson));
-                    command = CreateCommand(connection, alParmValues, SQLBuilder.GetMoveSlotSQL());
+                    alParmValues.Add(new KeyValuePair<string, object>("@IdPerson", idPerson));
+                    command = CreateCommand(connection, alParmValues, mMove.IdLoadTo==0 ? SQLBuilder.GetRemoveSlotSQL():SQLBuilder.GetMoveSlotSQL());
                     command.ExecuteNonQuery();
                 }
 

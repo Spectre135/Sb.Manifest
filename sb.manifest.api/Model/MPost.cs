@@ -21,12 +21,12 @@ namespace sb.manifest.api.Model
         [DataField("Company")]
         public string Company{ get; set; }
 
-        [DataField("IdCustomer")]
-        public long IdCustomer { get; set; }
+        [DataField("IdPerson")]
+        public long IdPerson { get; set; }
 
-        [DataField("Customer")]
-        [DataSearch("Customer")]
-        public string Customer { get; set; }
+        [DataField("Person")]
+        [DataSearch("Person")]
+        public string Person { get; set; }
 
         [DataField("Description")]
         public string Description { get; set; }

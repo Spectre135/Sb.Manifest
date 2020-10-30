@@ -1,6 +1,7 @@
 ﻿#region using
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
+using sb.manifest.api.Filter;
 using sb.manifest.api.Model;
 using sb.manifest.api.SQL;
 using sb.manifest.api.Utils;
@@ -283,8 +284,13 @@ namespace sb.manifest.api.DAO
                 transaction.Commit();
 
             }
-            catch (Exception ex)
+            catch (SqliteException ex)
             {
+                if (ex.SqliteErrorCode== 19) // FOREIGN KEY exception
+                    throw new SQLConstraintsException("Can't delete Foreign key!",ex);
+            }
+            catch (Exception ex)
+            {              
                 transaction.Rollback();
                 connection.Close();
                 throw new Exception("Error in saving data" + ex.Message, ex.InnerException);

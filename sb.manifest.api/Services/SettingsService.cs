@@ -21,6 +21,11 @@ namespace sb.manifest.api.Services
             using SettingsDAO dao = new SettingsDAO();
             dao.SaveSalesProduct(config, mSalesProduct);
         }
+        public void DeleteSalesProduct(IConfiguration config, MSalesProduct mSalesProduct)
+        {
+            using SettingsDAO dao = new SettingsDAO();
+            dao.DeleteSalesProduct(config, mSalesProduct);
+        }
         #endregion
 
         #region Product Slot
@@ -35,6 +40,11 @@ namespace sb.manifest.api.Services
             using SettingsDAO dao = new SettingsDAO();
             dao.SaveProductSlot(config, mProductSlot);
         }
+        public void DeleteProductSlot(IConfiguration config, MProductSlot mProductSlot)
+        {
+            using SettingsDAO dao = new SettingsDAO();
+            dao.DeleteProductSlot(config, mProductSlot);
+        }
         #endregion
 
         #region Aircrafts
@@ -48,6 +58,11 @@ namespace sb.manifest.api.Services
         {
             using SettingsDAO dao = new SettingsDAO();
                 dao.SaveAircraft(config, mAircraft);
+        }
+        public void DeleteAircraft(IConfiguration config, MAircraft mAircraft)
+        {
+            using SettingsDAO dao = new SettingsDAO();
+            dao.DeleteAircraft(config, mAircraft);
         }
         #endregion
 

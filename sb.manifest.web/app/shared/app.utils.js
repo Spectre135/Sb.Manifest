@@ -248,6 +248,28 @@ function noDuplicates(arr) {
     return newArr;
 };
 
+function noDuplicatesId(arr) {
+    try {
+        var newArr = [];
+        if (arr) {
+            angular.forEach(arr, function (value, key) {
+                var exists = false;
+                angular.forEach(newArr, function (val2, key) {
+                    if (value.Id == val2.Id) {
+                        exists = true
+                    };
+                });
+                if (exists == false && value != '') {
+                    newArr.push(value);
+                }
+            });
+        }
+        return newArr;
+    } catch (err) {
+        return arr;
+    }
+};
+
 function convertLocalDate(date) {
     date = new Date(date);
     //Local time converted to UTC

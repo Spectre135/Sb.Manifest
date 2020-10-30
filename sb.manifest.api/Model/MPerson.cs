@@ -62,7 +62,7 @@ namespace sb.manifest.api.Model
         [ParamField("IsStaff")]
         public bool IsStaff { get; set; }
 
-        [DataField("AvaibleTickets")]
+        [DataField("AvailableTickets")]
         public int? AvailableTickets { get; set; }
 
         [DataField("TicketName")]

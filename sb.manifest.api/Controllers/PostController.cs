@@ -44,12 +44,12 @@ namespace sb.manifest.api.Controllers
         /// Get Invoice for customer
         /// </summary>
         [HttpGet("post/invoice")]
-        public IActionResult GetInvoice(long idCustomer)
+        public IActionResult GetInvoice(long idPerson)
         {
             try
             {
                 PostService service = new PostService();
-                return Ok(service.GetInvoice(config, idCustomer));
+                return Ok(service.GetInvoice(config, idPerson));
 
             }
             catch (Exception ex)

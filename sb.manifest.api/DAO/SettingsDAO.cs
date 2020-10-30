@@ -30,6 +30,16 @@ namespace sb.manifest.api.DAO
 
             SaveData(config, sql, alParmValues);
         }
+        public void DeleteSalesProduct(IConfiguration config, MSalesProduct mSalesProduct)
+        {
+            List<KeyValuePair<string, object>> alParmValues = new List<KeyValuePair<string, object>>
+            {
+                new KeyValuePair<string, object>("@Id", mSalesProduct.Id)
+            };
+
+            SaveData(config, SQLBuilder.GetDeleteSalesProductSQL(), alParmValues);
+
+        }
         #endregion
 
         #region Product Slot
@@ -51,6 +61,16 @@ namespace sb.manifest.api.DAO
 
             SaveData(config, sql, alParmValues);
         }
+        public void DeleteProductSlot(IConfiguration config, MProductSlot mProductSlot)
+        {
+            List<KeyValuePair<string, object>> alParmValues = new List<KeyValuePair<string, object>>
+            {
+                new KeyValuePair<string, object>("@Id", mProductSlot.Id)
+            };
+
+            SaveData(config, SQLBuilder.GetDeleteProductSlotSQL(), alParmValues);
+
+        }
         #endregion
 
         #region Aircrafts
@@ -71,6 +91,15 @@ namespace sb.manifest.api.DAO
             }
 
             SaveData(config, sql, alParmValues);
+        }
+        public void DeleteAircraft(IConfiguration config, MAircraft mAircraft)
+        {
+            List<KeyValuePair<string, object>> alParmValues = new List<KeyValuePair<string, object>>
+            {
+                new KeyValuePair<string, object>("@Id", mAircraft.Id)
+            };
+
+            SaveData(config, SQLBuilder.GetDeleteAircraftSQL(), alParmValues);
         }
         #endregion
 

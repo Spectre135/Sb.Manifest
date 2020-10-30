@@ -25,18 +25,22 @@ app.factory('RequestsErrorHandler', function ($q, $rootScope) {
                     rejection.status != 429 &&
                     rejection.status != 403 &&
                     rejection.status != 404 &&
+                    rejection.status != 406 &&
                     rejection.status != 401) {
-                    $rootScope.showDialog('NAPAKA', 'Prišlo je do napake. Poizkusite kasneje.\n\nZa napako se opravičujemo !');
+                    $rootScope.showDialog('ERROR', 'Prišlo je do napake. Poizkusite kasneje.\n\nZa napako se opravičujemo !');
 
                 } else if (rejection.status == 403) {
                     //we check if user is authenticated
                     if (sessionStorage.getItem('Authorization') === null) {
                         $rootScope.logout(rejection.statusText); // go to login
                     } else {
-                        $rootScope.showDialog('NAPAKA', 'Za izbrano akcijo nimate dovoljenja.\n\nProsim obrnite se na oddelek informatike.');
+                        $rootScope.showDialog('ERROR', 'Za izbrano akcijo nimate dovoljenja.\n\nProsim obrnite se na oddelek informatike.');
                     }
-                } else if (rejection.status == 404 && sessionStorage.getItem('Authorization') != null) {
-                    $rootScope.showDialog('NAPAKA', rejection.statusText);
+                } else if (rejection.status == 404  && sessionStorage.getItem('Authorization') != null) {
+                    $rootScope.showDialog('ERROR', rejection.statusText);
+                } else if ( rejection.status == 406 && sessionStorage.getItem('Authorization') != null) {
+                    $rootScope.showDialog('ERROR', rejection.data.Message);
+                    return $q.reject(rejection.data.Message);
                 } else if (rejection.status != 400 && rejection.status != 306) {
                     try {
                         $rootScope.logout(rejection.statusText); // go to login
