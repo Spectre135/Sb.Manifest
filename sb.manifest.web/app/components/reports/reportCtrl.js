@@ -15,11 +15,11 @@ app.controller('reportCtrl', function ($scope, $state, $window, apiService, conf
                 $scope.productList = data.DataList;
                 //Loads
                 var chart1 = getDoughnutChart($scope.productList, 'Product', 'BackgroundColor', 'Number', 'Jumps');
-                var ctx1 = angular.element('#loadsChart')[0].getContext('2d');
+                var ctx1 = document.getElementById('loadsChart').getContext('2d');
                 var chart1 = new Chart(ctx1, chart1);
                 //Profit load
                 var chart2 = getDoughnutChart($scope.productList, 'Product', 'BackgroundColor', 'Profit', 'Income');
-                var ctx2 = angular.element('#profitChart')[0].getContext('2d');
+                var ctx2 = document.getElementById('profitChart').getContext('2d');
                 var chart2 = new Chart(ctx2, chart2);
                 sum();
             });
