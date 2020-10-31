@@ -52,6 +52,12 @@ namespace sb.manifest.api.SQL
                             ticketprice = @TicketPrice
                      WHERE  id = @Id ";
         }
+        public static string GetSaveSkydiversGroupSQL()
+        {
+            return @"DELETE FROM SkydiversGroup where IdPerson = @IdPerson;
+                     INSERT INTO SkydiversGroup (IdGroup,IdPerson) VALUES(@IdGroup,@IdPerson);";
+
+        }
         #endregion
 
         #region Load

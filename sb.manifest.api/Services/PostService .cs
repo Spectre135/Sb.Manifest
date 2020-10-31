@@ -33,5 +33,6 @@ namespace sb.manifest.api.Services
             dao.Buy(config, mBuy);
 
         }
+
     }
 }

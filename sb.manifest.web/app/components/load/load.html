@@ -87,7 +87,9 @@
                                     <div layout="row" class="passenger">
                                         <div flex="70">
                                             <span class="name"><span
-                                                    class="group-placeholder"></span>{{p.Passenger}}</span>
+                                                    class="group-placeholder">
+                                                <span ng-if="(g.IdGroup/l.Id)<10" ng-class="getGroupClass(g.IdGroup,l.Id)">{{g.IdGroup/l.Id}}</span>
+                                                </span>{{p.Passenger}}</span>
                                         </div>
                                         <div flex="30" style="text-align: end;">
                                             <span class="tickets" ng-if="p.AvailableTickets > 0">

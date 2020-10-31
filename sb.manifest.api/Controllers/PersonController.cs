@@ -6,6 +6,7 @@ using sb.manifest.api.Filter;
 using sb.manifest.api.Model;
 using sb.manifest.api.Services;
 using System;
+using System.Collections.Generic;
 #endregion
 
 namespace sb.manifest.api.Controllers
@@ -108,6 +109,27 @@ namespace sb.manifest.api.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex);
             }
+        }
+
+        /// <summary>
+        /// Add skydivers to group(group of people who jump together)
+        /// </summary>
+        /// <param name="groups">List of skydivers group</param>
+        [HttpPost("skydivers/group/save")]
+        public IActionResult SaveGroup([FromBody] List<MGroup> groups)
+        {
+            try
+            {
+                PersonService service = new PersonService();
+                service.SaveSkydiversGroup(config, groups);
+                return Ok();
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+
         }
 
     }

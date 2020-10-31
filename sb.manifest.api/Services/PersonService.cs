@@ -4,6 +4,7 @@ using sb.manifest.api.DAO;
 using sb.manifest.api.Model;
 using sb.manifest.api.SQL;
 using sb.manifest.api.Utils;
+using System.Collections.Generic;
 #endregion
 
 namespace sb.manifest.api.Services
@@ -29,6 +30,12 @@ namespace sb.manifest.api.Services
         {
             using PersonDAO dao = new PersonDAO();
             return dao.GetLoadsHistory(config, search, idPerson, (pageIndex - 1) * pageSelected, (pageIndex * pageSelected), sortKey, asc);
+        }
+        public void SaveSkydiversGroup(IConfiguration config, List<MGroup> groups)
+        {
+            using PersonDAO dao = new PersonDAO();
+            dao.SaveSkydiversGroup(config, groups);
+
         }
     }
 }

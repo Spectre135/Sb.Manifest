@@ -2,7 +2,7 @@
 
 namespace sb.manifest.api.Model
 {
-    //Model to se when move people from load to load
+    //Model to move people from load to load 
     public class MMove
     {
         [ParamField("IdLoadFrom")]

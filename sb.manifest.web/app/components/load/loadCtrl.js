@@ -18,7 +18,8 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
     $scope.productList = [];
     $scope.selectedIdPerson;
     $scope.selectedGroup;
-    $scope.dataDrag=true; //data drag flag 
+    $scope.dataDrag = true; //data drag flag 
+    $scope.groups = [];
 
     //getLoadList
     $scope.getLoadList = function () {
@@ -66,7 +67,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () { });
+        }).catch(function () {});
     };
 
     //confirm load
@@ -85,7 +86,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () { });
+        }).catch(function () {});
     };
 
     //add/edit Load
@@ -107,7 +108,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () { });;
+        }).catch(function () {});;
     };
 
     //check if passenger is already in load  
@@ -122,7 +123,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
                 });
             });
             return response;
-        } catch (err) { }
+        } catch (err) {}
     };
 
     //before drop item we show confirmation dialog
@@ -139,7 +140,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         if (item == -1) {
             $scope.moved.IdLoadFrom = $scope.loadMoveId;
             $rootScope.confirmDialog('Confirm remove',
-                'You will remove ' + $scope.PassengerMove + '\n\rfrom Load ' + $scope.loadMoveId, 'Remove', 'Cancel')
+                    'You will remove ' + $scope.PassengerMove + '\n\rfrom Load ' + $scope.loadMoveId, 'Remove', 'Cancel')
                 .then(function onSuccess(result) {
                     return deferred.resolve();
                 });
@@ -322,30 +323,50 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         }
         if ($scope.selectedGroup == group) {
             $scope.selectedGroup = -1;
-            $scope.dataDrag=true;
+            $scope.dataDrag = true;
             angular.element('body').removeClass('select-group');
-        }
-        else {
+            //Save selected group to database
+            SaveSkydiversGroup($scope.groups);
+        } else {
             var g = angular.element('#loads-helper-groups .group.g' + group);
             g.addClass('selected');
             $scope.selectedGroup = group;
-            $scope.dataDrag=false;
+            $scope.dataDrag = false;
             angular.element('body').addClass('select-group');
         }
     };
 
-    $scope.addGroup = function ($event,idPerson) {
-        console.log(idPerson,$scope.selectedGroup);
+    $scope.addGroup = function ($event, idPerson) {
         if ($scope.selectedGroup >= 0) {
+            //groups are saved to database after unselect group
+            var group = {};
+            group.IdPerson = idPerson;
+            group.IdGroup = $scope.selectedGroup;
+            $scope.groups.push(group);
             var g = angular.element($event.currentTarget).find('.passenger .group-placeholder');
             var html = '<span class="group g' + $scope.selectedGroup + '">' + $scope.selectedGroup + '</span>';
             if ($scope.selectedGroup > 0 && g.html() != html) {
                 g.html(html);
-            }
-            else {
+            } else {
                 g.html('');
             }
         }
+    };
+
+    $scope.getGroupClass = function (group, load) {
+        var g = group / load;
+        //idGroupe pod 1000 so skydvers groupe sestavljene IdLoad + gX
+        if (g < 1000) {
+            return 'group g' + g;
+        }
+    };
+
+    //api to save selected group to database
+    function SaveSkydiversGroup(dto) {
+        var url = config.manifestApi + '/skydivers/group/save';
+        apiService.postData(url, dto, false).then(function (data) {
+            $scope.getLoadList();
+        })
     };
 });
 
