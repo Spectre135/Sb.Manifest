@@ -167,23 +167,11 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
                 });
             }
         }
-
-        var loadBin = angular.element('.load-bin.visible');
-        loadBin.removeClass('visible');
-
         return deferred.promise;
     };
 
     //when we start drag item to know what item
     $scope.startCallback = function (event, ui, item) {
-        /*
-        if ($scope.selectedGroup >= 0) {
-            $event.preventDefault();
-            $event.stopPropagation();
-            angular.element($event.currentTarget).css('z-index','initial');
-            return;
-        }*/
-
         $scope.PassengerMove = [];
         $scope.moved.IdPerson = [];
         angular.forEach(item.LoadList, function (value, key) {
@@ -195,6 +183,11 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
 
         var loadBin = angular.element('.load-bin[data-idload="' + $scope.loadMoveId + '"]');
         loadBin.addClass('visible');
+    };
+
+    $scope.stopCallback = function (event, ui,) {
+        var loadBin = angular.element('.load-bin.visible');
+        loadBin.removeClass('visible');
     };
 
     //when we start drag item to Add into load
@@ -316,6 +309,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         }
     };
 
+
     $scope.selectGroup = function (group) {
         if ($scope.selectedGroup >= 0) {
             var g = angular.element('#loads-helper-groups .group.g' + $scope.selectedGroup);
@@ -324,19 +318,21 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         if ($scope.selectedGroup == group) {
             $scope.selectedGroup = -1;
             $scope.dataDrag = true;
-            angular.element('body').removeClass('select-group');
+            angular.element('body').removeClass('group-mode-on');
             //Save selected group to database
             SaveSkydiversGroup($scope.groups);
-        } else {
+        }
+        else {
             var g = angular.element('#loads-helper-groups .group.g' + group);
             g.addClass('selected');
             $scope.selectedGroup = group;
             $scope.dataDrag = false;
-            angular.element('body').addClass('select-group');
+            angular.element('body').addClass('group-mode-on');
         }
     };
 
-    $scope.addGroup = function ($event, idPerson) {
+
+    $scope.addGroup = function ($event) {
         if ($scope.selectedGroup >= 0) {
             //groups are saved to database after unselect group
             var group = {};
@@ -347,7 +343,8 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             var html = '<span class="group g' + $scope.selectedGroup + '">' + $scope.selectedGroup + '</span>';
             if ($scope.selectedGroup > 0 && g.html() != html) {
                 g.html(html);
-            } else {
+            }
+            else {
                 g.html('');
             }
         }
@@ -355,8 +352,8 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
 
     $scope.getGroupClass = function (group, load) {
         var g = group / load;
-        //idGroupe pod 1000 so skydvers groupe sestavljene IdLoad + gX
-        if (g < 1000) {
+        //idGroupe pod 100 so skydvers groupe sestavljene IdLoad * gX
+        if (g < 100) {
             return 'group g' + g;
         }
     };
@@ -368,6 +365,29 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             $scope.getLoadList();
         })
     };
+    $scope.refuel = function ($event) {
+        var el = angular.element($event.currentTarget);
+        var parent = el.parent().parent();
+        parent.toggleClass('refuel');
+    };
+
+    //TODO directive
+    $scope.isVisible = function (loadId) {
+        var el = angular.element('#load-card-l' + loadId);
+        var parent = angular.element('#loads-main md-content.loads');
+        var visible = checkVisible(el, parent);
+        return visible;
+    };
+
+    function checkVisible(el, parent) {
+        var parentWidth = parent.outerWidth();
+        var elementWidth = el.width();
+        var elementLeft = el.position().left;
+        var elementRight = elementLeft + elementWidth;
+
+        // na začetku mora biti vsaj 1/2 vidna, na koncu pa 2/3
+        return ((elementLeft > 0 - elementWidth / 2) && (elementRight - elementWidth / 3 < parentWidth));
+    }
 });
 
 app.controller('confirmLoadCtrl', function ($scope, $state, $filter, $mdDialog, $window, dataToPass, apiService, config) {

@@ -79,7 +79,7 @@ app.run(function ($state, $rootScope, $q, $mdDialog, apiService) {
     };
 
     $rootScope.dragOptions = {
-        //opacity: 0.50,
+        opacity: .8,
         //cursor: '-webkit-grab',
         revert: function () {
             $(this).css({

@@ -1075,11 +1075,11 @@ body.group-mode-on .group-mode-on-alert {
   border-style: solid;
 }
 
-.slot-card[data-drag='true'] {
+.slot-card.data-drag-on {
   cursor: grab;
 }
 
-body.group-mode-on .slot-card[data-drag='true'] {
+body.group-mode-on .slot-card {
   cursor: pointer;
 }
 
@@ -1113,12 +1113,49 @@ body.group-mode-on .slot-card[data-drag='true'] {
   color    : #666;
 }
 
+.load .time-left {
+  text-align: end;
+}
+
+.load .time-left .btn-no-refuel,
+.load .time-left .btn-refuel {
+  outline: none;
+  cursor : pointer;
+}
+
+.load .time-left .btn-no-refuel {
+  margin-right: 4px;
+  opacity     : .2;
+}
+
+.load .time-left .btn-no-refuel:hover {
+  opacity: .4;
+}
+
+.load .time-left.refuel .btn-no-refuel {
+  display: none;
+}
+
+.load .time-left .btn-refuel {
+  display     : none;
+  color       : #d32f2f;
+  margin-right: 4px;
+}
+
+.load .time-left.refuel .btn-refuel {
+  display: initial;
+}
+
+.load .time-left.refuel .btn-refuel:hover {
+  opacity: .7;
+}
+
 .load .slots-left,
-.load .min-left {
+.load .time-left .time {
   font-size: 24px;
 }
 
-.load .min-left {
+.load .time-left .time {
   display            : inline;
   font-weight        : 700;
   background-color   : #fff;

@@ -3,15 +3,20 @@
     <md-content class="md-padding loads" layout-xs="column" layout="row">
         <div flex-xs class="load-flex-container" layout="column" ng-repeat="l in loads | orderBy: 'Id' track by $index">
             <md-card class="load" ng-class="l.SlotsLeft > 0 ? '' : l.SlotsLeft == 0 ? 'full' : 'overbooked'"
-                data-drop="true" data-jqyoui-options="dropOptions" ng-model="l.GroupList"
-                jqyoui-droppable="{onDrop:'dropCallback()', beforeDrop:'beforeDrop(l)', multiple:true}">
+                data-drop="isVisible(l.Id)" data-jqyoui-options="dropOptions" ng-model="l.GroupList"
+                jqyoui-droppable="{onDrop:'dropCallback()', beforeDrop:'beforeDrop(l)', multiple:true}"
+                id="load-card-l{{l.Id}}">
                 <div layout="row" class="load-top">
-                    <div flex="50" class="slots-left">
+                    <div flex="35" class="slots-left">
                         <span class="value">{{l.SlotsLeft}}</span>
                         <span class="label-small">slots</span>
                     </div>
-                    <div flex="50" style="text-align: end;">
-                        <div class="min-left">
+                    <div flex="65" class="time-left" ng-class="($index % 2 == 1) ? 'refuel' : ''">
+                        <div style="display: inline;">
+                            <i class="fas fa-plane-departure btn-no-refuel" ng-click="refuel($event)"></i>
+                        </div>
+                        <div class="time">
+                            <i class="fas fa-gas-pump btn-refuel" ng-click="refuel($event)"></i>
                             <span class="value">{{l.IdAircraft * 2 + l.Number * 20}}</span>
                             <span class="label-small">min</span>
                         </div>
@@ -64,16 +69,17 @@
                 </md-card-title>
                 <md-card-content style="padding: 0">
                     <div class="slots">
-                        <md-card class="slot-card" data-drag="dataDrag" data-jqyoui-options="dragOptions"
+                        <md-card class="slot-card" data-drag="dataDrag" ng-class="dataDrag ? 'data-drag-on' : ''"
+                            data-jqyoui-options="dragOptions"
                             ng-repeat="g in l.GroupList | orderBy: 'DateOnLoad' track by $index"
                             ng-model="l.GroupList[$index]"
-                            jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallback(g)'}"
+                            jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallback(g)',onStop:'stopCallback()'}"
                             ng-hide="!g.IdGroup"
                             ng-style="{'background-color':g.BackgroundColor, 'border-color':g.BackgroundColor}">
                             <md-card-content>
                                 <div class="slot" ng-repeat="p in g.LoadList | orderBy: 'ProductSlotName'"
                                     data-idperson="{{p.IdPerson}}" ng-dblclick="selectPerson(p.IdPerson)"
-                                    ng-mousedown="addGroup($event,p.IdPerson)">
+                                    ng-mousedown="addGroup($event)">
                                     <div layout="row">
                                         <div flex="70" class="slot-name">
                                             <div>{{p.ProductSlotName}}</div>
@@ -148,9 +154,9 @@
                 <md-progress-circular md-mode="indeterminate"></md-progress-circular>
             </div>
 
-            <md-card class="slot-card" data-drag="true" data-jqyoui-options="dragOptions"
+            <md-card class="slot-card data-drag-on" data-drag="true" data-jqyoui-options="dragOptions"
                 ng-repeat="g in persons track by $index" ng-model="g[$index]"
-                jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallbackAdd(g)'}" data-drop="false">
+                jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallbackAdd(g)', containment:'position'}">
                 <md-card-content>
                     <div class="slot" data-idperson="{{g.Id}}" ng-dblclick="selectPerson(g.Id)">
                         <div layout="row" class="passenger">
