@@ -332,7 +332,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
     };
 
 
-    $scope.addGroup = function ($event) {
+    $scope.addGroup = function ($event,idPerson) {
         if ($scope.selectedGroup >= 0) {
             //groups are saved to database after unselect group
             var group = {};
@@ -362,6 +362,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
     function SaveSkydiversGroup(dto) {
         var url = config.manifestApi + '/skydivers/group/save';
         apiService.postData(url, dto, false).then(function (data) {
+            $scope.groups=[];
             $scope.getLoadList();
         })
     };
@@ -387,7 +388,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
 
         // na začetku mora biti vsaj 1/2 vidna, na koncu pa 2/3
         return ((elementLeft > 0 - elementWidth / 2) && (elementRight - elementWidth / 3 < parentWidth));
-    }
+    };
 });
 
 app.controller('confirmLoadCtrl', function ($scope, $state, $filter, $mdDialog, $window, dataToPass, apiService, config) {
