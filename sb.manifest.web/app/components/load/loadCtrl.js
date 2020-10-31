@@ -18,6 +18,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
     $scope.productList = [];
     $scope.selectedIdPerson;
     $scope.selectedGroup;
+    $scope.dataDrag=true; //data drag flag 
 
     //getLoadList
     $scope.getLoadList = function () {
@@ -175,11 +176,12 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
 
     //when we start drag item to know what item
     $scope.startCallback = function (event, ui, item) {
+        /*
         if ($scope.selectedGroup >= 0) {
             event.preventDefault();
             event.stopPropagation();
             return;
-        }
+        }*/
 
         $scope.PassengerMove = [];
         $scope.moved.IdPerson = [];
@@ -320,21 +322,20 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         }
         if ($scope.selectedGroup == group) {
             $scope.selectedGroup = -1;
-
+            $scope.dataDrag=true;
             angular.element('body').removeClass('select-group');
         }
         else {
             var g = angular.element('#loads-helper-groups .group.g' + group);
             g.addClass('selected');
             $scope.selectedGroup = group;
-
+            $scope.dataDrag=false;
             angular.element('body').addClass('select-group');
         }
-
-        console.log($scope.selectedGroup);
     };
 
-    $scope.addGroup = function ($event) {
+    $scope.addGroup = function ($event,idPerson) {
+        console.log(idPerson,$scope.selectedGroup);
         if ($scope.selectedGroup >= 0) {
             var g = angular.element($event.currentTarget).find('.passenger .group-placeholder');
             var html = '<span class="group g' + $scope.selectedGroup + '">' + $scope.selectedGroup + '</span>';

@@ -67,7 +67,7 @@
                 </md-card-title>
                 <md-card-content style="padding: 0">
                     <div class="slots">
-                        <md-card class="slot-card" data-drag="true" data-jqyoui-options="dragOptions"
+                        <md-card class="slot-card" data-drag="dataDrag" data-jqyoui-options="dragOptions"
                             ng-repeat="g in l.GroupList | orderBy: 'DateOnLoad' track by $index"
                             ng-model="l.GroupList[$index]"
                             jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallback(g)'}"
@@ -76,7 +76,7 @@
                             <md-card-content>
                                 <div class="slot" ng-repeat="p in g.LoadList | orderBy: 'ProductSlotName'"
                                     data-idperson="{{p.IdPerson}}" ng-dblclick="selectPerson(p.IdPerson)"
-                                    ng-mousedown="addGroup($event)">
+                                    ng-mousedown="addGroup($event,p.IdPerson)">
                                     <div layout="row">
                                         <div flex="70" class="slot-name">
                                             <div>{{p.ProductSlotName}}</div>
