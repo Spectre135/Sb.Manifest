@@ -64,7 +64,8 @@
                 </md-card-title>
                 <md-card-content style="padding: 0">
                     <div class="slots">
-                        <md-card class="slot-card" data-drag="dataDrag" data-jqyoui-options="dragOptions"
+                        <md-card class="slot-card" data-drag="dataDrag" ng-class="dataDrag ? 'data-drag-on' : ''"
+                            data-jqyoui-options="dragOptions"
                             ng-repeat="g in l.GroupList | orderBy: 'DateOnLoad' track by $index"
                             ng-model="l.GroupList[$index]"
                             jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallback(g)'}"

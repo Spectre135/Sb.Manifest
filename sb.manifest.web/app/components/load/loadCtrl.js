@@ -323,14 +323,14 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         if ($scope.selectedGroup == group) {
             $scope.selectedGroup = -1;
             $scope.dataDrag=true;
-            angular.element('body').removeClass('select-group');
+            angular.element('body').removeClass('group-mode-on');
         }
         else {
             var g = angular.element('#loads-helper-groups .group.g' + group);
             g.addClass('selected');
             $scope.selectedGroup = group;
             $scope.dataDrag=false;
-            angular.element('body').addClass('select-group');
+            angular.element('body').addClass('group-mode-on');
         }
     };
 

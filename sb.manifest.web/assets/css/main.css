@@ -1075,11 +1075,11 @@ body.group-mode-on .group-mode-on-alert {
   border-style: solid;
 }
 
-.slot-card[data-drag='true'] {
+.slot-card.data-drag-on {
   cursor: grab;
 }
 
-body.group-mode-on .slot-card[data-drag='true'] {
+body.group-mode-on .slot-card {
   cursor: pointer;
 }
 
