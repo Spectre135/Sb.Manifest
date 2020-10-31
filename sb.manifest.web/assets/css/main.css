@@ -979,42 +979,84 @@ body {
   font-size: 12px;
 }
 
+.group-mode-on-alert {
+  display         : none;
+  cursor          : pointer;
+  z-index         : 1000;
+  background-color: #fff176;
+  padding         : 0 16px;
+  border-radius   : 1em;
+  position        : fixed;
+  top             : 42px;
+  left            : 50%;
+  transform       : translate(-50%, 0);
+  box-shadow      : 0 1px 3px 0 rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 2px 1px -1px rgba(0, 0, 0, .12);
+}
+
+body.group-mode-on .group-mode-on-alert {
+  display: initial;
+}
+
 .load-bin {
   display: none;
 }
 
 .load-bin.drop-hover {
   display         : none;
-  background-color: rgba(221, 0, 0, .05);
+  background-color: rgba(211, 47, 47, .07);
 }
 
 .load-bin.visible {
   display: initial;
 }
 
-#loads-main .loads {
-  float        : none;
-  /* position  : relative; */
-}
-
 #loads-main .loads-helper {
-  width        : 46px;
-  float        : right;
-  box-shadow   : 0px -1px 5px rgba(22, 25, 31, 0.8);
-  border-radius: 0 0 0 12px;
+  width           : 46px;
+  box-shadow      : 0px -1px 5px rgba(22, 25, 31, 0.8);
+  border-radius   : 0 0 0 12px;
+  position        : absolute;
+  top             : 60px;
+  right           : 0;
+  z-index         : 100;
+  background-color: #fafafa;
 }
 
-#loads-main .loads {
-  float: left;
-  width: calc(100% - 52px);
+#loads-main .load-flex-container {
+  flex-shrink: 0;
+  width      : 280px;
+}
+
+/* #loads-main .loads {
+} */
+
+#loads-main .load-flex-container.btn-add-load {
+  width: 182px;
+}
+
+#loads-main.open-helper .load-flex-container.btn-add-load {
+  width: 136px;
+}
+
+#loads-main .load-flex-container.btn-add-load>.md-button {
+  width       : 112px;
+  height      : 112px;
+  margin-right: 70px;
+}
+
+#loads-main.open-helper .load-flex-container.btn-add-load>.md-button {
+  margin-right: 24px;
+}
+
+#loads-main .load-flex-container.btn-add-load>.md-button i.fas {
+  line-height: 1.5;
 }
 
 #loads-main.open-helper .loads {
-  width: calc(100% - 308px);
+  width: calc(100% - 288px);
 }
 
 #loads-main.open-helper .loads-helper {
-  width        : 300px;
+  width        : 288px;
   border-radius: 0;
 }
 
@@ -1028,7 +1070,7 @@ body {
 }
 
 .slot-card {
-  margin      : 0 8px 12px;
+  margin      : 0 8px 8x;
   border-width: 0 8px 0 0;
   border-style: solid;
 }
@@ -1037,7 +1079,7 @@ body {
   cursor: grab;
 }
 
-body.select-group .slot-card[data-drag='true'] {
+body.group-mode-on .slot-card[data-drag='true'] {
   cursor: pointer;
 }
 
@@ -1119,20 +1161,24 @@ body.select-group .slot-card[data-drag='true'] {
 
 .load.full {
   /* background: linear-gradient(180deg, rgba(0, 153, 31, 1) 45px, rgba(0, 153, 31, .15) 46px, rgba(255, 255, 255, 1) 107px); */
-  background: linear-gradient(180deg, rgba(96, 147, 108, 1) 45px, rgba(96, 147, 108, .15) 46px, rgba(255, 255, 255, 1) 107px);
+  /* background: linear-gradient(180deg, rgba(96, 147, 108, 1) 45px, rgba(96, 147, 108, .15) 46px, rgba(255, 255, 255, 1) 107px); */
+  background: linear-gradient(180deg, rgba(117, 164, 120, 1) 45px, rgba(117, 164, 120, .15) 46px, rgba(255, 255, 255, 1) 107px);
+
 }
 
 .load.full.drop-hover {
   /* background: linear-gradient(180deg, rgba(0, 153, 31, 1) 45px, rgba(0, 153, 31, .15) 46px, rgba(0, 153, 31, .05) 107px); */
-  background: linear-gradient(180deg, rgba(96, 147, 108, 1) 45px, rgba(96, 147, 108, .15) 46px, rgba(0, 153, 31, .05) 107px);
+  background: linear-gradient(180deg, rgba(117, 164, 120, 1) 45px, rgba(117, 164, 120, .15) 46px, rgba(117, 164, 120, .1) 107px);
 }
 
 .load.overbooked {
-  background: linear-gradient(180deg, rgba(221, 0, 0, 1) 45px, rgba(221, 0, 0, .15) 46px, rgba(255, 255, 255, 1) 107px);
+  /* background: linear-gradient(180deg, rgba(221, 0, 0, 1) 45px, rgba(221, 0, 0, .15) 46px, rgba(255, 255, 255, 1) 107px); */
+  background: linear-gradient(180deg, rgba(211, 47, 47, 1) 45px, rgba(211, 47, 47, .15) 46px, rgba(255, 255, 255, 1) 107px);
+
 }
 
 .load.overbooked.drop-hover {
-  background: linear-gradient(180deg, rgba(221, 0, 0, 1) 45px, rgba(221, 0, 0, .15) 46px, rgba(221, 0, 0, .05) 107px);
+  background: linear-gradient(180deg, rgba(211, 47, 47, 1) 45px, rgba(211, 47, 47, .15) 46px, rgba(211, 47, 47, .07) 107px);
 }
 
 .load .slots-left .label-small {

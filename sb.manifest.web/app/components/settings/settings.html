@@ -4,83 +4,90 @@
             <md-tabs md-dynamic-height md-border-bottom>
                 <md-tab label="Products" ng-click="getProducts()">
                     <md-content>
-                        <md-card style="padding: 20px;">
+                        <md-card>
+                            <md-card-content>
+                                <md-button aria-label="edit" class="md-fab md-mini md-gray"
+                                    ng-click="editProduct($event)">
+                                    <md-tooltip md-direction="right">{{messages.addProduct}}</md-tooltip>
+                                    <span><i style="margin-top: 12px;" class="fas fa-plus font16"></i></span>
+                                </md-button>
 
-                            <md-button aria-label="edit" class="md-fab md-mini md-gray" ng-click="editProduct($event)">
-                                <md-tooltip md-direction="right">{{messages.addProduct}}</md-tooltip>
-                                <span><i style="margin-top: 12px;" class="fas fa-plus font16"></i></span>
-                            </md-button>
+                                <div layout="row" layout-align="end end" style="height:43px;">
+                                    <md-input-container class="md-icon-float md-block" style="width:30%;z-index: 99;">
+                                        <md-icon class="name" style="margin-left: 15px;"><i class="fas fa-search"></i>
+                                        </md-icon>
+                                        <label style="padding-left: 36px;">Search</label>
+                                        <input ng-model="search" name="search" />
+                                    </md-input-container>
+                                </div>
 
-                        <div layout="row" layout-align="end end" style="height:43px;">
-                            <md-input-container class="md-icon-float md-block" style="width:30%;z-index: 99;">             
-                                <md-icon class="name" style="margin-left: 15px;"><i class="fas fa-search"></i></md-icon>
-                                <label style="padding-left: 36px;">Search</label>
-                                <input ng-model="search" name="search" />
-                            </md-input-container>
-                          </div>
-                
-                
-                        <!--[if IE]> <div style="margin-top:20px;"> <![endif]-->
-                        <md-table-container style="padding-top: 15px;">
-                            <table md-table>
-                                <thead md-head md-order="myOrder">
-                                    <tr md-row>
-                                        <th md-column class="item-color"></th>
-                                        <th md-column md-order-by="Name"><span>Name</span></th>
-                                        <th md-column md-order-by="Description"><span>Description</span></th>
-                                        <th md-column md-order-by="IsProductSlot"><span>Show in Product slot</span></th>
-                                        <th md-column md-order-by="IsFavorite"><span>Is favorite</span></th>
-                                        <th md-column md-numeric right md-order-by="Price"><span>Price</span></th>
-                                    </tr>
-                                </thead>
-                                <tbody md-body>
-                                    <tr md-row md-select-id="lista" md-auto-select
-                                        ng-repeat="p in list | filter: search | orderBy: myOrder | limitTo: myLimit: (myPage - 1) * myLimit"
-                                        class="md-row showhim" style="cursor: pointer;">
-                                        <td md-cell class="item-color">
-                                            <span class="item-color" ng-style="{'background-color':p.BackgroundColor}"></span>
-                                        </td>
-                                        <td md-cell>{{p.Name}}</td>
-                                    <td md-cell>{{p.Description}}</td>
-                                    <td md-cell>
-                                        <md-checkbox ng-disabled="true" aria-label="Show in Product slot"
-                                            ng-model="p.IsProductSlot"></md-checkbox>
-                                    </td>
-                                    <td md-cell>
-                                        <md-checkbox ng-disabled="true" aria-label="Is favorite"
-                                            ng-model="p.IsFavorite"></md-checkbox>
-                                    </td>
-                                    <td md-cell right>{{p.Price | currency}}</td>
-                                    <td style="width: 20px;">
 
-                                        <md-menu class="td-menu showme">
-                                            <md-button aria-label="Open menu" class="md-icon-button"
-                                                ng-click="setSelected(p.Id);$mdMenu.open($event)">
-                                                <span><i class="fas fa-ellipsis-v"></i></span>
-                                            </md-button>
-                                            <md-menu-content width="4">
-                                                <md-menu-item>
-                                                    <md-button ng-click="editProduct($event,p)">
-                                                        <span><i class="fas fa-edit"></i></span>
-                                                        &nbsp;&nbsp;Edit
-                                                    </md-button>
-                                                </md-menu-item>
-                                                <md-menu-item>
-                                                    <md-button ng-click="deleteProduct($event,p)">
-                                                        <span><i class="fas fa-trash-alt"></i></span>
-                                                        &nbsp;&nbsp;Delete
-                                                    </md-button>
-                                                </md-menu-item>
-                                            </md-menu-content>
-                                        </md-menu>
-                                    </td>
-                                    </tr>
-                                    </tbody>
+                                <!--[if IE]> <div style="margin-top:20px;"> <![endif]-->
+                                <md-table-container style="padding-top: 15px;">
+                                    <table md-table>
+                                        <thead md-head md-order="myOrder">
+                                            <tr md-row>
+                                                <th md-column class="item-color"></th>
+                                                <th md-column md-order-by="Name"><span>Name</span></th>
+                                                <th md-column md-order-by="Description"><span>Description</span></th>
+                                                <th md-column md-order-by="IsProductSlot"><span>Show in Product
+                                                        slot</span>
+                                                </th>
+                                                <th md-column md-order-by="IsFavorite"><span>Is favorite</span></th>
+                                                <th md-column md-numeric right md-order-by="Price"><span>Price</span>
+                                                </th>
+                                                <th md-column></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody md-body>
+                                            <tr md-row md-auto-select
+                                                ng-repeat="p in list | filter: search | orderBy: myOrder | limitTo: myLimit: (myPage - 1) * myLimit"
+                                                class="md-row showhim" style="cursor: pointer;">
+                                                <td md-cell class="item-color">
+                                                    <span class="item-color"
+                                                        ng-style="{'background-color':p.BackgroundColor}"></span>
+                                                </td>
+                                                <td md-cell>{{p.Name}}</td>
+                                                <td md-cell>{{p.Description}}</td>
+                                                <td md-cell>
+                                                    <md-checkbox ng-disabled="true" aria-label="Show in Product slot"
+                                                        ng-model="p.IsProductSlot"></md-checkbox>
+                                                </td>
+                                                <td md-cell>
+                                                    <md-checkbox ng-disabled="true" aria-label="Is favorite"
+                                                        ng-model="p.IsFavorite"></md-checkbox>
+                                                </td>
+                                                <td md-cell right>{{p.Price | currency}}</td>
+                                                <td md-cell style="padding: 0; min-width: 52px;">
+                                                    <md-menu class="td-menu showme">
+                                                        <md-button aria-label="Open menu" class="md-icon-button"
+                                                            ng-click="setSelected(p.Id);$mdMenu.open($event)">
+                                                            <span><i class="fas fa-ellipsis-v"></i></span>
+                                                        </md-button>
+                                                        <md-menu-content width="4">
+                                                            <md-menu-item>
+                                                                <md-button ng-click="editProduct($event,p)">
+                                                                    <span><i class="fas fa-edit"></i></span>
+                                                                    &nbsp;&nbsp;Edit
+                                                                </md-button>
+                                                            </md-menu-item>
+                                                            <md-menu-item>
+                                                                <md-button ng-click="deleteProduct($event,p)">
+                                                                    <span><i class="fas fa-trash-alt"></i></span>
+                                                                    &nbsp;&nbsp;Delete
+                                                                </md-button>
+                                                            </md-menu-item>
+                                                        </md-menu-content>
+                                                    </md-menu>
+                                                </td>
+                                            </tr>
+                                        </tbody>
                                     </table>
-                                    </md-table-container>
-                                    <!--[if IE]> </div> <![endif]-->
-                                    <md-table-pagination md-page="myPage" md-limit="myLimit"
-                                        md-limit-options="[5, 10, 15]" md-total="{{rows}}"></md-table-pagination>
+                                </md-table-container>
+                                <!--[if IE]> </div> <![endif]-->
+                                <md-table-pagination md-page="myPage" md-limit="myLimit" md-limit-options="[5, 10, 15]"
+                                    md-total="{{rows}}"></md-table-pagination>
+                            </md-card-content>
                         </md-card>
 
                     </md-content>
@@ -88,163 +95,172 @@
 
                 <md-tab label="Product slot" ng-click="getProductSlot()">
                     <md-content>
-                        <md-card style="padding: 20px;">
+                        <md-card>
+                            <md-card-content>
+                                <md-button aria-label="edit" class="md-fab md-mini md-gray"
+                                    ng-click="editProductSlot($event)">
+                                    <md-tooltip md-direction="right">{{messages.addProductSlot}}</md-tooltip>
+                                    <span><i style="margin-top: 12px;" class="fas fa-plus font16"></i></span>
+                                </md-button>
 
-                            <md-button aria-label="edit" class="md-fab md-mini md-gray"
-                                ng-click="editProductSlot($event)">
-                                <md-tooltip md-direction="right">{{messages.addProductSlot}}</md-tooltip>
-                                <span><i style="margin-top: 12px;" class="fas fa-plus font16"></i></span>
-                            </md-button>
-    
-                        <div layout="row" layout-align="end end" style="height:43px;">
-                            <md-input-container class="md-icon-float md-block" style="width:30%;z-index: 99;">             
-                                <md-icon class="name" style="margin-left: 15px;"><i class="fas fa-search"></i></md-icon>
-                                <label style="padding-left: 36px;">Search</label>
-                                <input ng-model="search" name="search" />
-                            </md-input-container>
-                          </div>
-                
-                
-                        <!--[if IE]> <div style="margin-top:20px;"> <![endif]-->
-                        <md-table-container style="padding-top: 15px;">
-                            <table md-table>
-                                <thead md-head md-order="myOrder">
-                                    <tr md-row>
-                                        <th md-column md-order-by="ProductName"><span>Product</span></th>
-                                        <th md-column md-order-by="Name"><span>Name</span></th>
-                                        <th md-column md-order-by="Description"><span>Description</span></th>
-                                        <th md-column md-order-by="Account"><span>Account</span></th>
-                                        <th md-column md-order-by="IsStaffJob"><span>Staff job</span></th>
-                                        <th md-column md-numeric right md-order-by="Income"><span>Income</span></th>
-                                        <th md-column md-numeric right md-order-by="Outcome"><span>Outcome</span></th>
-                                    </tr>
-                                </thead>
-                                <tbody md-body>
-                                    <tr md-row md-select-id="lista" md-auto-select
-                                        ng-repeat="p in list | filter: search | orderBy: myOrder | limitTo: myLimit: (myPage - 1) * myLimit"
-                                        class="md-row showhim" style="cursor: pointer;">
-                                        <td md-cell>{{p.ProductName}}</td>
-                                    <td md-cell>{{p.Name}}</td>
-                                    <td md-cell>{{p.Description}}</td>
-                                    <td md-cell>{{p.AccountDescription}}</td>
-                                    <td md-cell>
-                                        <md-checkbox ng-disabled="true" aria-label="Staff job" ng-model="p.IsStaffJob">
-                                        </md-checkbox>
-                                    </td>
-                                    <td md-cell right ng-style="p.Income  > 0 && {'color':'green'}">
-                                        {{p.Income | currency}}</td>
-                                    <td md-cell right ng-style="p.Outcome > 0 && {'color':'red'}">
-                                        {{p.Outcome | currency}}</td>
-                                        <td style="width: 20px;">
-                                            <md-menu class="td-menu showme">
-                                                <md-button aria-label="Open menu" class="md-icon-button"
-                                                    ng-click="setSelected(p.Id);$mdMenu.open($event)">
-                                                    <span><i class="fas fa-ellipsis-v"></i></span>
-                                                </md-button>
-                                                <md-menu-content width="4">
-                                                    <md-menu-item>
-                                                        <md-button ng-click="editProductSlot($event,p)">
-                                                            <span><i class="fas fa-edit"></i></span>
-                                                            &nbsp;&nbsp;Edit
+                                <div layout="row" layout-align="end end" style="height:43px;">
+                                    <md-input-container class="md-icon-float md-block" style="width:30%;z-index: 99;">
+                                        <md-icon class="name" style="margin-left: 15px;"><i class="fas fa-search"></i>
+                                        </md-icon>
+                                        <label style="padding-left: 36px;">Search</label>
+                                        <input ng-model="search" name="search" />
+                                    </md-input-container>
+                                </div>
+
+
+                                <!--[if IE]> <div style="margin-top:20px;"> <![endif]-->
+                                <md-table-container style="padding-top: 15px;">
+                                    <table md-table>
+                                        <thead md-head md-order="myOrder">
+                                            <tr md-row>
+                                                <th md-column md-order-by="ProductName"><span>Product</span></th>
+                                                <th md-column md-order-by="Name"><span>Name</span></th>
+                                                <th md-column md-order-by="Description"><span>Description</span></th>
+                                                <th md-column md-order-by="Account"><span>Account</span></th>
+                                                <th md-column md-order-by="IsStaffJob"><span>Staff job</span></th>
+                                                <th md-column md-numeric right md-order-by="Income"><span>Income</span>
+                                                </th>
+                                                <th md-column md-numeric right md-order-by="Outcome">
+                                                    <span>Outcome</span>
+                                                </th>
+                                                <th md-column></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody md-body>
+                                            <tr md-row md-auto-select
+                                                ng-repeat="p in list | filter: search | orderBy: myOrder | limitTo: myLimit: (myPage - 1) * myLimit"
+                                                class="md-row showhim" style="cursor: pointer;">
+                                                <td md-cell>{{p.ProductName}}</td>
+                                                <td md-cell>{{p.Name}}</td>
+                                                <td md-cell>{{p.Description}}</td>
+                                                <td md-cell>{{p.AccountDescription}}</td>
+                                                <td md-cell>
+                                                    <md-checkbox ng-disabled="true" aria-label="Staff job"
+                                                        ng-model="p.IsStaffJob">
+                                                    </md-checkbox>
+                                                </td>
+                                                <td md-cell right ng-style="p.Income  > 0 && {'color':'green'}">
+                                                    {{p.Income | currency}}</td>
+                                                <td md-cell right ng-style="p.Outcome > 0 && {'color':'red'}">
+                                                    {{p.Outcome | currency}}</td>
+                                                <td md-cell style="padding: 0; min-width: 52px;">
+                                                    <md-menu class="td-menu showme">
+                                                        <md-button aria-label="Open menu" class="md-icon-button"
+                                                            ng-click="setSelected(p.Id);$mdMenu.open($event)">
+                                                            <span><i class="fas fa-ellipsis-v"></i></span>
                                                         </md-button>
-                                                    </md-menu-item>
-                                                    <md-menu-item>
-                                                        <md-button ng-click="deleteProductSlot($event,p)">
-                                                            <span><i class="fas fa-trash-alt"></i></span>
-                                                            &nbsp;&nbsp;Delete
-                                                        </md-button>
-                                                    </md-menu-item>
-                                                </md-menu-content>
-                                            </md-menu>
-                                        </td>
-                                    </tr>
-                                    </tbody>
+                                                        <md-menu-content width="4">
+                                                            <md-menu-item>
+                                                                <md-button ng-click="editProductSlot($event,p)">
+                                                                    <span><i class="fas fa-edit"></i></span>
+                                                                    &nbsp;&nbsp;Edit
+                                                                </md-button>
+                                                            </md-menu-item>
+                                                            <md-menu-item>
+                                                                <md-button ng-click="deleteProductSlot($event,p)">
+                                                                    <span><i class="fas fa-trash-alt"></i></span>
+                                                                    &nbsp;&nbsp;Delete
+                                                                </md-button>
+                                                            </md-menu-item>
+                                                        </md-menu-content>
+                                                    </md-menu>
+                                                </td>
+                                            </tr>
+                                        </tbody>
                                     </table>
-                                    </md-table-container>
-                                    <!--[if IE]> </div> <![endif]-->
-                                    <md-table-pagination md-page="myPage" md-limit="myLimit"
-                                        md-limit-options="[5, 10, 15]" md-total="{{rows}}"></md-table-pagination>
+                                </md-table-container>
+                                <!--[if IE]> </div> <![endif]-->
+                                <md-table-pagination md-page="myPage" md-limit="myLimit" md-limit-options="[5, 10, 15]"
+                                    md-total="{{rows}}"></md-table-pagination>
+                            </md-card-content>
                         </md-card>
                     </md-content>
                 </md-tab>
 
                 <md-tab label="Aircrafts" ng-click="getAircrafts()">
                     <md-content>
-                        <md-card style="padding: 20px;">
+                        <md-card>
+                            <md-card-content>
+                                <md-button aria-label="edit" class="md-fab md-mini md-gray"
+                                    ng-click="editAircraft($event)">
+                                    <md-tooltip md-direction="right">{{messages.addProductSlot}}</md-tooltip>
+                                    <span><i style="margin-top: 12px;" class="fas fa-plus font16"></i></span>
+                                </md-button>
 
-                            <md-button aria-label="edit" class="md-fab md-mini md-gray" ng-click="editAircraft($event)">
-                                <md-tooltip md-direction="right">{{messages.addProductSlot}}</md-tooltip>
-                                <span><i style="margin-top: 12px;" class="fas fa-plus font16"></i></span>
-                            </md-button>
-
-                            <div layout="row" layout-align="end end" style="height:43px;">
-                                <md-input-container class="md-icon-float md-block" style="width:30%;z-index: 99;">
-                                    <md-icon class="name" style="margin-left: 15px;"><i class="fas fa-search"></i>
-                                    </md-icon>
-                                    <label style="padding-left: 36px;">Search</label>
-                                    <input ng-model="search" name="search" />
-                                </md-input-container>
-                            </div>
+                                <div layout="row" layout-align="end end" style="height:43px;">
+                                    <md-input-container class="md-icon-float md-block" style="width:30%;z-index: 99;">
+                                        <md-icon class="name" style="margin-left: 15px;"><i class="fas fa-search"></i>
+                                        </md-icon>
+                                        <label style="padding-left: 36px;">Search</label>
+                                        <input ng-model="search" name="search" />
+                                    </md-input-container>
+                                </div>
 
 
-                            <!--[if IE]> <div style="margin-top:20px;"> <![endif]-->
-                            <md-table-container style="padding-top: 15px;">
-                                <table md-table>
-                                    <thead md-head md-order="myOrder">
-                                        <tr md-row>
-                                            <th md-column md-order-by="Registration"><span>Registration</span></th>
-                                            <th md-column md-order-by="Type"><span>Type</span></th>
-                                            <th md-column md-order-by="Name"><span>Name</span></th>
-                                            <th md-column md-order-by="Slots"><span>Maximum Slots</span></th>
-                                            <th md-column md-order-by="MinSlots"><span>Minimum slots</span></th>
-                                            <th md-column md-order-by="RotationTime"><span>Rotation time</span></th>
-                                            <th md-column md-order-by="Active"><span>Active</span></th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody md-body>
-                                        <tr md-row md-select-id="lista" md-auto-select
-                                            ng-repeat="p in list | filter: search | orderBy: myOrder | limitTo: myLimit: (myPage - 1) * myLimit"
-                                            class="md-row showhim" style="cursor: pointer;">
-                                            <td md-cell>{{p.Registration}}</td>
-                                            <td md-cell>{{p.Type}}</td>
-                                            <td md-cell>{{p.Name}}</td>
-                                            <td md-cell>{{p.MaxSlots}}</td>
-                                            <td md-cell>{{p.MinSlots}}</td>
-                                            <td md-cell>{{p.RotationTime}}</td>
-                                            <td md-cell>
-                                                <md-checkbox ng-disabled="true" aria-label="Aircraft active"
-                                                    ng-model="p.Active"></md-checkbox>
-                                            </td>
-                                            <td style="width: 20px;">
-                                                <md-menu class="td-menu showme">
-                                                    <md-button aria-label="Open menu" class="md-icon-button"
-                                                        ng-click="setSelected(p.Id);$mdMenu.open($event)">
-                                                        <span><i class="fas fa-ellipsis-v"></i></span>
-                                                    </md-button>
-                                                    <md-menu-content width="4">
-                                                        <md-menu-item>
-                                                            <md-button ng-click="editAircraft($event,p)">
-                                                                <span><i class="fas fa-edit"></i></span>
-                                                                &nbsp;&nbsp;Edit
-                                                            </md-button>
-                                                        </md-menu-item>
-                                                        <md-menu-item>
-                                                            <md-button ng-click="deleteAircraft($event,p)">
-                                                                <span><i class="fas fa-trash-alt"></i></span>
-                                                                &nbsp;&nbsp;Delete
-                                                            </md-button>
-                                                        </md-menu-item>
-                                                    </md-menu-content>
-                                                </md-menu>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </md-table-container>
-                            <!--[if IE]> </div> <![endif]-->
-                            <md-table-pagination md-page="myPage" md-limit="myLimit" md-limit-options="[5, 10, 15]"
-                                md-total="{{rows}}"></md-table-pagination>
+                                <!--[if IE]> <div style="margin-top:20px;"> <![endif]-->
+                                <md-table-container style="padding-top: 15px;">
+                                    <table md-table>
+                                        <thead md-head md-order="myOrder">
+                                            <tr md-row>
+                                                <th md-column md-order-by="Registration"><span>Registration</span></th>
+                                                <th md-column md-order-by="Type"><span>Type</span></th>
+                                                <th md-column md-order-by="Name"><span>Name</span></th>
+                                                <th md-column md-order-by="Slots"><span>Maximum Slots</span></th>
+                                                <th md-column md-order-by="MinSlots"><span>Minimum slots</span></th>
+                                                <th md-column md-order-by="RotationTime"><span>Rotation time</span></th>
+                                                <th md-column md-order-by="Active"><span>Active</span></th>
+                                                <th md-column></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody md-body>
+                                            <tr md-row md-auto-select
+                                                ng-repeat="p in list | filter: search | orderBy: myOrder | limitTo: myLimit: (myPage - 1) * myLimit"
+                                                class="md-row showhim" style="cursor: pointer;">
+                                                <td md-cell>{{p.Registration}}</td>
+                                                <td md-cell>{{p.Type}}</td>
+                                                <td md-cell>{{p.Name}}</td>
+                                                <td md-cell>{{p.MaxSlots}}</td>
+                                                <td md-cell>{{p.MinSlots}}</td>
+                                                <td md-cell>{{p.RotationTime}}</td>
+                                                <td md-cell>
+                                                    <md-checkbox ng-disabled="true" aria-label="Aircraft active"
+                                                        ng-model="p.Active"></md-checkbox>
+                                                </td>
+                                                <td md-cell style="padding: 0; min-width: 52px;">
+                                                    <md-menu class="td-menu ">
+                                                        <md-button aria-label="Open menu" class="md-icon-button"
+                                                            ng-click="setSelected(p.Id);$mdMenu.open($event)">
+                                                            <span><i class="fas fa-ellipsis-v"></i></span>
+                                                        </md-button>
+                                                        <md-menu-content width="4">
+                                                            <md-menu-item>
+                                                                <md-button ng-click="editAircraft($event,p)">
+                                                                    <span><i class="fas fa-edit"></i></span>
+                                                                    &nbsp;&nbsp;Edit
+                                                                </md-button>
+                                                            </md-menu-item>
+                                                            <md-menu-item>
+                                                                <md-button ng-click="deleteAircraft($event,p)">
+                                                                    <span><i class="fas fa-trash-alt"></i></span>
+                                                                    &nbsp;&nbsp;Delete
+                                                                </md-button>
+                                                            </md-menu-item>
+                                                        </md-menu-content>
+                                                    </md-menu>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </md-table-container>
+                                <!--[if IE]> </div> <![endif]-->
+                                <md-table-pagination md-page="myPage" md-limit="myLimit" md-limit-options="[5, 10, 15]"
+                                    md-total="{{rows}}"></md-table-pagination>
+                            </md-card-content>
                         </md-card>
 
                     </md-content>
@@ -252,17 +268,16 @@
 
                 <md-tab label="Company">
                     <md-content>
-                        <h1 class="md-display-2">Company</h1>
-                        <p>Aviofun d.o.o.
-                            Gorče 12a,
-
-                            2372 Libeliče,
-
-                            Slovenia
-
-                            VAT ID: SI36591530
-
-                            E-mail: info@aviofun.com</p>
+                        <md-card>
+                            <md-card-content>
+                                <h3>Aviofun d.o.o.</h3>
+                                <p>Gorče 12a<br>
+                                    2372 Libeliče<br>
+                                    Slovenia</p>
+                                <p>VAT ID: SI36591530</p>
+                                <p>e-mail: info@aviofun.com</p>
+                            </md-card-content>
+                        </md-card>
                     </md-content>
                 </md-tab>
             </md-tabs>

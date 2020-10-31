@@ -66,7 +66,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () {});
+        }).catch(function () { });
     };
 
     //confirm load
@@ -85,12 +85,11 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () {});
+        }).catch(function () { });
     };
 
     //add/edit Load
     $scope.editLoad = function ($event, dto) {
-        console.log($event);
         //init if null to pass the loads array for get max load number
         if (!dto) {
             dto = {};
@@ -108,7 +107,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () {});;
+        }).catch(function () { });;
     };
 
     //check if passenger is already in load  
@@ -123,7 +122,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
                 });
             });
             return response;
-        } catch (err) {}
+        } catch (err) { }
     };
 
     //before drop item we show confirmation dialog
@@ -140,10 +139,10 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         if (item == -1) {
             $scope.moved.IdLoadFrom = $scope.loadMoveId;
             $rootScope.confirmDialog('Confirm remove',
-            'You will remove ' + $scope.PassengerMove + '\n\rfrom Load ' + $scope.loadMoveId,'Remove','Cancel')
-            .then( function onSuccess(result) {
-                return deferred.resolve();
-            });
+                'You will remove ' + $scope.PassengerMove + '\n\rfrom Load ' + $scope.loadMoveId, 'Remove', 'Cancel')
+                .then(function onSuccess(result) {
+                    return deferred.resolve();
+                });
         }
         // move to
         else if ($scope.loadMoveId != item.Id) {
@@ -178,8 +177,9 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
     $scope.startCallback = function (event, ui, item) {
         /*
         if ($scope.selectedGroup >= 0) {
-            event.preventDefault();
-            event.stopPropagation();
+            $event.preventDefault();
+            $event.stopPropagation();
+            angular.element($event.currentTarget).css('z-index','initial');
             return;
         }*/
 
@@ -218,7 +218,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
                 .then(function () {
                     $scope.moved = {};
                     $scope.moved.IdPerson = [];
-                    $scope.dragToAdd=false;
+                    $scope.dragToAdd = false;
                     $scope.getLoadList().then(reselectPerson);
                 });
         } else {
@@ -228,7 +228,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
                     //init
                     $scope.moved = {};
                     $scope.moved.IdPerson = [];
-                    $scope.loadMoveId=0;
+                    $scope.loadMoveId = 0;
                     //we must refresh load list
                     $scope.getLoadList().then(reselectPerson);
                 });
@@ -252,7 +252,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         angular.element('#loads-main').addClass('open-helper');
 
         var newClientWidth = a[0].clientWidth;
-        var delta = clientWidth - newClientWidth;
+        var delta = clientWidth - newClientWidth - 46; // 46 je širina zaprtega panela
         a[0].scrollLeft += delta;
     };
 

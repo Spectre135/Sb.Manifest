@@ -3,7 +3,7 @@
 var app = angular.module('SbManifest');
 
 app.controller('reportCtrl', function ($scope, $state, $window, apiService, config) {
-    $scope.loads = 0; 
+    $scope.loads = 0;
     $scope.profit = 0;
 
     //get dashboard product list data
@@ -25,15 +25,15 @@ app.controller('reportCtrl', function ($scope, $state, $window, apiService, conf
             });
     };
 
-    function sum(){
+    function sum() {
         angular.forEach($scope.productList, function (value, key) {
-            $scope.loads = $scope.loads+ value.Number; 
-            $scope.profit = $scope.profit+ value.Profit;
+            $scope.loads = $scope.loads + value.Number;
+            $scope.profit = $scope.profit + value.Profit;
         });
     };
 
-    //line chart
-  
+    // line chart
+
     var meseci = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     var labels1 = [0, 10, 30, 130, 1300, 2345, 1800, 1950, 1500, 855, 0, 0];
     var labels2 = [0, 910, 930, 4130, 4300, 8345, 7800, 6950, 4500, 3955, 0, 0];
