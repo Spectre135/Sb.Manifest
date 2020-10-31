@@ -55,7 +55,13 @@ namespace sb.manifest.api.SQL
         public static string GetSaveSkydiversGroupSQL()
         {
             return @"DELETE FROM SkydiversGroup where IdPerson = @IdPerson;
-                     INSERT INTO SkydiversGroup (IdGroup,IdPerson) VALUES(@IdGroup,@IdPerson);";
+                     INSERT INTO SkydiversGroup (
+                               IdGroup,
+                               IdPerson
+                           )
+                           SELECT @IdGroup IdGroup,
+                                  @IdPerson IdPerson
+                            WHERE IdGroup != 0;";
 
         }
         #endregion

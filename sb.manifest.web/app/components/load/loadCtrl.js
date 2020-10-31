@@ -332,16 +332,17 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
     };
 
 
-    $scope.addGroup = function ($event,idPerson) {
+    $scope.addGroup = function ($event,idPerson,idGroup) {
         if ($scope.selectedGroup >= 0) {
             //groups are saved to database after unselect group
             var group = {};
             group.IdPerson = idPerson;
-            group.IdGroup = $scope.selectedGroup;
+            group.IdGroup = (idGroup==$scope.selectedGroup) ? 0:$scope.selectedGroup; //če je že izbran damo 0 
             $scope.groups.push(group);
             var g = angular.element($event.currentTarget).find('.passenger .group-placeholder');
             var html = '<span class="group g' + $scope.selectedGroup + '">' + $scope.selectedGroup + '</span>';
-            if ($scope.selectedGroup > 0 && g.html() != html) {
+            //če je idGroup iz baze enak označenemu ga odznačimo
+            if ($scope.selectedGroup > 0 && g.html() != html &&idGroup!=$scope.selectedGroup ) {
                 g.html(html);
             }
             else {
@@ -359,12 +360,12 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
     };
 
     //api to save selected group to database
-    function SaveSkydiversGroup(dto) {
+    function SaveSkydiversGroup(dto) {      
         var url = config.manifestApi + '/skydivers/group/save';
         apiService.postData(url, dto, false).then(function (data) {
             $scope.groups=[];
             $scope.getLoadList();
-        })
+        });
     };
     $scope.refuel = function ($event) {
         var el = angular.element($event.currentTarget);

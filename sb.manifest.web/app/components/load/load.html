@@ -79,7 +79,7 @@
                             <md-card-content>
                                 <div class="slot" ng-repeat="p in g.LoadList | orderBy: 'ProductSlotName'"
                                     data-idperson="{{p.IdPerson}}" ng-dblclick="selectPerson(p.IdPerson)"
-                                    ng-mousedown="addGroup($event,p.IdPerson)">
+                                    ng-mousedown="addGroup($event,p.IdPerson,(g.IdGroup/l.Id))">
                                     <div layout="row">
                                         <div flex="70" class="slot-name">
                                             <div>{{p.ProductSlotName}}</div>
