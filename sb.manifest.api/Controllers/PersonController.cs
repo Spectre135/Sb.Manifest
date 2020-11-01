@@ -132,5 +132,24 @@ namespace sb.manifest.api.Controllers
 
         }
 
+        /// <summary>
+        /// Check exist email before insert new person
+        /// </summary>
+        /// <param name="email">email of person </param>
+        [HttpGet("person/email/exist")]
+        public IActionResult GetEmail(string email)
+        {
+            try
+            {
+                PersonService service = new PersonService();
+                return Ok(service.GetEmail(config, email));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+        }
+
+
     }
 }

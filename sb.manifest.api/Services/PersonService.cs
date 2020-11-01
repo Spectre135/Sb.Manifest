@@ -37,5 +37,11 @@ namespace sb.manifest.api.Services
             dao.SaveSkydiversGroup(config, groups);
 
         }
+        public MResponse GetEmail(IConfiguration config, string email)
+        {
+            using PersonDAO dao = new PersonDAO();
+            return dao.GetEmail(config, email);
+
+        }
     }
 }

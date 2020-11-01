@@ -10,6 +10,10 @@ namespace sb.manifest.api.SQL
         {
             return "SELECT * FROM v_person WHERE 1=1 "; //WHERE 1=1 ker dodajamo pogoje za search
         }
+        public static string GetPersonEmailSQL()
+        {
+            return "SELECT * FROM v_person WHERE Email = @Email "; //WHERE 1=1 ker dodajamo pogoje za search
+        }
         public static string GetInsertPersonSQL()
         {
             return @"INSERT INTO person

@@ -75,5 +75,13 @@ namespace sb.manifest.api.DAO
                 throw new Exception("Error SaveSkydiversGroup " + ex.Message, ex.InnerException);
             }
         }
+        public MResponse GetEmail(IConfiguration config, string email)
+        {
+            List<KeyValuePair<string, object>> alParmValues = new List<KeyValuePair<string, object>>
+            {
+                new KeyValuePair<string, object>("@Email", email)
+            };
+            return GetData<MPerson>(config, SQLBuilder.GetPersonEmailSQL(), alParmValues);
+        }
     }
 }

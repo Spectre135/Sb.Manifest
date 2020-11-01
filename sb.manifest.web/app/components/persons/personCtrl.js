@@ -138,6 +138,21 @@ app.controller('editPersonCtrl', function ($scope, $mdDialog, dataToPass, apiSer
         }];
     };
 
+    //check if email aready taken unique attribute in database
+    $scope.checkEmail = function () {
+        var url = config.manifestApi + '/person/email/exist';
+        var params = {
+            email: $scope.person.Email
+        };
+        var promise = apiService.getData(url, params, false)
+            .then(function (data) {
+                if (data.RowsCount>0){
+                    $scope.form.email.$setValidity('emailexist', false);
+                }
+            });
+        return promise;
+    };
+
 });
 
 app.controller('detailPersonCtrl', function ($scope, $state, $mdDialog, apiService, config) {

@@ -12,7 +12,8 @@ var app = angular.module('SbManifest', [
     'ngIntlTelInput',
     'ngCapsLock',
     'ngDragDrop',
-    'mdColorPicker'
+    'mdColorPicker',
+    'angular-inview'
 ]);
 
 app.run(function ($state, $rootScope, $q, $mdDialog, apiService) {

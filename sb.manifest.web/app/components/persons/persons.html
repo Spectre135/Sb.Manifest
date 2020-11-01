@@ -10,7 +10,7 @@
         <div layout="row">
             <div flex="70">
                 <md-button aria-label="Open menu" class="md-fab md-mini md-gray" ng-click="editPerson($event,{})">
-                    <md-tooltip md-direction="right">{{messages.addperson}}</md-tooltip>
+                    <md-tooltip md-direction="right">Add person</md-tooltip>
                     <span><i style="margin-left: 5px;" class="fas fa-user-plus font16"></i></span>
                 </md-button>
             </div>
@@ -65,31 +65,31 @@
                                 </md-button>
                                 <md-menu-content width="4">
                                     <md-menu-item>
-                                        <md-button ng-click="detailPerson(p)">
+                                        <md-button aria-label="Details" ng-click="detailPerson(p)">
                                             <span><i class="fas fa-info-circle"></i></span>
                                             &nbsp;&nbsp;Details
                                         </md-button>
                                     </md-menu-item>
                                     <md-menu-item>
-                                        <md-button ng-click="editPerson($event,p)">
+                                        <md-button aria-label="Edit" ng-click="editPerson($event,p)">
                                             <span><i class="fas fa-edit"></i></span>
                                             &nbsp;&nbsp;Edit
                                         </md-button>
                                     </md-menu-item>
                                     <md-menu-item>
-                                        <md-button>
+                                        <md-button aria-label="Delete">
                                             <span><i class="fas fa-trash-alt"></i></span>
                                             &nbsp;&nbsp;Delete
                                         </md-button>
                                     </md-menu-item>
                                     <md-menu-item ng-if="p.Balance<0">
-                                        <md-button ng-click="getInvoice($event,p)">
+                                        <md-button aria-label="Invoice" ng-click="getInvoice($event,p)">
                                             <span><i class="fas fa-file-invoice"></i></span>
                                             &nbsp;&nbsp;Invoice
                                         </md-button>
                                     </md-menu-item>
                                     <md-menu-item>
-                                        <md-button ng-click="purchase($event,p)">
+                                        <md-button aria-label="Purchase" ng-click="purchase($event,p)">
                                             <span><i class="fas fa-shopping-cart"></i></span>
                                             &nbsp;&nbsp;Purchase
                                         </md-button>

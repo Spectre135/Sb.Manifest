@@ -7,6 +7,7 @@
     "addPassenger" : "Add passenger to load",
     "addCustomer" : "Add new customer",
     "required" : "Field is required",
+    "emailexist" : "Email already exist !",
     "nomoreslots" : "There are not enought slots available!",
     "duplicatePassengerInLoad": "Duplicate passenger in load",
     "warning":"WARNING!",
