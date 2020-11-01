@@ -154,8 +154,9 @@
                 <md-progress-circular md-mode="indeterminate"></md-progress-circular>
             </div>
 
-            <md-card class="slot-card data-drag-on" data-drag="true" data-jqyoui-options="dragOptions"
-                ng-repeat="g in persons track by $index" ng-model="g[$index]"
+            <md-card class="slot-card data-drag-on"
+                data-drag="(persons[$index].AvailableFunds>0 || persons[$index].AvailableTickets>0)"
+                data-jqyoui-options="dragOptions" ng-repeat="g in persons track by $index" ng-model="g[$index]"
                 jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallbackAdd(g)', containment:'position'}">
                 <md-card-content>
                     <div class="slot" data-idperson="{{g.Id}}" ng-dblclick="selectPerson(g.Id)">

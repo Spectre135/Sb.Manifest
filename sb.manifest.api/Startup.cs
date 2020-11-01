@@ -31,12 +31,8 @@ namespace sb.manifest.api
             services.AddControllers().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();//drugaèe da lower case pri konvertiranju JSON objektov
-                options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;//prazne objekte ne kreiramo
             });
-                /*.AddJsonOptions(options =>
-            {
-                options.JsonSerializerOptions.IgnoreNullValues = true; //prazne objekte ne kreiramo
-            });*/
 
             services.AddHttpClient();
 
@@ -54,6 +50,26 @@ namespace sb.manifest.api
                     Title = "Skydive Bovec Manifest API",
                     Description = ""
                 });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please insert JWT token into field",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                   {
+                     new OpenApiSecurityScheme
+                     {
+                       Reference = new OpenApiReference
+                       {
+                         Type = ReferenceType.SecurityScheme,
+                         Id = "Bearer"
+                       }
+                      },
+                      new string[] { }
+                    }
+                  });
 
                 // Set the comments path for the Swagger JSON and UI.
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -70,21 +86,25 @@ namespace sb.manifest.api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                // Enable middleware to serve generated Swagger as a JSON endpoint.
+                /*
                 app.UseSwagger();
 
-                // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
                 // specifying the Swagger JSON endpoint.
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "SB manifest API");
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Skydive Bovec Manifest API");
                 });
+                */
             }
 
-            app.UseRouting();
+            app.UseSwagger();
 
-            //app.UseAuthentication();
-            //app.UseAuthorization();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Skydive Bovec Manifest API");
+            });
+
+            app.UseRouting();
 
             app.UseCors("SiteCorsPolicy");
 
