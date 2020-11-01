@@ -1107,6 +1107,10 @@ body.group-mode-on .slot-card {
   border-bottom-color: transparent;
 }
 
+.load.no-drop {
+  opacity: .5;
+}
+
 .slot .slot-name,
 .slot .profit {
   font-size: 11px;

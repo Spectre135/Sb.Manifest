@@ -352,7 +352,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
 
     $scope.getGroupClass = function (group, load) {
         var g = group / load;
-        //idGroupe pod 100 so skydvers groupe sestavljene IdLoad * gX
+        //idGroupe pod 100 so skydivers groupe sestavljene IdLoad * gX
         if (g < 100) {
             return 'group g' + g;
         }
@@ -372,26 +372,6 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         parent.toggleClass('refuel');
     };
 
-    //TODO directive
-    /*
-        $scope.isVisible = function (loadId) {
-            var el = angular.element('#load-card-l' + loadId);
-            var parent = angular.element('#loads-main md-content.loads');
-            var visible = checkVisible(el, parent);
-            console.log(visible);
-            return visible;
-        };
-
-        function checkVisible(el, parent) {
-            var parentWidth = parent.outerWidth();
-            var elementWidth = el.width();
-            var elementLeft = el.position().left;
-            var elementRight = elementLeft + elementWidth;
-
-            // na začetku mora biti vsaj 1/2 vidna, na koncu pa 2/3
-            return ((elementLeft > 0 - elementWidth / 2) && (elementRight - elementWidth / 3 < parentWidth));
-        };
-      */
     $scope.setInview = function (index, inview) {
         var item = {};
         item.Index = index;
@@ -414,7 +394,6 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             return false;
         }
     };
-
 });
 
 app.controller('confirmLoadCtrl', function ($scope, $state, $filter, $mdDialog, $window, dataToPass, apiService, config) {
