@@ -160,7 +160,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
                         'What would you like to move ?', 'group', 'person')
                     .then(function (result) {
                         $scope.moved.IdPerson = $scope.personsInGroup;;
-                    }).finally(function() {
+                    }).finally(function () {
                         return deferred.resolve();
                     });
 
@@ -416,34 +416,37 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
     function checkForOthersInGroup(item, idLoad) {
         $scope.personsInGroup = [];
         var response = false;
-        //find groups of load from
-        var loads = $filter('filter')($scope.loads, function (l) {
-            return l.Id == idLoad;
-        })[0].GroupList;
 
-        //return all persons with same IdPersonalGroup
-        if ($scope.IdPersonalGroup) {
-            var groups = $filter('filter')(loads, function (g) {
-                return g.IdPersonalGroup == $scope.IdPersonalGroup;
+        if (!$scope.dragToAdd) {
+            //find groups of load from
+            var loads = $filter('filter')($scope.loads, function (l) {
+                return l.Id == idLoad;
+            })[0].GroupList;
+
+            //return all persons with same IdPersonalGroup
+            if ($scope.IdPersonalGroup) {
+                var groups = $filter('filter')(loads, function (g) {
+                    return g.IdPersonalGroup == $scope.IdPersonalGroup;
+                });
+            }
+
+            //add to array all persons id for later save to DB
+            angular.forEach(groups, function (value, key) {
+                angular.forEach(value.LoadList, function (value, key) {
+                    $scope.personsInGroup.push(value.IdPerson);
+                    response = true;
+                });
             });
-        }
 
-        //add to array all persons id for later save to DB
-        angular.forEach(groups, function (value, key) {
-            angular.forEach(value.LoadList, function (value, key) {
-                $scope.personsInGroup.push(value.IdPerson);
-                response = true;
-            });
-        });
-
-        //if only selected person then we don't need to move group
-        if (response && $scope.personsInGroup.length==1){
-            response=false;
-        }
-        //before move all group we must check if are in load to if true we move only selected person
-        if (response) {
-            if (isInLoad(item, $scope.personsInGroup)) {
-                return false;
+            //if only selected person then we don't need to move group
+            if (response && $scope.personsInGroup.length == 1) {
+                response = false;
+            }
+            //before move all group we must check if are in load to if true we move only selected person
+            if (response) {
+                if (isInLoad(item, $scope.personsInGroup)) {
+                    return false;
+                }
             }
         }
 
