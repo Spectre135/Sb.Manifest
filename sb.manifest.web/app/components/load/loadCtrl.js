@@ -153,32 +153,40 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             $scope.moved.IdLoadFrom = $scope.loadMoveId;
             $scope.moved.IdLoadTo = item.Id;
 
-            //check if person in group
-            if (checkForOthersInGroup(item, $scope.loadMoveId)) {
-                //ask to remove all group
-                $rootScope.confirmDialog('Move',
-                        'What would you like to move ?', 'group', 'person')
-                    .then(function (result) {
-                        $scope.moved.IdPerson = $scope.personsInGroup;;
-                    }).finally(function () {
-                        return deferred.resolve();
+            //check if person exist in load
+            if (isInLoad(item, $scope.moved.IdPerson)) {                
+                $rootScope.confirmDialog($rootScope.messages.warning, $scope.PassengerMove + ' already In', 'ok')
+                    .then(function () {
+                        $scope.moved = {};
+                        $scope.moved.IdPerson = [];
+                        $mdDialog.hide();
+                    }, function () {
+                        $mdDialog.hide();
                     });
+            //check if person in group        
+            } else  if (checkForOthersInGroup($scope.loadMoveId)) {
+                //check if persons exists in load
+                    if (isInLoad(item, $scope.personsInGroup)) {
+                        $rootScope.confirmDialog('Move',
+                                'Whole group can not be moved, people already in load ' + item.Number +' !\nMove only ' + $scope.PassengerMove + ' ?', 'yes','no')
+                            .then(function (result) {
+                                return deferred.resolve();
+                            }).finally(function () {
+                                return deferred.reject();
+                            });
+                    } else {
+                        $rootScope.confirmDialog('Move',
+                                'What would you like to move ?', 'group', 'person')
+                            .then(function (result) {
+                                $scope.moved.IdPerson = $scope.personsInGroup;
+                            }).finally(function () {
+                                return deferred.resolve();
+                            });
+                    }
 
-            } else if (!isInLoad(item, $scope.moved.IdPerson)) {
+            }else { 
                 deferred.resolve();
-            } else {
-                var confirm = $mdDialog.alert()
-                    .title($rootScope.messages.warning)
-                    .textContent($scope.PassengerMove + ' already In')
-                    .ok('ok')
-                $mdDialog.show(confirm).then(function () {
-                    $scope.moved = {};
-                    $scope.moved.IdPerson = [];
-                    $mdDialog.hide();
-                }, function () {
-                    $mdDialog.hide();
-                });
-            }
+            } 
         }
         return deferred.promise;
     };
@@ -413,7 +421,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         } catch (err) {}
     };
 
-    function checkForOthersInGroup(item, idLoad) {
+    function checkForOthersInGroup(idLoad) {
         $scope.personsInGroup = [];
         var response = false;
 
@@ -442,12 +450,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             if (response && $scope.personsInGroup.length == 1) {
                 response = false;
             }
-            //before move all group we must check if are in load to if true we move only selected person
-            if (response) {
-                if (isInLoad(item, $scope.personsInGroup)) {
-                    return false;
-                }
-            }
+
         }
 
         return response;
