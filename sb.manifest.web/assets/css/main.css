@@ -1111,6 +1111,10 @@ body.group-mode-on .slot-card {
   opacity: .5;
 }
 
+.no-drag {
+  opacity: .5;
+}
+
 .slot .slot-name,
 .slot .profit {
   font-size: 11px;

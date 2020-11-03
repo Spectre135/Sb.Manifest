@@ -71,15 +71,15 @@
                     <div class="slots">
                         <md-card class="slot-card" data-drag="dataDrag" ng-class="dataDrag ? 'data-drag-on' : ''"
                             data-jqyoui-options="dragOptions"
-                            ng-repeat="g in l.GroupList | orderBy: 'DateOnLoad' track by $index"
+                            ng-repeat="g in l.GroupList | orderBy: ['IdPersonalGroup','DateOnLoad'] track by $index"
                             ng-model="l.GroupList[$index]"
-                            jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallback(g)',onStop:'stopCallback()'}"
+                            jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallback(g,l.Number)',onStop:'stopCallback()'}"
                             ng-hide="!g.IdGroup"
                             ng-style="{'background-color':g.BackgroundColor, 'border-color':g.BackgroundColor}">
                             <md-card-content>
-                                <div class="slot" ng-repeat="p in g.LoadList | orderBy: 'ProductSlotName'"
+                                <div class="slot" ng-repeat="p in g.LoadList | orderBy: ProductSlotName"
                                     data-idperson="{{p.IdPerson}}" ng-dblclick="selectPerson(p.IdPerson)"
-                                    ng-mousedown="addGroup($event,p.IdPerson,(g.IdGroup/l.Id))">
+                                    ng-mousedown="addGroup($event,p.IdPerson,g.IdPersonalGroup,l.Id)">
                                     <div layout="row">
                                         <div flex="70" class="slot-name">
                                             <div>{{p.ProductSlotName}}</div>
@@ -93,8 +93,8 @@
                                     <div layout="row" class="passenger">
                                         <div flex="70">
                                             <span class="name"><span class="group-placeholder">
-                                                    <span ng-if="(g.IdGroup/l.Id)<10"
-                                                        ng-class="getGroupClass(g.IdGroup,l.Id)">{{g.IdGroup/l.Id}}</span>
+                                                    <span ng-if="p.IdPersonalGroup"
+                                                        ng-class="getGroupClass(p.IdPersonalGroup)">{{p.IdPersonalGroup}}</span>
                                                 </span>{{p.Passenger}}</span>
                                         </div>
                                         <div flex="30" style="text-align: end;">
@@ -154,9 +154,9 @@
                 <md-progress-circular md-mode="indeterminate"></md-progress-circular>
             </div>
 
-            <md-card class="slot-card data-drag-on"
+            <md-card class="slot-card data-drag-on" ng-class="getClassLoadHelperPerson(g)"
                 data-drag="(persons[$index].AvailableFunds>0 || persons[$index].AvailableTickets>0)"
-                data-jqyoui-options="dragOptions" ng-repeat="g in persons track by $index" ng-model="g[$index]"
+                data-jqyoui-options="dragOptions" ng-repeat="g in persons | filter:searchText track by $index" ng-model="g[$index]"
                 jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallbackAdd(g)', containment:'position'}">
                 <md-card-content>
                     <div class="slot" data-idperson="{{g.Id}}" ng-dblclick="selectPerson(g.Id)">

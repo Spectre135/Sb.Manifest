@@ -60,9 +60,12 @@ app.run(function ($state, $rootScope, $q, $mdDialog, apiService) {
 
         $mdDialog.show(confirm).then(function () {
             return deferred.resolve();
-        }, function () {
+        }, function (error) {
+            return deferred.reject(error);
+        }).finally(function() {
             $mdDialog.hide();
         });
+        
         return deferred.promise;
     };
 

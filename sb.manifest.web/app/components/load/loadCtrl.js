@@ -14,13 +14,14 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
     $scope.moved = {}; //array when we move passengers between loads
     $scope.moved.IdPerson = []; //array when we move passengers between loads
     $scope.persons = [];
+    $scope.personsInGroup = [];
     $scope.dragToAdd = false; //to know if we must add person to load from side menu
     $scope.productList = [];
     $scope.selectedIdPerson;
     $scope.selectedGroup;
     $scope.dataDrag = true; //data drag flag 
     $scope.groups = [];
-    var visibleItems = [];
+    var visibleItems = []; //array of objects who are inview for drop disable 
 
     //getLoadList
     $scope.getLoadList = function () {
@@ -113,12 +114,12 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
     };
 
     //check if passenger is already in load  
-    function isInLoad(item) {
+    function isInLoad(load, idPerson) {
         try {
             var response = false;
-            angular.forEach(item.GroupList, function (value, key) {
+            angular.forEach(load.GroupList, function (value, key) {
                 angular.forEach(value.LoadList, function (value, key) {
-                    if ($.inArray(value.IdPerson, $scope.moved.IdPerson) > -1) {
+                    if ($.inArray(value.IdPerson, idPerson) > -1) {
                         response = true;
                     }
                 });
@@ -141,7 +142,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         if (item == -1) {
             $scope.moved.IdLoadFrom = $scope.loadMoveId;
             $rootScope.confirmDialog('Confirm remove',
-                    'You will remove ' + $scope.PassengerMove + '\n\rfrom Load ' + $scope.loadMoveId, 'Remove', 'Cancel')
+                    'You will remove ' + $scope.PassengerMove + '\n\rfrom Load ' + $scope.loadMove, 'Remove', 'Cancel')
                 .then(function onSuccess(result) {
                     return deferred.resolve();
                 });
@@ -152,7 +153,18 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             $scope.moved.IdLoadFrom = $scope.loadMoveId;
             $scope.moved.IdLoadTo = item.Id;
 
-            if (!isInLoad(item)) {
+            //check if person in group
+            if (checkForOthersInGroup(item, $scope.loadMoveId)) {
+                //ask to remove all group
+                $rootScope.confirmDialog('Move',
+                        'What would you like to move ?', 'group', 'person')
+                    .then(function (result) {
+                        $scope.moved.IdPerson = $scope.personsInGroup;;
+                    }).finally(function() {
+                        return deferred.resolve();
+                    });
+
+            } else if (!isInLoad(item, $scope.moved.IdPerson)) {
                 deferred.resolve();
             } else {
                 var confirm = $mdDialog.alert()
@@ -172,12 +184,13 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
     };
 
     //when we start drag item to know what item
-    $scope.startCallback = function (event, ui, item) {
+    $scope.startCallback = function (event, ui, item, idLoad) {
         $scope.PassengerMove = [];
         $scope.moved.IdPerson = [];
         angular.forEach(item.LoadList, function (value, key) {
-            $scope.loadMove = value.Number;
+            $scope.loadMove = idLoad;
             $scope.loadMoveId = value.Id;
+            $scope.IdPersonalGroup = item.IdPersonalGroup;
             $scope.moved.IdPerson.push(value.IdPerson);
             $scope.PassengerMove.push(value.Passenger);
         });
@@ -260,7 +273,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         var url = config.manifestApi + '/load/active/today';
         var promise = apiService.getData(url, null, false)
             .then(function (data) {
-                $scope.persons = noDuplicatesId($scope.persons.concat(data.DataList));
+                $scope.persons = data.DataList;
             }).finally(function () {
                 self.working = false;
             });
@@ -310,7 +323,6 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         }
     };
 
-
     $scope.selectGroup = function (group) {
         if ($scope.selectedGroup >= 0) {
             var g = angular.element('#loads-helper-groups .group.g' + $scope.selectedGroup);
@@ -331,13 +343,13 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         }
     };
 
-
-    $scope.addGroup = function ($event, idPerson, idGroup) {
+    $scope.addGroup = function ($event, idPerson, idGroup, idLoad) {
         if ($scope.selectedGroup >= 0) {
             //groups are saved to database after unselect group
             var group = {};
             group.IdPerson = idPerson;
             group.IdGroup = (idGroup == $scope.selectedGroup) ? 0 : $scope.selectedGroup; //če je že izbran damo 0 
+            group.IdLoad = idLoad;
             $scope.groups.push(group);
             var g = angular.element($event.currentTarget).find('.passenger .group-placeholder');
             var html = '<span class="group g' + $scope.selectedGroup + '">' + $scope.selectedGroup + '</span>';
@@ -350,12 +362,8 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         }
     };
 
-    $scope.getGroupClass = function (group, load) {
-        var g = group / load;
-        //idGroupe pod 100 so skydivers groupe sestavljene IdLoad * gX
-        if (g < 100) {
-            return 'group g' + g;
-        }
+    $scope.getGroupClass = function (group) {
+        return 'group g' + group;
     };
 
     //api to save selected group to database
@@ -366,6 +374,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             $scope.getLoadList();
         });
     };
+
     $scope.refuel = function ($event) {
         var el = angular.element($event.currentTarget);
         var parent = el.parent().parent();
@@ -393,6 +402,52 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         } catch (err) {
             return false;
         }
+    };
+
+    $scope.getClassLoadHelperPerson = function (p) {
+        try {
+            if ((p.AvailableFunds <= 0 || p.AvailableFunds == null) && (p.AvailableTickets == null || p.AvailableTickets == 0)) {
+                return 'no-drag';
+            }
+
+        } catch (err) {}
+    };
+
+    function checkForOthersInGroup(item, idLoad) {
+        $scope.personsInGroup = [];
+        var response = false;
+        //find groups of load from
+        var loads = $filter('filter')($scope.loads, function (l) {
+            return l.Id == idLoad;
+        })[0].GroupList;
+
+        //return all persons with same IdPersonalGroup
+        if ($scope.IdPersonalGroup) {
+            var groups = $filter('filter')(loads, function (g) {
+                return g.IdPersonalGroup == $scope.IdPersonalGroup;
+            });
+        }
+
+        //add to array all persons id for later save to DB
+        angular.forEach(groups, function (value, key) {
+            angular.forEach(value.LoadList, function (value, key) {
+                $scope.personsInGroup.push(value.IdPerson);
+                response = true;
+            });
+        });
+
+        //if only selected person then we don't need to move group
+        if (response && $scope.personsInGroup.length==1){
+            response=false;
+        }
+        //before move all group we must check if are in load to if true we move only selected person
+        if (response) {
+            if (isInLoad(item, $scope.personsInGroup)) {
+                return false;
+            }
+        }
+
+        return response;
     };
 });
 

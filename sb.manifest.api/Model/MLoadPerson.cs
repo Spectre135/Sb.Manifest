@@ -13,6 +13,7 @@ namespace sb.manifest.api.Model
         public decimal Profit { get; set; }
         public int AvailableTickets { get; set; }
         public int IdGroup { get; set; }
+        public int? IdPersonalGroup { get; set; }
         public string BackgroundColor { get; set; }
 
     }

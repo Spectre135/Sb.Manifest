@@ -65,6 +65,9 @@ namespace sb.manifest.api.Model
         [DataField("IdGroup")]
         public int IdGroup { get; set; }
 
+        [DataField("IdPersonalGroup")]
+        public int? IdPersonalGroup { get; set; }
+
         [DataField("BackgroundColor")]
         public string BackgroundColor { get; set; }
 

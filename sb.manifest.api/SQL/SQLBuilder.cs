@@ -58,13 +58,15 @@ namespace sb.manifest.api.SQL
         }
         public static string GetSaveSkydiversGroupSQL()
         {
-            return @"DELETE FROM SkydiversGroup where IdPerson = @IdPerson;
+            return @"DELETE FROM SkydiversGroup where IdPerson = @IdPerson and IdLoad=@IdLoad;
                      INSERT INTO SkydiversGroup (
                                IdGroup,
-                               IdPerson
+                               IdPerson,
+                               IdLoad
                            )
-                           SELECT @IdGroup IdGroup,
-                                  @IdPerson IdPerson
+                           SELECT @IdGroup  IdGroup,
+                                  @IdPerson IdPerson,
+                                  @IdLoad   IdLoad
                             WHERE IdGroup != 0;";
 
         }
@@ -170,7 +172,15 @@ namespace sb.manifest.api.SQL
         }
         public static string GetMoveSlotSQL()
         {
-            return @"UPDATE OnLoad set IdLoad = @IdLoadTo,Date=datetime('now', 'localtime') WHERE IdPerson = @IdPerson AND IdLoad = @IdLoadFrom";
+            return @"UPDATE onload 
+                     SET    idload = @IdLoadTo, 
+                            date = Datetime('now', 'localtime') 
+                     WHERE  idperson = @IdPerson 
+                            AND idload = @IdLoadFrom;
+                     UPDATE skydiversgroup
+                     SET    idload = @IdLoadTo
+                     WHERE  idperson = @IdPerson
+                            AND idload = @IdLoadFrom;";
         }
         public static string GetRemoveSlotSQL()
         {

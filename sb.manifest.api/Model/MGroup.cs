@@ -9,10 +9,14 @@ namespace sb.manifest.api.Model
     {
         [ParamField("IdGroup")]
         public int IdGroup { get; set; }
+        public int? IdPersonalGroup { get; set; }
 
         [ParamField("IdPerson")]
-        public int? IdPerson { get; set; } //used only when add to skydivers group
-        
+        public int? IdPerson { get; set; } //used only when add skydivers in personal group
+
+        [ParamField("IdLoad")]
+        public int? IdLoad { get; set; } //used only when add skydivers in personal group
+
         public string BackgroundColor { get; set; }
         
         public DateTime? DateOnLoad { get; set; }
