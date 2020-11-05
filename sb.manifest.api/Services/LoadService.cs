@@ -1,12 +1,15 @@
 ﻿#region using
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using sb.manifest.api.DAO;
+using sb.manifest.api.Hubs;
 using sb.manifest.api.Model;
 using sb.manifest.api.SQL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 #endregion
 
 namespace sb.manifest.api.Services
@@ -19,7 +22,7 @@ namespace sb.manifest.api.Services
             return dao.GetLoads(config);
 
         }
-        public MResponse GetLoadList(IConfiguration config)
+        public MResponse GetLoadList(IConfiguration config, IHubContext<DisplayHub> hubContext)
         {
             MResponse mResponse = new MResponse();
             List<MLoad> loadlist = new List<MLoad>();
@@ -68,8 +71,10 @@ namespace sb.manifest.api.Services
                     load.SlotsLeft = load.MaxSlots - slots;
                 }
             }
-
+            
             mResponse.DataList = loadlist;
+
+            HubService.SendLoadList(mResponse, hubContext);
 
             return mResponse;
         }

@@ -1,0 +1,1 @@
+"use strict";var app=angular.module("SbManifest",["ui.router","ngMaterial","ngMessages"]);app.run((function($state,$rootScope,apiService){window.myAppErrorLog=[],$state.defaultErrorHandler((function(error){window.myAppErrorLog.push(error)})),null===sessionStorage.getItem("Authorization")&&$state.go("prijava")}));

@@ -1,0 +1,62 @@
+<div ng-if="showLoadList" id="loads-main">
+    <md-content class="md-padding loads" layout-xs="column" layout="row">
+        <div flex-xs class="load-flex-container" layout="column" ng-repeat="l in loads | orderBy: 'Id' track by $index">
+            <md-card  class="load"
+                ng-class="[l.SlotsLeft > 0 ? '' : l.SlotsLeft == 0 ? 'full' : 'overbooked']" ng-model="l.GroupList">
+                <div layout="row" class="load-top">
+                    <div flex="35" class="slots-left">
+                        <span class="value">{{l.SlotsLeft}}</span>
+                        <span class="label-small">slots</span>
+                    </div>
+                    <div flex="65" class="time-left" ng-class="($index % 2 == 1) ? 'refuel' : ''">
+                        <div style="display: inline;">
+                            <i class="fas fa-plane-departure btn-no-refuel"></i>
+                        </div>
+                        <div class="time">
+                            <i class="fas fa-gas-pump btn-refuel"></i>
+                            <span class="value">{{l.IdAircraft * 2 + l.Number * 20}}</span>
+                            <span class="label-small">min</span>
+                        </div>
+                    </div>
+                </div>
+
+                <md-card-title style="padding: 8px;">
+                    <md-card-title-text>
+                        <div class="md-headline blue">{{l.AircraftName}} <b>{{l.Number}}</b>
+                            <b style="display: block;">{{l.Description}}</b></div>
+                        <span class="md-subhead">{{l.AircraftType}} <b
+                                style="display: inline-block;">{{l.AircraftRegistration}}</b></span>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card-content style="padding: 0">
+                    <div class="slots">
+                        <md-card class="slot-card"  
+                            ng-repeat="g in l.GroupList | orderBy: ['IdPersonalGroup','DateOnLoad'] track by $index"
+                            ng-model="l.GroupList[$index]" ng-hide="!g.IdGroup"
+                            ng-style="{'background-color':g.BackgroundColor, 'border-color':g.BackgroundColor}">
+                            <md-card-content>
+                                <div class="slot" ng-repeat="p in g.LoadList | orderBy: ProductSlotName">
+                                    <div layout="row">
+                                         <div>{{p.ProductSlotName}}</div>
+                                    </div>
+                                    <div layout="row" class="passenger">
+                                            <span class="name"><span class="group-placeholder">
+                                                    <span ng-if="p.IdPersonalGroup"
+                                                        ng-class="getGroupClass(p.IdPersonalGroup)">{{p.IdPersonalGroup}}</span>
+                                                </span>{{p.Passenger}}</span>
+                                    </div>
+                                </div>
+                            </md-card-content>
+                        </md-card>
+                    </div>
+                </md-card-content>
+            </md-card>
+        </div>
+    </md-content>
+</div>
+
+<div ng-if="showPic">
+<img ng-src="{{pic}}"/>
+</div>
+
+<div ng-init="init()"></div>

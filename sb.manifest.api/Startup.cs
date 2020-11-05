@@ -6,9 +6,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
+using sb.manifest.api.Hubs;
 using System;
 using System.IO;
+using System.Net;
 using System.Reflection;
+using System.Text.Json;
 #endregion
 
 namespace sb.manifest.api
@@ -24,10 +27,7 @@ namespace sb.manifest.api
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddCors(options => options.AddPolicy("SiteCorsPolicy", p => p.AllowAnyOrigin()
-                                                                                  .AllowAnyMethod()
-                                                                                  .AllowAnyHeader()));
+        {         
             services.AddControllers().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();//drugaèe da lower case pri konvertiranju JSON objektov
@@ -77,6 +77,20 @@ namespace sb.manifest.api
                 c.IncludeXmlComments(xmlPath);
             });
 
+            services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
+            {
+                builder
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowAnyOrigin();
+            }));
+
+            //SignalR service
+            services.AddSignalR().AddJsonProtocol(options =>
+            {
+                options.PayloadSerializerOptions.PropertyNamingPolicy = null; //PascalCase serialization 
+                options.PayloadSerializerOptions.IgnoreNullValues = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -104,16 +118,18 @@ namespace sb.manifest.api
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Skydive Bovec Manifest API");
             });
 
-            app.UseRouting();
+            app.UseCors("CorsPolicy");
 
-            app.UseCors("SiteCorsPolicy");
+            app.UseRouting();
 
             app.UseResponseCompression();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<DisplayHub>("/display");
             });
+
         }
 
     }

@@ -1,9 +1,10 @@
 ﻿#region using
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using sb.manifest.api.Filter;
+using sb.manifest.api.Hubs;
 using sb.manifest.api.Model;
 using sb.manifest.api.Services;
 using System;
@@ -17,9 +18,12 @@ namespace sb.manifest.api.Controllers
     public class LoadController : ControllerBase
     {
         private readonly IConfiguration config;
-        public LoadController(IConfiguration configuration)
+        private readonly IHubContext<DisplayHub> hubContext;
+
+        public LoadController(IConfiguration configuration, IHubContext<DisplayHub> _hubContext)
         {
             config = configuration;
+            hubContext = _hubContext;
         }
 
         /// <summary>
@@ -49,7 +53,7 @@ namespace sb.manifest.api.Controllers
             try
             {
                 LoadService service = new LoadService();
-                return Ok(service.GetLoadList(config));
+                return Ok(service.GetLoadList(config, hubContext));
 
             }
             catch (Exception ex)

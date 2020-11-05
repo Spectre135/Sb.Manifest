@@ -1,0 +1,49 @@
+body,
+html {
+  height: 100%;
+}
+.c-white {
+  color: #fff;
+}
+.card-prijava {
+  max-width: 400px;
+  -webkit-box-shadow: 2px 2px 3px 0px rgba(229, 229, 229, 1);
+  -moz-box-shadow: 2px 2px 3px 0px rgba(229, 229, 229, 1);
+  box-shadow: 2px 2px 3px 0px rgba(229, 229, 229, 1);
+}
+
+.card {
+  border: 1px solid rgba(229, 229, 229, 1);
+}
+
+.pb-50 {
+  padding-bottom: 40%;
+}
+.btn-primary {
+  border-block: rgba(0, 102, 188, 1);
+  color: #fff;
+  background-color: rgba(0, 102, 188, 1);
+}
+
+.btn-block {
+  display: block;
+  width: 100%;
+}
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.line {
+  flex: 1;
+}
+
+.dividertext {
+  padding-left: 10px;
+  padding-right: 10px;
+  color: rgba(0, 0, 0, 0.38);
+  font-size: 14px;
+}

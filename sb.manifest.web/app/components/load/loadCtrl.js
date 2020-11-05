@@ -5,11 +5,6 @@ var app = angular.module('SbManifest');
 app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $mdDialog, $mdSidenav, apiService, config) {
 
     $scope.loads;
-    $scope.query = {
-        order: '',
-        limit: 5,
-        page: 1
-    };
     $scope.rows;
     $scope.moved = {}; //array when we move passengers between loads
     $scope.moved.IdPerson = []; //array when we move passengers between loads

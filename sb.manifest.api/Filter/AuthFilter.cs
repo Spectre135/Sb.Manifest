@@ -35,7 +35,7 @@ namespace sb.manifest.api.Filter
             return;
 
         }
-        private static bool ValidateToken(string token)
+        public static bool ValidateToken(string token)
         {
             var simplePrinciple = JwtManager.GetPrincipal(token);
 

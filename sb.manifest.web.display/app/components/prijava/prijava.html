@@ -1,0 +1,61 @@
+<div class="container d-flex" style="padding-top: 7%;">
+    <div class="row no-gutters align-self-center w-100">
+        <div class="col-12 mx-auto">
+            <div class="card card-prijava mx-auto">
+                <div class="card-header bg-blue">
+                    <div class="row no-gutters">
+                        <div style="width: 80%; text-align: left;">
+                            <h3 class="c-white">
+                                <span id="app-txt">Skydive Bovec</span>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form name="form" id="prijava">
+
+                        <md-input-container class="md-icon-float md-block" style="width: 100%;">
+                            <label>Username</label>
+                            <md-icon class="name"><i class="fas fa-user"></i></md-icon>
+                            <input required type="text" ng-model="user.Username" name="username"
+                                autocomplete="off" onfocus="this.removeAttribute('readonly');" readonly />
+                            <div ng-messages="form.username.$error" role="alert">
+                                <div ng-message="required">Polje je obvezno.</div>
+                            </div>
+                        </md-input-container>
+
+                        <md-input-container class="md-icon-float md-block" style="width: 100%;">
+                            <label>Password</label>
+                            <md-icon class="name"><i class="fas fa-key"></i></md-icon>
+                            <input required type="password" ng-model="user.Password" on-enter="Login()" name="password"
+                                autocomplete="off" onfocus="this.removeAttribute('readonly');" readonly>
+                            <div ng-messages="form.password.$error" role="alert">
+                                <div ng-message="required">Polje je obvezno.</div>
+                            </div>
+                            <p class="caps-lock-alert" style="color:green" ng-show='isCapsLockOn'>Vklopljene velike
+                                &#269;rke</p>
+                        </md-input-container>
+
+                        <div ng-show="response" class="alert alert-danger" role="alert">
+                            {{response}}
+                        </div>
+
+                        <div ng-show="success" class="alert alert-success" role="alert">
+                            {{success}}
+                        </div>
+
+                        <div id="blank" class="row align-items-center">
+                            <label>&nbsp;</label>
+                        </div>
+
+                        <div class="row align-items-center">
+
+                            <md-button class="md-raised md-primary" style="width: 100%;font-size: 16px;padding:2px"
+                                ng-disabled="(working || form.$invalid)" ng-click="Login()">{{prijava}}</md-button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
