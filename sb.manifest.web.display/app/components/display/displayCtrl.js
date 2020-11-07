@@ -71,16 +71,21 @@ app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
     };
 
     function BodyOnKeyDown(e) {
-        // plus, minus, numpad plus, numpad minus
-        if ([107, 109, 187, 189].includes(e.which)) {
+        // D, plus, minus, numpad plus, numpad minus
+        if ([68, 107, 109, 187, 189].includes(e.which)) {
 
             const html = angular.element('html')[0];
             let fontSize = new Number(html.style.fontSize.replace('%', ''));
 
-            if (e.which == 187 || e.which == 107)
+            // plus
+            if (e.which == 107 || e.which == 187)
                 fontSize += .1;
-            else if (e.which == 189 || e.which == 109)
+            // minus
+            else if (e.which == 109 || e.which == 189)
                 fontSize -= .1;
+            // default
+            else if (e.which == 68)
+                fontSize = 6.25;
 
             html.style.fontSize = fontSize + '%';
 
