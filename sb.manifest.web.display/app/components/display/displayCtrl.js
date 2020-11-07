@@ -93,15 +93,31 @@ app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
             // minus, numpad minus
             else if ([109, 189].includes(e.which))
                 fontSize -= .1;
-            // 4, numpad 4 (4 columns on 1920px wide screen)
-            else if ([52, 100].includes(e.which))
-                fontSize = 10.65;
-            // 5, numpad 5 (5 columns on 1920px wide screen)
-            else if ([53, 101].includes(e.which))
-                fontSize = 8.55;
-            // 6, numpad 6 (6 columns on 1920px wide screen)
-            else if ([54, 102].includes(e.which))
-                fontSize = 7.15;
+
+            else if ([52, 100, 53, 101, 54, 102].includes(e.which)) {
+                let cols = 0;
+                // 4, numpad 4 (4 columns)
+                if ([52, 100].includes(e.which))
+                    cols = 4;
+                // 5, numpad 5 (5 columns)
+                else if ([53, 101].includes(e.which))
+                    cols = 5;
+                // 6, numpad 6 (6 columns)
+                else if ([54, 102].includes(e.which))
+                    cols = 6;
+
+                fontSize = 6.25 * document.body.clientWidth / ((cols * 280) + 8);
+
+                // // 4, numpad 4 (4 columns on 1920px wide screen)
+                // if ([52, 100].includes(e.which))
+                //     fontSize = 10.65;
+                // // 5, numpad 5 (5 columns on 1920px wide screen)
+                // else if ([53, 101].includes(e.which))
+                //     fontSize = 8.55;
+                // // 6, numpad 6 (6 columns on 1920px wide screen)
+                // else if ([54, 102].includes(e.which))
+                //     fontSize = 7.15;
+            }
 
             html.style.fontSize = fontSize + '%';
 

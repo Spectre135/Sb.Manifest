@@ -985,10 +985,6 @@ md-card {
   box-shadow   : initial;
 }
 
-.load-flex-container:last-child > md-card {
-  margin: 8rem 8rem 0 8rem;
-}
-
 md-content {
   background-color: initial;
 }
@@ -1011,6 +1007,10 @@ md-content {
 #loads-main .load-flex-container {
   flex-shrink: 0;
   width      : 280rem;
+}
+
+#loads-main .load-flex-container:last-child {
+  margin: 0 8rem 0 0;
 }
 
 #loads-main .load-flex-container.btn-add-load>.md-button i.fas {
