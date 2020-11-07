@@ -70,7 +70,27 @@ app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
         return 'group g' + (group || 0);
     };
 
+    function BodyOnKeyDown(e) {
+        // plus, minus, numpad plus, numpad minus
+        if ([107, 109, 187, 189].includes(e.which)) {
+
+            const html = angular.element('html')[0];
+            let fontSize = new Number(html.style.fontSize.replace('%', ''));
+
+            if (e.which == 187 || e.which == 107)
+                fontSize += .1;
+            else if (e.which == 189 || e.which == 109)
+                fontSize -= .1;
+
+            html.style.fontSize = fontSize + '%';
+
+            //TODO fontSize bi se lahko pisal v bazo
+        }
+    };
+
     $scope.init = function () {
         getLoadList();
+
+        document.body.onkeydown = function (e) { BodyOnKeyDown(e); };
     };
 });
