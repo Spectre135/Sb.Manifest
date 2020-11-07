@@ -77,7 +77,7 @@
                             ng-hide="!g.IdGroup"
                             ng-style="{'background-color':g.BackgroundColor, 'border-color':g.BackgroundColor}">
                             <md-card-content>
-                                <div class="slot" ng-repeat="p in g.LoadList | orderBy: ProductSlotName"
+                                <div class="slot" ng-repeat="p in g.LoadList | orderBy: 'ProductSlotName'"
                                     data-idperson="{{p.IdPerson}}" ng-dblclick="selectPerson(p.IdPerson)"
                                     ng-mousedown="addGroup($event, p, l.Id)">
                                     <div layout="row">

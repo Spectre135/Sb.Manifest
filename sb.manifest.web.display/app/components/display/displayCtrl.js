@@ -6,9 +6,11 @@ app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
     $scope.loads;
     $scope.connected = false;
     $scope.showLoadList = true;
-    $scope.showPic =false;
+    $scope.showPic = false;
     $scope.pic = 'pictures/1.jpg';
-    var refresh = 10000;
+    const displayTime = 60 * 1000; //60 sec za load listo
+    const picTime = 5 * 1000; //5 sec za reklame 
+    let refresh = displayTime;
 
     //call swap after 10sec 
     setTimeout(swap, refresh);
@@ -20,14 +22,14 @@ app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
             $scope.showLoadList = !$scope.showLoadList;
         });
         if ($scope.showPic) {
-            refresh = 5000; //5 sec za reklame 
+            refresh = picTime;
             setTimeout(swap, refresh);
         } else {
-            refresh = 10000; //10 sec za load listo
+            refresh = displayTime;
             setTimeout(swap, refresh);
         }
     };
-    
+
     //getLoadList after init
     function getLoadList() {
         var params = {};
@@ -65,7 +67,7 @@ app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
     });
 
     $scope.getGroupClass = function (group) {
-        return 'group g' + group;
+        return 'group g' + (group || 0);
     };
 
     $scope.init = function () {
