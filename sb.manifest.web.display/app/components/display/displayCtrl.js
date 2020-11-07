@@ -71,21 +71,37 @@ app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
     };
 
     function BodyOnKeyDown(e) {
-        // D, plus, minus, numpad plus, numpad minus
-        if ([68, 107, 109, 187, 189].includes(e.which)) {
+
+        // D, F, plus, minus, 4, 5, 6
+        if ([68, 70, 52, 100, 53, 101, 54, 102, 107, 109, 187, 189].includes(e.which)) {
 
             const html = angular.element('html')[0];
             let fontSize = new Number(html.style.fontSize.replace('%', ''));
-
-            // plus
-            if (e.which == 107 || e.which == 187)
-                fontSize += .1;
-            // minus
-            else if (e.which == 109 || e.which == 189)
-                fontSize -= .1;
-            // default
+            // F = toggle fullscreen  
+            if (e.which == 70) {
+                if (!document.fullscreenElement)
+                    document.documentElement.requestFullscreen();
+                else if (document.exitFullscreen)
+                    document.exitFullscreen();
+            }
+            // D = default
             else if (e.which == 68)
                 fontSize = 6.25;
+            // plus, numpad plus
+            else if ([107, 187].includes(e.which))
+                fontSize += .1;
+            // minus, numpad minus
+            else if ([109, 189].includes(e.which))
+                fontSize -= .1;
+            // 4, numpad 4 (4 columns on 1920px wide screen)
+            else if ([52, 100].includes(e.which))
+                fontSize = 10.65;
+            // 5, numpad 5 (5 columns on 1920px wide screen)
+            else if ([53, 101].includes(e.which))
+                fontSize = 8.55;
+            // 6, numpad 6 (6 columns on 1920px wide screen)
+            else if ([54, 102].includes(e.which))
+                fontSize = 7.15;
 
             html.style.fontSize = fontSize + '%';
 
