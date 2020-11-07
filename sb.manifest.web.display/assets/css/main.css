@@ -985,7 +985,7 @@ md-card {
   box-shadow   : initial;
 }
 
-load-flex-container:last-child md-card {
+.load-flex-container:last-child > md-card {
   margin: 8rem 8rem 0 8rem;
 }
 
