@@ -64,7 +64,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () {});
+        }).catch(function () { });
     };
 
     //confirm load
@@ -83,7 +83,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () {});
+        }).catch(function () { });
     };
 
     //add/edit Load
@@ -105,7 +105,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () {});;
+        }).catch(function () { });;
     };
 
     //check if passenger is already in load  
@@ -120,7 +120,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
                 });
             });
             return response;
-        } catch (err) {}
+        } catch (err) { }
     };
 
     //before drop item we show confirmation dialog
@@ -137,7 +137,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         if (item == -1) {
             $scope.moved.IdLoadFrom = $scope.loadMoveId;
             $rootScope.confirmDialog('Confirm remove',
-                    'You will remove ' + $scope.PassengerMove + '\n\rfrom Load ' + $scope.loadMove, 'Remove', 'Cancel')
+                'You will remove ' + $scope.PassengerMove + '\n\rfrom Load ' + $scope.loadMove, 'Remove', 'Cancel')
                 .then(function onSuccess(result) {
                     return deferred.resolve();
                 });
@@ -149,7 +149,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
             $scope.moved.IdLoadTo = item.Id;
 
             //check if person exist in load
-            if (isInLoad(item, $scope.moved.IdPerson)) {                
+            if (isInLoad(item, $scope.moved.IdPerson)) {
                 $rootScope.confirmDialog($rootScope.messages.warning, $scope.PassengerMove + ' already In', 'ok')
                     .then(function () {
                         $scope.moved = {};
@@ -158,30 +158,30 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
                     }, function () {
                         $mdDialog.hide();
                     });
-            //check if person in group        
-            } else  if (checkForOthersInGroup($scope.loadMoveId)) {
+                //check if person in group        
+            } else if (checkForOthersInGroup($scope.loadMoveId)) {
                 //check if persons exists in load
-                    if (isInLoad(item, $scope.personsInGroup)) {
-                        $rootScope.confirmDialog('Move',
-                                'Whole group can not be moved, people already in load ' + item.Number +' !\nMove only ' + $scope.PassengerMove + ' ?', 'yes','no')
-                            .then(function (result) {
-                                return deferred.resolve();
-                            }).finally(function () {
-                                return deferred.reject();
-                            });
-                    } else {
-                        $rootScope.confirmDialog('Move',
-                                'What would you like to move ?', 'group', 'person')
-                            .then(function (result) {
-                                $scope.moved.IdPerson = $scope.personsInGroup;
-                            }).finally(function () {
-                                return deferred.resolve();
-                            });
-                    }
+                if (isInLoad(item, $scope.personsInGroup)) {
+                    $rootScope.confirmDialog('Move',
+                        'Whole group can not be moved, people already in load ' + item.Number + ' !\nMove only ' + $scope.PassengerMove + ' ?', 'yes', 'no')
+                        .then(function (result) {
+                            return deferred.resolve();
+                        }).finally(function () {
+                            return deferred.reject();
+                        });
+                } else {
+                    $rootScope.confirmDialog('Move',
+                        'What would you like to move ?', 'group', 'person')
+                        .then(function (result) {
+                            $scope.moved.IdPerson = $scope.personsInGroup;
+                        }).finally(function () {
+                            return deferred.resolve();
+                        });
+                }
 
-            }else { 
+            } else {
                 deferred.resolve();
-            } 
+            }
         }
         return deferred.promise;
     };
@@ -202,7 +202,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         loadBin.addClass('visible');
     };
 
-    $scope.stopCallback = function (event, ui, ) {
+    $scope.stopCallback = function (event, ui,) {
         var loadBin = angular.element('.load-bin.visible');
         loadBin.removeClass('visible');
     };
@@ -346,22 +346,39 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         }
     };
 
-    $scope.addGroup = function ($event, idPerson, idGroup, idLoad) {
+    $scope.addGroup = function ($event, personModel, idLoad) {
+        //groups are saved to database after unselect group
+
         if ($scope.selectedGroup >= 0) {
-            //groups are saved to database after unselect group
-            var group = {};
-            group.IdPerson = idPerson;
-            group.IdGroup = (idGroup == $scope.selectedGroup) ? 0 : $scope.selectedGroup; //če je že izbran damo 0 
-            group.IdLoad = idLoad;
-            $scope.groups.push(group);
-            var g = angular.element($event.currentTarget).find('.passenger .group-placeholder');
-            var html = '<span class="group g' + $scope.selectedGroup + '">' + $scope.selectedGroup + '</span>';
-            //če je idGroup iz baze enak označenemu ga odznačimo
-            if ($scope.selectedGroup > 0 && g.html() != html && idGroup != $scope.selectedGroup) {
-                g.html(html);
-            } else {
+            const idGroup = (personModel.IdPersonalGroup == $scope.selectedGroup) ? 0 : $scope.selectedGroup //če je že izbran damo 0 
+
+            // poiščemo zapis v groups
+            let index = $scope.groups.findIndex(g =>
+                g.IdPerson == personModel.IdPerson &&
+                g.IdLoad == idLoad);
+
+            // če zapisa še ni, ga ustvarimo
+            if (index == -1) {
+                $scope.groups.push({
+                    IdPerson: personModel.IdPerson,
+                    IdLoad: idLoad
+                });
+                index = $scope.groups.length - 1;
+            }
+
+            const g = angular.element($event.currentTarget).find('.passenger .group-placeholder');
+            //če je idGroup drugačen, označimo, sicer odznačimo
+            if ($scope.selectedGroup > 0 && personModel.IdPersonalGroup != $scope.selectedGroup) {
+                $scope.groups[index].IdGroup = idGroup;
+                g.html('<span class="group g' + $scope.selectedGroup + '">' + $scope.selectedGroup + '</span>');
+            }
+            else {
+                $scope.groups[index].IdGroup = 0;
                 g.html('');
             }
+
+            // nastavimo grupo v person modelu
+            personModel.IdPersonalGroup = idGroup;
         }
     };
 
@@ -413,7 +430,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
                 return 'no-drag';
             }
 
-        } catch (err) {}
+        } catch (err) { }
     };
 
     function checkForOthersInGroup(idLoad) {

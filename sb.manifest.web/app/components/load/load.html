@@ -79,7 +79,7 @@
                             <md-card-content>
                                 <div class="slot" ng-repeat="p in g.LoadList | orderBy: ProductSlotName"
                                     data-idperson="{{p.IdPerson}}" ng-dblclick="selectPerson(p.IdPerson)"
-                                    ng-mousedown="addGroup($event,p.IdPerson,g.IdPersonalGroup,l.Id)">
+                                    ng-mousedown="addGroup($event, p, l.Id)">
                                     <div layout="row">
                                         <div flex="70" class="slot-name">
                                             <div>{{p.ProductSlotName}}</div>
@@ -94,8 +94,7 @@
                                         <div flex="70">
                                             <span class="name"><span class="group-placeholder">
                                                     <span ng-if="p.IdPersonalGroup"
-                                                        ng-class="getGroupClass(p.IdPersonalGroup)">{{p.IdPersonalGroup}}</span>
-                                                </span>{{p.Passenger}}</span>
+                                                        ng-class="getGroupClass(p.IdPersonalGroup)">{{p.IdPersonalGroup}}</span></span>{{p.Passenger}}</span>
                                         </div>
                                         <div flex="30" style="text-align: end;">
                                             <span class="tickets" ng-if="p.AvailableTickets > 0">
@@ -156,7 +155,8 @@
 
             <md-card class="slot-card data-drag-on" ng-class="getClassLoadHelperPerson(g)"
                 data-drag="(persons[$index].AvailableFunds>0 || persons[$index].AvailableTickets>0)"
-                data-jqyoui-options="dragOptions" ng-repeat="g in persons | filter:searchText track by $index" ng-model="g[$index]"
+                data-jqyoui-options="dragOptions" ng-repeat="g in persons | filter:searchText track by $index"
+                ng-model="g[$index]"
                 jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallbackAdd(g)', containment:'position'}">
                 <md-card-content>
                     <div class="slot" data-idperson="{{g.Id}}" ng-dblclick="selectPerson(g.Id)">
