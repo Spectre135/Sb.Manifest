@@ -1075,7 +1075,7 @@ body.group-mode-on .group-mode-on-alert {
 }
 
 .slot-card {
-  margin      : 0 8px 8x;
+  margin      : 0 8px 8px;
   border-width: 0 8px 0 0;
   border-style: solid;
 }
@@ -1212,30 +1212,32 @@ body.group-mode-on .slot-card {
 .load.full {
   /* background: linear-gradient(180deg, rgba(0, 153, 31, 1) 45px, rgba(0, 153, 31, .15) 46px, rgba(255, 255, 255, 1) 107px); */
   /* background: linear-gradient(180deg, rgba(96, 147, 108, 1) 45px, rgba(96, 147, 108, .15) 46px, rgba(255, 255, 255, 1) 107px); */
-  background: linear-gradient(180deg, rgba(117, 164, 120, 1) 45px, rgba(117, 164, 120, .15) 46px, rgba(255, 255, 255, 1) 107px);
-
+  background      : linear-gradient(180deg, rgba(117, 164, 120, 1) 45px, rgba(117, 164, 120, .15) 45px, rgba(255, 255, 255, 1) 107px);
+  background-color: #fff;
 }
 
 .load.full.drop-hover {
   /* background: linear-gradient(180deg, rgba(0, 153, 31, 1) 45px, rgba(0, 153, 31, .15) 46px, rgba(0, 153, 31, .05) 107px); */
-  background: linear-gradient(180deg, rgba(117, 164, 120, 1) 45px, rgba(117, 164, 120, .15) 46px, rgba(117, 164, 120, .1) 107px);
+  background      : linear-gradient(180deg, rgba(117, 164, 120, 1) 45px, rgba(117, 164, 120, .15) 45px, rgba(117, 164, 120, .1) 107px);
+  background-color: #fff;
 }
 
 .load.overbooked {
   /* background: linear-gradient(180deg, rgba(221, 0, 0, 1) 45px, rgba(221, 0, 0, .15) 46px, rgba(255, 255, 255, 1) 107px); */
-  background: linear-gradient(180deg, rgba(211, 47, 47, 1) 45px, rgba(211, 47, 47, .15) 46px, rgba(255, 255, 255, 1) 107px);
-
+  background      : linear-gradient(180deg, rgba(211, 47, 47, 1) 45px, rgba(211, 47, 47, .15) 45px, rgba(255, 255, 255, 1) 107px);
+  background-color: #fff;
 }
 
 .load.overbooked.drop-hover {
-  background: linear-gradient(180deg, rgba(211, 47, 47, 1) 45px, rgba(211, 47, 47, .15) 46px, rgba(211, 47, 47, .07) 107px);
+  background      : linear-gradient(180deg, rgba(211, 47, 47, 1) 45px, rgba(211, 47, 47, .15) 45px, rgba(211, 47, 47, .07) 107px);
+  background-color: #fff;
 }
 
 .load .slots-left .label-small {
   font-size: 11px;
 }
 
-.load .min-left .label-small {
+.load .time-left .label-small {
   font-size: 16px;
 }
 
