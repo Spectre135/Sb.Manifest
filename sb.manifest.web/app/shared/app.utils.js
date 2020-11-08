@@ -100,14 +100,14 @@ function buildLocaleProvider(formatString) {
 
 function Refresh(key) {
     try {
-        var version = window.localStorage.getItem('versionHrDoc');
+        var version = window.localStorage.getItem('versionSbManifest');
         console.log(version);
         if (version != key) {
             window.location.reload(true);
-            window.localStorage.setItem('versionHrDoc', key);
+            window.localStorage.setItem('versionSbManifest', key);
             console.log('refreshed');
         } else {
-            window.localStorage.setItem('versionHrDoc', key);
+            window.localStorage.setItem('versionSbManifest', key);
         }
     } catch (error) {}
 };
@@ -280,4 +280,15 @@ function convertLocalDate(date) {
 
     date = new Date(date);
     return date;
+};
+
+function getDateHHss(d){
+    return new Date(d.getFullYear(),d.getMonth(),d.getDate(),d.getHours(),d.getMinutes());
+};
+
+function getTimeDiffInMInutes(date){
+    var now =new Date();
+    var scheduled = new Date(date);
+    var diff = scheduled-now;
+    return Math.floor(diff / 60000);
 };

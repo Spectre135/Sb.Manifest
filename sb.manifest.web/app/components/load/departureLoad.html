@@ -1,0 +1,42 @@
+<md-dialog>
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <span><i class="fas fa-plane-departure"></i></span>
+      <h2>&nbsp;&nbsp;Load {{dto.Number}} {{dto.AircraftName}} {{dto.AircraftRegistration}}</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="ctrl.cancel()">
+        <i class="fas fa-times"></i>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-dialog-content ng-cloak style="min-width: 500px">
+    <div class="md-dialog-content">
+      <form name="form" ng-submit="$event.preventDefault()">
+
+
+        <md-input-container class="md-block">
+          <label>Schedule</label>
+          <input ng-model="dto.DateDeparted" type="time" name="scheduled" placeholder="HH:mm" ng-required="true" greater-to="minTime">
+          <div ng-messages="form.scheduled.$error" role="alert" style="padding-bottom: 5px;">
+            <div ng-message="required">Departure time is required</div>
+            <div ng-message="time">Time is not valid</div>
+            <div ng-message="greaterTo">Scheduled time must be greater !</div>
+          </div>
+        </md-input-container>
+
+        <div layout="row">
+          <span><i class="fas fa-plane-departure"></i></span>
+          <label>&nbsp;&nbsp;Number {{prevLoad.Number}} {{prevLoad.AircraftName}} {{prevLoad.DateDeparted |date:'HH:mm'}}</label>
+        </div>
+
+        <div class="alert">{{warning}}</div>
+
+      </form>
+    </div>
+  </md-dialog-content>
+
+  <md-dialog-actions>
+    <md-button aria-label="ok" class="md-primary" ng-disabled="form.$invalid" ng-click="ctrl.save($event)">OK</md-button>
+  </md-dialog-actions>
+</md-dialog>

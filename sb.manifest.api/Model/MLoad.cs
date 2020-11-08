@@ -33,19 +33,26 @@ namespace sb.manifest.api.Model
         [DataField("MaxSlots")]
         public int MaxSlots { get; set; }
 
+        [DataField("RotationTime")]
+        public int? RotationTime { get; set; }
+
         [DataField("Status")]
         public int Status { get; set; }
 
-        [DataField("DateC")]
-        public DateTime? DateConfirmed{ get; set; }
+        [DataField("DateCreated")]
+        public DateTime? DateCreated{ get; set; }
 
-        [DataField("DateD")]
-        public DateTime? DateDeleted { get; set; }
+        [DataField("DateDeparted")]
+        public DateTime? DateDeparted { get; set; }
 
         public List<MGroup> GroupList { get; set; }
         public decimal? TotalWeight { get; set; }
         public int? SlotsLeft { get; set; }
         public decimal? Profit { get; set; }
+
+        [DataField("Refuel")]
+        [ParamField("Refuel")]
+        public Boolean? Refuel { get; set; }
 
     }
 }

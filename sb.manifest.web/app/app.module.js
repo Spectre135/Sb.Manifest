@@ -5,7 +5,6 @@ var app = angular.module('SbManifest', [
     'ui.router',
     'ngMaterial',
     'md.data.table',
-    'md.time.picker',
     'ngMessages',
     'ui.bootstrap',
     'ngSanitize',

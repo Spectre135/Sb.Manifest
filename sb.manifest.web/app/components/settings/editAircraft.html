@@ -69,6 +69,11 @@
 
         </div>
 
+        <md-input-container class="md-icon-float md-block animate-show-hide" style="width: 100%;">
+          <label>Background color</label>
+          <div flex md-color-picker random="true" ng-model="dto.BackgroundColor" open-on-input="true"></div>
+        </md-input-container>
+
         <md-input-container class="md-icon-float md-block">
           <label style="padding-bottom: 20px;">Active</label>
           <md-checkbox name="active" ng-model="dto.Active" class="blue">

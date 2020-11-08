@@ -122,7 +122,7 @@ namespace sb.manifest.api.Services
         }
         #endregion
 
-        #region Confirm and Save Load
+        #region Confirm, Depart, Save Load
         public void ConfirmLoad(IConfiguration config, MLoad mLoad)
         {
             using LoadDAO dao = new LoadDAO();
@@ -133,6 +133,12 @@ namespace sb.manifest.api.Services
         {
             using LoadDAO dao = new LoadDAO();
             dao.SaveLoad(config, mLoad);
+
+        }
+        public void SaveDepart(IConfiguration config, MLoad mLoad)
+        {
+            using LoadDAO dao = new LoadDAO();
+            dao.SaveDepart(config, mLoad);
 
         }
         #endregion

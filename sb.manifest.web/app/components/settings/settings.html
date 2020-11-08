@@ -207,6 +207,7 @@
                                     <table md-table>
                                         <thead md-head md-order="myOrder">
                                             <tr md-row>
+                                                <th md-column class="item-color"></th>
                                                 <th md-column md-order-by="Registration"><span>Registration</span></th>
                                                 <th md-column md-order-by="Type"><span>Type</span></th>
                                                 <th md-column md-order-by="Name"><span>Name</span></th>
@@ -221,6 +222,10 @@
                                             <tr md-row md-auto-select
                                                 ng-repeat="p in list | filter: search | orderBy: myOrder | limitTo: myLimit: (myPage - 1) * myLimit"
                                                 class="md-row showhim" style="cursor: pointer;">
+                                                <td md-cell class="item-color">
+                                                    <span class="item-color"
+                                                        ng-style="{'background-color':p.BackgroundColor}"></span>
+                                                </td>
                                                 <td md-cell>{{p.Registration}}</td>
                                                 <td md-cell>{{p.Type}}</td>
                                                 <td md-cell>{{p.Name}}</td>
