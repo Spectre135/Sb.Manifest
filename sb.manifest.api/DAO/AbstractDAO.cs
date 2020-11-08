@@ -288,6 +288,8 @@ namespace sb.manifest.api.DAO
             {
                 if (ex.SqliteErrorCode== 19) // FOREIGN KEY exception
                     throw new SQLConstraintsException("Can't delete Foreign key!",ex);
+
+                throw new Exception("Error in saving data" + ex.Message, ex.InnerException);
             }
             catch (Exception ex)
             {              

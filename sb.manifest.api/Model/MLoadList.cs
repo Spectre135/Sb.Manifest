@@ -31,7 +31,10 @@ namespace sb.manifest.api.Model
 
         [DataField("MaxSlots")]
         public int MaxSlots { get; set; }
-        
+
+        [DataField("RotationTime")]
+        public int? RotationTime { get; set; }
+
         [DataField("Passenger")]
         public string Passenger { get; set; }
 
@@ -50,11 +53,11 @@ namespace sb.manifest.api.Model
         [DataField("AvailableTickets")]
         public int AvailableTickets { get; set; }
 
-        [DataField("DateC")]
-        public DateTime? DateConfirmed{ get; set; }
+        [DataField("DateCreated")]
+        public DateTime? DateCreated{ get; set; }
 
-        [DataField("DateD")]
-        public DateTime? DateDeleted { get; set; }
+        [DataField("DateDeparted")]
+        public DateTime? DateDeparted { get; set; }
 
         [DataField("DateOnLoad")]
         public DateTime? DateOnLoad { get; set; }
@@ -70,6 +73,9 @@ namespace sb.manifest.api.Model
 
         [DataField("BackgroundColor")]
         public string BackgroundColor { get; set; }
+
+        [DataField("Refuel")]
+        public Boolean? Refuel { get; set; }
 
     }
 }

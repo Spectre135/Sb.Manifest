@@ -47,7 +47,7 @@ app.controller('prijavaCtrl', function ($scope, $state, config, apiService) {
     };
 
     $scope.Prijavljen = function () {
-        $state.go('main'); // go to.
+        $state.go('display'); // go to.
     };
 
     $('#prijava').keyup(function(event) {

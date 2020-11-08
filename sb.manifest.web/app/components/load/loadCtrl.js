@@ -2,7 +2,7 @@
 
 var app = angular.module('SbManifest');
 
-app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $mdDialog, $mdSidenav, apiService, config) {
+app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog, $interval, apiService, config) {
 
     $scope.loads;
     $scope.rows;
@@ -25,6 +25,8 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         var promise = apiService.getData(url, params, true)
             .then(function (data) {
                 $scope.loads = data.DataList;
+                //update minutes left for load depart
+                updateMinutesLeft();
             });
         return promise;
     };
@@ -67,17 +69,19 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         }).catch(function () { });
     };
 
-    //confirm load
-    $scope.confirmLoad = function ($event, dto) {
-        var now = new Date();
-        dto.scheduled = new Date(now.getTime() + 20 * 60000);
+    //departure load
+    $scope.departureLoad = function ($event, dto) {
+        var prevLoad = $filter('filter')($scope.loads, function (item) {
+            return item.IdAircraft == dto.IdAircraft && item.Number == (dto.Number - 1);
+        })[0];
         $mdDialog.show({
             locals: {
-                dataToPass: dto
+                dataToPass: dto,
+                prevLoad: prevLoad
             },
-            controller: 'confirmLoadCtrl',
+            controller: 'departureLoadCtrl',
             controllerAs: 'ctrl',
-            templateUrl: 'app/components/load/confirmLoad.html',
+            templateUrl: 'app/components/load/departureLoad.html',
             parent: angular.element(document.body),
             targetEvent: $event,
             clickOutsideToClose: false
@@ -395,10 +399,13 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
         });
     };
 
-    $scope.refuel = function ($event) {
+    $scope.refuel = function ($event, dto, refuel) {
         var el = angular.element($event.currentTarget);
         var parent = el.parent().parent();
         parent.toggleClass('refuel');
+        //save refuel to database
+        dto.Refuel = refuel;
+        apiService.postData(config.manifestApi + '/load/save', dto, false);
     };
 
     $scope.setInview = function (index, inview) {
@@ -467,19 +474,55 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdUtil, $
 
         return response;
     };
+
+    function updateMinutesLeft() {
+        try {
+            angular.forEach($scope.loads, function (value, key) {
+                if (value.DateDeparted) {
+                    value.MinutesLeft = getTimeDiffInMInutes(value.DateDeparted);
+                }
+            });
+        } catch (err) {}
+    };
+
+    //update minutes left for depart load every minut
+    $interval(updateMinutesLeft, 60000);
+
 });
 
-app.controller('confirmLoadCtrl', function ($scope, $state, $filter, $mdDialog, $window, dataToPass, apiService, config) {
+app.controller('departureLoadCtrl', function ($scope, $mdDialog, dataToPass, prevLoad, apiService, config) {
     var self = this;
-    $scope.dto = dataToPass; //data from parent ctrl
+    $scope.dto = angular.copy(dataToPass); //data from parent ctrl
+    $scope.prevLoad = prevLoad;
+    $scope.minTime=getDateHHss(new Date());
+
+    function getMinTime() {
+        if ($scope.prevLoad) {
+            if ($scope.prevLoad.DateDeparted) {
+                var d = new Date($scope.prevLoad.DateDeparted);
+                //add rotation time
+                d.setMinutes(d.getMinutes() + $scope.prevLoad.RotationTime);
+                $scope.minTime=getDateHHss(d);
+                return $scope.minTime;
+            }
+        }
+        $scope.minTime=getDateHHss(new Date());
+        return $scope.minTime;
+    };
+
+    $scope.dto.DateDeparted = $scope.dto.DateDeparted == null ? getMinTime() : getDateHHss(new Date($scope.dto.DateDeparted));
+
 
     self.cancel = function ($event) {
         $mdDialog.cancel();
     };
 
     self.save = function ($event) {
-        var url = config.manifestApi + '/load/confirm';
-        apiService.postData(url, $scope.dto, true)
+        //convert to local time gmt+1
+        var dto = angular.copy($scope.dto);
+        dto.DateDeparted = convertLocalDate($scope.dto.DateDeparted);
+        var url = config.manifestApi + '/load/depart/save';
+        apiService.postData(url, dto, true)
             .then(function () {
                 $mdDialog.hide();
             });

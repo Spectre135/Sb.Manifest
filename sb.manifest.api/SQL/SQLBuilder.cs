@@ -83,8 +83,26 @@ namespace sb.manifest.api.SQL
             return @"UPDATE Load set 
                                     Description = @Description, 
                                     IdAircraft = @IdAircraft, 
-                                    Number = @Number
+                                    Number = @Number,
+                                    Refuel = @Refuel
                     WHERE Id = @Id";
+        }
+        public static string GetSaveDepartSQL()
+        {
+            return @"UPDATE load
+                    SET    datedeparted = datetime(
+                                                Julianday(DateDeparted) + 
+                                                    (
+                                                      SELECT Julianday(@DateDeparted) - Julianday(datedeparted) 
+                                                      FROM   LOAD 
+                                                      WHERE  id = @Id 
+                                                    )
+                                                )
+                    WHERE  number> @Number 
+                    AND    status=0 
+                    AND    idaircraft = @IdAircraft
+                    AND    datedeparted is not null;
+                    UPDATE Load set DateDeparted = @DateDeparted WHERE Id = @Id";
         }
         public static string GetInsertPassengersToLoadSQL()
         {
@@ -460,8 +478,8 @@ namespace sb.manifest.api.SQL
         }
         public static string GetInsertAircraftSQL()
         {
-            return @"INSERT INTO Aircraft(Registration,Type,Name,MaxSlots,MinSlots,RotationTime,Active) 
-                                      VALUES(upper(@Registration),@Type,@Name,@MaxSlots,@MinSlots,@RotationTime,@Active)";
+            return @"INSERT INTO Aircraft(Registration,Type,Name,MaxSlots,MinSlots,RotationTime,Active,BackgroundColor) 
+                                      VALUES(upper(@Registration),@Type,@Name,@MaxSlots,@MinSlots,@RotationTime,@Active,@BackgroundColor)";
         }
         public static string GetSaveAircraftSQL()
         {
@@ -472,7 +490,8 @@ namespace sb.manifest.api.SQL
                                     MaxSlots = @MaxSlots,
                                     MinSlots = @MinSlots, 
                                     RotationTime= @RotationTime, 
-                                    Active = @Active 
+                                    Active = @Active,
+                                    BackgroundColor=@BackgroundColor
                     WHERE Id = @Id";
         }
         public static string GetDeleteAircraftSQL()

@@ -35,5 +35,8 @@ namespace sb.manifest.api.Model
         [ParamField("Active")]
         public bool Active{ get; set; }
 
+        [DataField("BackgroundColor")]
+        [ParamField("BackgroundColor")]
+        public string BackgroundColor { get; set; }
     }
 }

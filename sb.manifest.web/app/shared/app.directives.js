@@ -66,6 +66,26 @@ app.directive('equalTo', function () {
     };
 });
 
+app.directive('greaterTo', function () {
+    return {
+        require: 'ngModel',
+        scope: {
+            otherModelValue: '=greaterTo'
+        },
+        link: function (scope, element, attributes, ngModel) {
+            try {
+                ngModel.$validators.greaterTo = function (modelValue) {
+                    return modelValue >= scope.otherModelValue;
+                };
+
+                scope.$watch('otherModelValue', function () {
+                    ngModel.$validate();
+                });
+            } catch (err) {console.log(err);}
+        }
+    };
+});
+
 app.directive('date', function (dateFilter) {
     return {
         require: 'ngModel',

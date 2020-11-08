@@ -85,6 +85,27 @@ namespace sb.manifest.api.Controllers
         }
 
         /// <summary>
+        /// Save depart time of load
+        /// </summary>
+        /// <param name="mLoad">Model MLoad with values</param>
+        [HttpPost("load/depart/save")]
+        public IActionResult SaveDepart([FromBody] MLoad mLoad)
+        {
+            try
+            {
+                LoadService service = new LoadService();
+                service.SaveDepart(config, mLoad);
+                return Ok();
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+
+        }
+
+        /// <summary>
         /// Add skykdiver/passenger to load
         /// </summary>
         /// <param name="list">List of passengers with MPassenger model</param>

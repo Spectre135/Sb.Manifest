@@ -4,6 +4,7 @@ var gulp = require("gulp");
 var gutil = require("gulp-util");
 var concat = require("gulp-concat");
 var htmlreplace = require('gulp-html-replace');
+var replace = require('gulp-replace');
 var uglify = require('gulp-uglify-es').default; //require('gulp-uglify');
 var ngAnnotate = require('gulp-ng-annotate');
 //var pipeline = require('readable-stream').pipeline;
@@ -108,6 +109,7 @@ gulp.task('preimenuj', function () {
             'css': 'assets/css/' + prodCssMin,
             'app': prodJSMin
         }))
+        .pipe(replace('Refresh(1234567899)', 'Refresh(' + timeStamp +')'))
         .pipe(strip())
         .pipe(gulp.dest('dist/'));
 });

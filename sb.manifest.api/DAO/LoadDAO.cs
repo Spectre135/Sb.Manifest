@@ -115,7 +115,7 @@ namespace sb.manifest.api.DAO
         }
         #endregion
 
-        #region Confirm and Save Load
+        #region Confirm, Depart, Save Load
         public void ConfirmLoad(IConfiguration config, MLoad mLoad)
         {
             IDbTransaction transaction = null;
@@ -170,6 +170,20 @@ namespace sb.manifest.api.DAO
             }
 
             SaveData(config, sql, alParmValues);
+
+        }
+        public void SaveDepart(IConfiguration config, MLoad mLoad)
+        {
+
+            List<KeyValuePair<string, object>> alParmValues = new List<KeyValuePair<string, object>>
+            {
+                new KeyValuePair<string, object>("@Id", mLoad.Id),
+                new KeyValuePair<string, object>("@DateDeparted", mLoad.DateDeparted),
+                new KeyValuePair<string, object>("@IdAircraft", mLoad.IdAircraft),
+                new KeyValuePair<string, object>("@Number", mLoad.Number)
+            };
+
+            SaveData(config, SQLBuilder.GetSaveDepartSQL(), alParmValues);
 
         }
         #endregion
