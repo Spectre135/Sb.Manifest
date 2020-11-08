@@ -979,6 +979,42 @@ body {
   font-size: 12px;
 }
 
+#help {
+  position: absolute;
+  right   : 24px;
+  bottom  : 24px;
+  outline : none;
+}
+
+#help-btn {
+  color    : rgb(255, 255, 255, .5);
+  font-size: 32px;
+}
+
+#help-btn:hover {
+  color : rgb(255, 255, 255, 1);
+  cursor: pointer;
+}
+
+#help.open #help-btn {
+  display: none;
+}
+
+#help>div {
+  display         : none;
+  background-color: #efefef;
+  padding         : 16px;
+  font-family     : monospace;
+}
+
+#help>div>ul {
+  list-style-type: none;
+}
+
+#help.open>div {
+  display: block;
+}
+
 md-card {
   margin       : 8rem 0 0 8rem;
   border-radius: 0;
@@ -993,6 +1029,7 @@ md-content {
   font-size  : 24rem;
   font-weight: 400;
   line-height: 32rem;
+  color      : rgb(0, 102, 188);
 }
 
 .loads {
@@ -1002,6 +1039,7 @@ md-content {
 .load .md-subhead {
   font-size: 14rem;
   padding  : 0 !important;
+  color    : rgb(0 102 188 / 50%);
 }
 
 #loads-main .load-flex-container {

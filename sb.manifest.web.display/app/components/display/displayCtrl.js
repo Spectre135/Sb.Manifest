@@ -11,6 +11,12 @@ app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
     const displayTime = 60 * 1000; //60 sec za load listo
     const picTime = 5 * 1000; //5 sec za reklame 
     let refresh = displayTime;
+    $scope.helpOpacity = 1;
+
+    document.body.onkeydown = function (e) { BodyOnKeyDown(e); };
+
+    // po 10 sekundah se gumb help skrije
+    setTimeout(fadeHelp, 10 * 1000);
 
     //call swap after 10sec 
     setTimeout(swap, refresh);
@@ -70,23 +76,44 @@ app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
         return 'group g' + (group || 0);
     };
 
+    $scope.toggleHelp = function () {
+        const help = angular.element('#help');
+        help.toggleClass('open');
+    }
+
+    function fadeHelp() {
+        if ($scope.helpOpacity > 0) {
+            $scope.helpOpacity = Math.max($scope.helpOpacity - .01, 0);
+
+            const helpBtn = angular.element('#help-btn')[0];
+            helpBtn.style.opacity = $scope.helpOpacity;
+
+            setTimeout(fadeHelp, 100);
+        }
+    }
+
     function BodyOnKeyDown(e) {
 
-        // D, F, plus, minus, 4, 5, 6
-        if ([68, 70, 52, 100, 53, 101, 54, 102, 107, 109, 187, 189].includes(e.which)) {
+        // D, F, H, plus, minus, 4, 5, 6
+        if ([68, 70, 72, 52, 100, 53, 101, 54, 102, 107, 109, 187, 189].includes(e.which)) {
 
             const html = angular.element('html')[0];
             let fontSize = new Number(html.style.fontSize.replace('%', ''));
+            // D = default
+            if (e.which == 68)
+                fontSize = 6.25;
             // F = toggle fullscreen  
-            if (e.which == 70) {
+            else if (e.which == 70) {
                 if (!document.fullscreenElement)
                     document.documentElement.requestFullscreen();
                 else if (document.exitFullscreen)
                     document.exitFullscreen();
             }
-            // D = default
-            else if (e.which == 68)
-                fontSize = 6.25;
+            // H = toggle help  
+            else if (e.which == 72) {
+                const help = angular.element('#help');
+                help.toggleClass('open');
+            }
             // plus, numpad plus
             else if ([107, 187].includes(e.which))
                 fontSize += .1;
@@ -107,27 +134,13 @@ app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
                     cols = 6;
 
                 fontSize = 6.25 * document.body.clientWidth / ((cols * 280) + 8);
-
-                // // 4, numpad 4 (4 columns on 1920px wide screen)
-                // if ([52, 100].includes(e.which))
-                //     fontSize = 10.65;
-                // // 5, numpad 5 (5 columns on 1920px wide screen)
-                // else if ([53, 101].includes(e.which))
-                //     fontSize = 8.55;
-                // // 6, numpad 6 (6 columns on 1920px wide screen)
-                // else if ([54, 102].includes(e.which))
-                //     fontSize = 7.15;
             }
 
             html.style.fontSize = fontSize + '%';
-
-            //TODO fontSize bi se lahko pisal v bazo
         }
     };
 
     $scope.init = function () {
         getLoadList();
-
-        document.body.onkeydown = function (e) { BodyOnKeyDown(e); };
     };
 });
