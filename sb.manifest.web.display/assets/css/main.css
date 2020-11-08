@@ -1095,7 +1095,7 @@ md-content {
 .slot .slot-name {
   position  : absolute;
   right     : 0;
-  font-size : 11rem;
+  font-size : 9rem;
   color     : rgba(0, 0, 0, .33);
   text-align: end;
   margin    : -1rem 2rem 0 0;

@@ -1,6 +1,7 @@
 <div id="loads-main">
     <div class="group-mode-on-alert" ng-click="selectGroup(selectedGroup)">Group mode is ON</div>
-    <md-content in-view-container class="md-padding loads" layout-xs="column" layout="row">
+    <md-content in-view-container class="md-padding loads" layout-xs="column" layout="row"
+        style="min-height: calc(100vh - 60px);">
         <div flex-xs class="load-flex-container" layout="column" ng-repeat="l in loads | orderBy: 'Id' track by $index">
             <md-card in-view-options="{offset:[0, '-50%', 0, '-75%']}" in-view="setInview($index,$inview)" class="load"
                 ng-class="[l.SlotsLeft > 0 ? '' : l.SlotsLeft == 0 ? 'full' : 'overbooked', canDrop($index)? '' : 'no-drop']"
