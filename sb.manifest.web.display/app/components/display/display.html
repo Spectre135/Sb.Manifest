@@ -30,7 +30,7 @@
                         <md-card class="slot-card"
                             ng-repeat="g in l.GroupList | orderBy: ['IdPersonalGroup','DateOnLoad'] track by $index"
                             ng-model="l.GroupList[$index]" ng-hide="!g.IdGroup"
-                            ng-style="{'background-color':g.BackgroundColor}">
+                            ng-style="{'background-color': g.BackgroundColor}">
                             <md-card-content>
                                 <div class="slot" ng-repeat="p in g.LoadList | orderBy: 'ProductSlotName'"
                                     ng-class="getGroupClass(p.IdPersonalGroup)">
@@ -49,32 +49,7 @@
                 </md-card-content>
             </md-card>
         </div>
-    </md-content>
-    <div id="help" ng-click="toggleHelp()">
-        <i id="help-btn" class="fas fa-question-circle" style="opacity: {{helpOpacity}}"></i>
-        <div>
-            <p>
-                <b>Fullscreen</b></p>
-            <ul>
-                <li><b>F</b> ... toggle fullscreen</li>
-            </ul>
-            <p>
-                <b>Resize</b></p>
-            <ul>
-                <li><b>4</b> ... fit 4 columns to screen</li>
-                <li><b>5</b> ... fit 5 columns to screen</li>
-                <li><b>6</b> ... fit 6 columns to screen</li>
-                <li><b>+</b> ... larger</li>
-                <li><b>-</b> ... smaller</li>
-                <li><b>D</b> ... default, no resize</li>
-            </ul>
-            <p>
-                <b>Help</b></p>
-            <ul>
-                <li><b>H</b> ... toggle this help window</li>
-            </ul>
-        </div>
-    </div>
+    </md-content>   
 </div>
 
 <div ng-if="showPic" style="
@@ -85,6 +60,32 @@ background-image: url({{pic}});
 background-repeat: no-repeat;
 background-position: center;
 background-size: contain;">
+</div>
+
+<div id="help" ng-click="toggleHelp()">
+    <i id="help-btn" class="fas fa-question-circle" style="opacity: 1"></i>
+    <div>
+        <p>
+            <b>Fullscreen</b></p>
+        <ul>
+            <li><b>F</b> ... toggle fullscreen</li>
+        </ul>
+        <p>
+            <b>Resize</b></p>
+        <ul>
+            <li><b>4</b> ... fit 4 columns to screen</li>
+            <li><b>5</b> ... fit 5 columns to screen</li>
+            <li><b>6</b> ... fit 6 columns to screen</li>
+            <li><b>+</b> ... larger</li>
+            <li><b>-</b> ... smaller</li>
+            <li><b>D</b> ... default, no resize</li>
+        </ul>
+        <p>
+            <b>Help</b></p>
+        <ul>
+            <li><b>H</b> ... toggle this help window</li>
+        </ul>
+    </div>
 </div>
 
 <div ng-init="init()"></div>

@@ -11,12 +11,6 @@ app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
     const displayTime = 60 * 1000; //60 sec za load listo
     const picTime = 5 * 1000; //5 sec za reklame 
     let refresh = displayTime;
-    $scope.helpOpacity = 1;
-
-    document.body.onkeydown = function (e) { BodyOnKeyDown(e); };
-
-    // po 10 sekundah se gumb help skrije
-    setTimeout(fadeHelp, 10 * 1000);
 
     //call swap after 10sec 
     setTimeout(swap, refresh);
@@ -82,11 +76,14 @@ app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
     }
 
     function fadeHelp() {
-        if ($scope.helpOpacity > 0) {
-            $scope.helpOpacity = Math.max($scope.helpOpacity - .01, 0);
+        const helpBtn = angular.element('#help-btn')[0];
+        let opacity = new Number(helpBtn.style.opacity);
+        if (opacity > 0) {
+            opacity = Math.max(opacity - .01, 0);
+            helpBtn.style.opacity = opacity;
 
-            const helpBtn = angular.element('#help-btn')[0];
-            helpBtn.style.opacity = $scope.helpOpacity;
+            if (opacity == 0)
+                helpBtn.style.display = 'none';
 
             setTimeout(fadeHelp, 100);
         }
@@ -142,5 +139,10 @@ app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
 
     $scope.init = function () {
         getLoadList();
+
+        document.body.onkeydown = function (e) { BodyOnKeyDown(e); };
+
+        // po 10 sekundah se gumb help skrije
+        setTimeout(fadeHelp, 10 * 1000);
     };
 });
