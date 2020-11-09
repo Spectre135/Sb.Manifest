@@ -10,10 +10,9 @@ app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
     $scope.pic = 'pictures/1.jpg';
     const displayTime = 60 * 1000; //60 sec za load listo
     const picTime = 5 * 1000; //5 sec za reklame 
-    let refresh = displayTime;
 
-    //call swap after 10sec 
-    setTimeout(swap, refresh);
+    //call swap after displayTime 
+    setTimeout(swap, displayTime);
 
     //Interval to call function to display loadlist  or pictures
     function swap() {
@@ -21,13 +20,10 @@ app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
             $scope.showPic = !$scope.showPic;
             $scope.showLoadList = !$scope.showLoadList;
         });
-        if ($scope.showPic) {
-            refresh = picTime;
-            setTimeout(swap, refresh);
-        } else {
-            refresh = displayTime;
-            setTimeout(swap, refresh);
-        }
+        if ($scope.showPic)
+            setTimeout(swap, picTime);
+        else
+            setTimeout(swap, displayTime);
     };
 
     //getLoadList after init
@@ -141,6 +137,8 @@ app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
         getLoadList();
 
         document.body.onkeydown = function (e) { BodyOnKeyDown(e); };
+        // send D: default
+        BodyOnKeyDown({ which: 68 });
 
         // po 10 sekundah se gumb help skrije
         setTimeout(fadeHelp, 10 * 1000);

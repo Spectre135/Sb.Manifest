@@ -13,17 +13,14 @@
                         <span class="label-small">slots</span>
                     </div>
                     <div flex="65" class="time-left" ng-class="l.Refuel ? 'refuel' : ''">
-                        <div style="display: inline;">
-                            <i class="fas fa-plane-departure btn-no-refuel" ng-click="refuel($event,l,true)"></i>
-                        </div>
+                        <i class="fas fa-plane-departure btn-no-refuel" ng-click="refuel($event,l,true)"></i>
                         <div class="time">
                             <i class="fas fa-gas-pump btn-refuel" ng-click="refuel($event,l,false)"></i>
-                            <span ng-click="departureLoad($event,l)" style="cursor: pointer;">
-                                <span class="value">{{l.MinutesLeft}}</span>
-                                <span ng-if="l.DateDeparted" class="label-small">min</span>
+                            <div class="time-or-clock" ng-click="departureLoad($event,l)">
+                                <span ng-if="l.DateDeparted" class="value">{{l.MinutesLeft}}
+                                    <span class="label-small">min</span></span>
                                 <span ng-if="!l.DateDeparted"><i class="far fa-clock"></i></span>
-                            </span>
-                            
+                            </div>
                         </div>
                     </div>
                 </div>
