@@ -482,11 +482,11 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
                     value.MinutesLeft = getTimeDiffInMInutes(value.DateDeparted);
                 }
             });
-        } catch (err) {}
+        } catch (err) { }
     };
 
-    //update minutes left for depart load every minut
-    $interval(updateMinutesLeft, 60000);
+    //update minutes left for depart load every 15 sec
+    $interval(updateMinutesLeft, 15 * 1000);
 
 });
 
@@ -494,7 +494,7 @@ app.controller('departureLoadCtrl', function ($scope, $mdDialog, dataToPass, pre
     var self = this;
     $scope.dto = angular.copy(dataToPass); //data from parent ctrl
     $scope.prevLoad = prevLoad;
-    $scope.minTime=getDateHHss(new Date());
+    $scope.minTime = getDateHHss(new Date());
 
     function getMinTime() {
         if ($scope.prevLoad) {
@@ -502,11 +502,11 @@ app.controller('departureLoadCtrl', function ($scope, $mdDialog, dataToPass, pre
                 var d = new Date($scope.prevLoad.DateDeparted);
                 //add rotation time
                 d.setMinutes(d.getMinutes() + $scope.prevLoad.RotationTime);
-                $scope.minTime=getDateHHss(d);
+                $scope.minTime = getDateHHss(d);
                 return $scope.minTime;
             }
         }
-        $scope.minTime=getDateHHss(new Date());
+        $scope.minTime = getDateHHss(new Date());
         return $scope.minTime;
     };
 
