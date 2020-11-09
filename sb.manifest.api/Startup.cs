@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
 using sb.manifest.api.Hubs;
+using sb.manifest.api.Tasks;
 using System;
 using System.IO;
 using System.Net;
@@ -91,6 +92,8 @@ namespace sb.manifest.api
                 options.PayloadSerializerOptions.PropertyNamingPolicy = null; //PascalCase serialization 
                 options.PayloadSerializerOptions.IgnoreNullValues = true;
             });
+
+            services.AddHostedService<LoadAlertBackgroundTask>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -127,7 +130,8 @@ namespace sb.manifest.api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<DisplayHub>("/display");
+                endpoints.MapHub<DisplayHub>("/display"); //signalr kanal za pošiljanje load liste na display
+                endpoints.MapHub<AlertHub>("/alert"); //signlar kanal za pošiljanje loadu ki padejo v èasovno okno 15min
             });
 
         }

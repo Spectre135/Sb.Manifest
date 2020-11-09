@@ -13,10 +13,15 @@ namespace sb.manifest.api.DAO
 {
     public class LoadDAO : AbstractDAO
     {
-        public MResponse GetLoads(IConfiguration config, int status=0)
+        public MResponse GetLoads(IConfiguration config, int status=0,bool alert=false)
         {
             string sql = SQLBuilder.GetLoadSQL();
             sql += " and Status = @Status";
+
+            //filter za alarme na loade kateri so v 15min časovnem oknu
+            if (alert)
+                sql += " and DateDeparted between datetime('now','localtime', '-15 Minute') and datetime('now','localtime', '+15 Minute')  ";
+
             List<KeyValuePair<string, object>> alParmValues = new List<KeyValuePair<string, object>>
             {
                 SetParam("@Status", status)

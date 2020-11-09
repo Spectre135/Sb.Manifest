@@ -5,16 +5,69 @@ var app = angular.module('SbManifest');
 app.controller('mainCtrl', function ($rootScope, $scope, $state, config) {
     $scope.appName = config.appName;
     $rootScope.user = GetUser();
+    $rootScope.alertLoads;
+    $rootScope.connected=false;
 
     //Logout/Login
     $rootScope.logout = function (response) {
         //pobrišemo sejo
         sessionStorage.removeItem('Authorization');
         //ponovno login 
-        $state.go('prijava',{response: response});
+        $state.go('prijava', {
+            response: response
+        });
 
     };
-    
+
+    //init SignalR Connection for alert loads
+    var connection = new signalR.HubConnectionBuilder()
+        .configureLogging(signalR.LogLevel.Debug)
+        .withAutomaticReconnect()
+        .withUrl(config.alertHub, {
+            skipNegotiation: true,
+            transport: signalR.HttpTransportType.WebSockets,
+            accessTokenFactory: () => {
+                return sessionStorage.getItem('Authorization') //Auth token we need fo success connect to signalr hub
+            }
+        }).build();
+
+    //Start connection
+    connection.start().then(function () {
+        $scope.$apply(function () {
+            $rootScope.connected = true;
+        });
+    }).catch(function (err) {
+        $scope.$apply(function () {
+            $rootScope.connected = false;
+        });
+        console.log(err);
+    });
+
+    //check connection status
+    connection.onreconnecting(error => {
+        if (connection.state === signalR.HubConnectionState.Reconnecting){
+            $scope.$apply(function () {
+                $rootScope.connected = false;
+            });
+        }
+    });
+
+    connection.onreconnected(connectionId => {
+        if (connection.state === signalR.HubConnectionState.Connected){
+            $scope.$apply(function () {
+                $rootScope.connected = true;
+            });
+        }
+    });
+
+    //Listen for incoming  messages and alert loads<=15min
+    connection.on('messageReceived', function (data) {
+        $scope.$apply(function () {
+            $rootScope.alertLoads = data.DataList;
+            console.log($rootScope.alertLoads);
+        });
+    });
+
     //mora bit noter če en ne dela menu
     jQuery(function ($) {
 
@@ -49,7 +102,7 @@ app.controller('mainCtrl', function ($rootScope, $scope, $state, config) {
         //Pin sidebar
         $('#pin-sidebar').click(function () {
             if ($('.page-wrapper').hasClass('pinned')) {
-                window.localStorage.setItem('hop.hit.si.pinned',false);
+                window.localStorage.setItem('hop.hit.si.pinned', false);
                 $('#pin-icon').addClass('fa-angle-double-left');
                 $('#pin-icon').removeClass('fa-thumbtack');
                 // unpin sidebar when hovered
@@ -57,7 +110,7 @@ app.controller('mainCtrl', function ($rootScope, $scope, $state, config) {
                 $('.page-wrapper').removeClass('sidebar-hovered');
                 $('#sidebar').unbind('mouseenter mouseleave');
             } else {
-                window.localStorage.setItem('hop.hit.si.pinned',true);
+                window.localStorage.setItem('hop.hit.si.pinned', true);
                 $('.page-wrapper').addClass('pinned');
 
                 $('#pin-icon').removeClass('fa-angle-double-left');
@@ -107,24 +160,24 @@ app.controller('mainCtrl', function ($rootScope, $scope, $state, config) {
         try {
             var pinned = false;
             pinned = window.localStorage.getItem('hop.hit.si.pinned');
-            if (pinned=='true'){
-                $('#pin-sidebar').click(); 
+            if (pinned == 'true') {
+                $('#pin-sidebar').click();
             }
-        } catch (error) { }  
+        } catch (error) {}
 
         //set side bar toggled if we have small display
-        if($('#toggle-sidebar').is(":visible")){
+        if ($('#toggle-sidebar').is(":visible")) {
             $('.page-wrapper').toggleClass('toggled');
-        } 
-        
+        }
+
         //hide menu bar when user click on link
         $('.menu-link').click(function () {
             $('.page-wrapper').removeClass('sidebar-hovered');
             //if we have sidebar for small display
-            if($('#toggle-sidebar').is(":visible")){
+            if ($('#toggle-sidebar').is(":visible")) {
                 $('.page-wrapper').toggleClass('toggled');
-            }           
-        }); 
+            }
+        });
 
     });
 });
