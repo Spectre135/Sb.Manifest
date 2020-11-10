@@ -4,6 +4,23 @@ namespace sb.manifest.api.DAO
 {
     //Field Attributes to use with models
 
+    //Attribute za paramter for TABLE name
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
+    public sealed class TableNameAttribute : Attribute
+    {
+        private readonly string _tableName;
+
+        public TableNameAttribute (string tableName)
+        {
+            _tableName = tableName;
+        }
+
+        public string TableName
+        {
+            get { return _tableName; }
+        }
+    }
+
     //Attribute za load data in object
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public sealed class DataFieldAttribute : Attribute

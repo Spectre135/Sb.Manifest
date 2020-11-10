@@ -7,6 +7,7 @@ using sb.manifest.api.Utils;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Security.Cryptography;
 #endregion
 
 namespace sb.manifest.api.DAO
@@ -68,7 +69,8 @@ namespace sb.manifest.api.DAO
                 using var connection = GetConnection(config);
                 transaction = connection.BeginTransaction();
                 //idGroup za skupine ali tandeme da imamo skupaj osebe, če jih premikamo med loadi
-                int idGroup = int.Parse(DateTime.Now.ToString("mmssff"));
+                //int idGroup = int.Parse(DateTime.Now.ToString("mmssff"));
+                int idGroup = GetSeqNextValue<MOnBoard>(connection);
 
                 foreach (MOnBoard p in list)
                 {
@@ -120,7 +122,7 @@ namespace sb.manifest.api.DAO
         }
         #endregion
 
-        #region Confirm, Depart, Save Load
+        #region Confirm, Depart, Save, Delete Load
         public void ConfirmLoad(IConfiguration config, MLoad mLoad)
         {
             IDbTransaction transaction = null;
@@ -141,7 +143,8 @@ namespace sb.manifest.api.DAO
                 //insert DEBIT transakcije v POST tabelo
                 //id transaction sestavimo iz mmssff
                 alParmValues = new List<KeyValuePair<string, object>>();
-                long idTransaction = long.Parse(DateTime.Now.ToString("mmssff"));
+                //long idTransaction = long.Parse(DateTime.Now.ToString("mmssff"));
+                long idTransaction = GetSeqNextValue<MPost>(connection);
                 alParmValues.Add(new KeyValuePair<string, object>("@IdTransaction", idTransaction));
                 alParmValues.Add(new KeyValuePair<string, object>("@IdCompany", 1));
                 alParmValues.Add(new KeyValuePair<string, object>("@IdLoad", mLoad.Id));
@@ -175,6 +178,16 @@ namespace sb.manifest.api.DAO
             }
 
             SaveData(config, sql, alParmValues);
+
+        }
+        public void DeleteLoad(IConfiguration config, MLoad mLoad)
+        {
+            List<KeyValuePair<string, object>> alParmValues = new List<KeyValuePair<string, object>>
+            {
+                new KeyValuePair<string, object>("@Id", mLoad.Id)
+            };
+
+            SaveData(config, SQLBuilder.GetDeleteLoadSQL(), alParmValues);
 
         }
         public void SaveDepart(IConfiguration config, MLoad mLoad)

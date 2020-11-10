@@ -44,7 +44,7 @@ app.run(function ($state, $rootScope, $q, $mdDialog, apiService) {
             .title(title)
             .textContent(message)
             .ariaLabel('Alert Dialog')
-            .ok('Zapri!')
+            .ok('close')
         );
     };
 

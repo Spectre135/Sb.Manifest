@@ -55,12 +55,12 @@
                 <div layout-gt-sm="row">
                     <md-input-container class="md-icon-float md-block" style="width: -webkit-fill-available;">
                         <label>Limit</label>
-                        <input readonly type="text" format="currency" ng-model="dto.Limit" />
+                        <input readonly type="text" format-currency ng-model="dto.Limit" />
                     </md-input-container>
                     <md-input-container class="md-icon-float md-block" style="width: -webkit-fill-available;">
                         <label>Balance</label>
                         <input readonly type="text" ng-style="dto.Balance >= 0 && {'color':'green'} || {'color': 'red'}"
-                            format="currency" ng-model="dto.Balance" />
+                        format-currency ng-model="dto.Balance" />
                     </md-input-container>
                 </div>
                 <div layout-gt-sm="row">

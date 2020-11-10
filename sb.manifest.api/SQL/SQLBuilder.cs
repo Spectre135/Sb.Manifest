@@ -87,6 +87,12 @@ namespace sb.manifest.api.SQL
                                     Refuel = @Refuel
                     WHERE Id = @Id";
         }
+        public static string GetDeleteLoadSQL()
+        {
+            return @"DELETE from SkydiversGroup WHERE IdLoad = @Id;
+                     DELETE from OnLoad WHERE IdLoad = @Id;
+                     DELETE from Load WHERE Id = @Id;";
+        }
         public static string GetSaveDepartSQL()
         {
             return @"UPDATE load
@@ -140,10 +146,10 @@ namespace sb.manifest.api.SQL
                              WHEN l.idload IS NULL THEN 0 
                              ELSE 1 
                            end           OnBoard,
-                           at.AvailableTickets - IFNULL(til.Tickets,0)  AvailableTickets,
+                           IFNULL(at.AvailableTickets,0) - IFNULL(til.Tickets,0)  AvailableTickets,
                            at.ProductName TicketName,
                            at.IdProductSlot,
-                           IFNULL(c.[Limit],0) + c.Balance AvailableFunds,
+                           IFNULL(c.[Limit],0) + IFNULL(c.Balance,0) AvailableFunds,
                            c.IsStaff
                     FROM   v_person c 
                            INNER JOIN today t ON t.Id = c.Id 
@@ -168,10 +174,10 @@ namespace sb.manifest.api.SQL
                              WHEN l.idload IS NULL THEN 0 
                              ELSE 1 
                            end           OnBoard,
-                           at.AvailableTickets - IFNULL(til.Tickets,0)  AvailableTickets,
+                           IFNULL(at.AvailableTickets,0) - IFNULL(til.Tickets,0)  AvailableTickets,
                            at.ProductName TicketName,
                            at.IdProductSlot,
-                           IFNULL(c.[Limit],0) + c.Balance AvailableFunds,
+                           IFNULL(c.[Limit],0) + IFNULL(c.Balance,0) AvailableFunds,
                            c.IsStaff
                     FROM   v_person c 
                            LEFT JOIN onload l 
@@ -529,5 +535,11 @@ namespace sb.manifest.api.SQL
         }
         #endregion
 
+        #region Sequences
+        public static string GetSequenceValueSQL()
+        {
+            return @"SELECT seq FROM 'sqlite_sequence' where Name= @TableName";
+        }
+        #endregion
     }
 }

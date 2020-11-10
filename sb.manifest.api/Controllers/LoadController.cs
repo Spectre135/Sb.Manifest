@@ -85,6 +85,31 @@ namespace sb.manifest.api.Controllers
         }
 
         /// <summary>
+        /// Delete load
+        /// </summary>
+        /// <param name="mLoad">Model MLoad with values</param>
+        [HttpPost("load/delete")]
+        public IActionResult DeleteLoad([FromBody] MLoad mLoad)
+        {
+            try
+            {
+                LoadService service = new LoadService();
+                service.DeleteLoad(config, mLoad);
+                return Ok();
+
+            }
+            catch (SQLConstraintsException ex)
+            {
+                return StatusCode(StatusCodes.Status406NotAcceptable, ex);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+
+        }
+
+        /// <summary>
         /// Save depart time of load
         /// </summary>
         /// <param name="mLoad">Model MLoad with values</param>
