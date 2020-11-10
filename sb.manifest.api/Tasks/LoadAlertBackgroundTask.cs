@@ -51,8 +51,6 @@ namespace sb.manifest.api.Tasks
             using LoadDAO dao = new LoadDAO();
                 mResponse= dao.GetLoads(config,0,true);
 
-            Console.WriteLine(mResponse.RowsCount);
-
             HubService.SendAlert(mResponse, hubContext);
         } 
     }

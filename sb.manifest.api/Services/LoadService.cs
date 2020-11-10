@@ -132,7 +132,7 @@ namespace sb.manifest.api.Services
         public void SaveLoad(IConfiguration config, MLoad mLoad)
         {
             using LoadDAO dao = new LoadDAO();
-            dao.SaveLoad(config, mLoad);
+                dao.SaveLoad(config, mLoad);
 
         }
         public void DeleteLoad(IConfiguration config, MLoad mLoad)
@@ -141,11 +141,16 @@ namespace sb.manifest.api.Services
             dao.DeleteLoad(config, mLoad);
 
         }
-        public void SaveDepart(IConfiguration config, MLoad mLoad)
+        public void SaveDeparture(IConfiguration config, IHubContext<AlertHub> hubContext, MLoad mLoad)
         {
-            using LoadDAO dao = new LoadDAO();
-            dao.SaveDepart(config, mLoad);
+            MResponse mResponse = new MResponse();
+            using (LoadDAO dao = new LoadDAO())
+            {
+                dao.SaveDepart(config, mLoad);
+                mResponse = dao.GetLoads(config, 0, true);
+            }
 
+            HubService.SendAlert(mResponse, hubContext);
         }
         #endregion
     }

@@ -27,7 +27,7 @@ app.controller('mainCtrl', function ($rootScope, $scope, $state, config) {
             skipNegotiation: true,
             transport: signalR.HttpTransportType.WebSockets,
             accessTokenFactory: () => {
-                return sessionStorage.getItem('Authorization') //Auth token we need fo success connect to signalr hub
+                return sessionStorage.getItem('Authorization') //Auth token we need for success connect to signalr hub
             }
         }).build();
 
@@ -64,15 +64,6 @@ app.controller('mainCtrl', function ($rootScope, $scope, $state, config) {
     connection.on('messageReceived', function (data) {
         $scope.$apply(function () {
             $rootScope.alertLoads = data.DataList;
-            try {
-                angular.forEach( $rootScope.alertLoads, function (value, key) {
-                    if (value.DateDeparted) {
-                        value.MinutesLeft = getTimeDiffInMInutes(value.DateDeparted);
-                    }
-                });
-            } catch (err) { }
-
-            console.log($rootScope.alertLoads);
         });
     });
 
