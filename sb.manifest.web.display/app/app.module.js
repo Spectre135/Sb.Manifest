@@ -7,7 +7,7 @@ var app = angular.module('SbManifest', [
     'ngMessages'
 ]);
 
-app.run(function ($state, $rootScope,apiService) {
+app.run(function ($state, $rootScope,$mdDialog) {
 
     window.myAppErrorLog = [];
 
@@ -15,6 +15,19 @@ app.run(function ($state, $rootScope,apiService) {
         // This is a naive example of how to silence the default error handler.
         window.myAppErrorLog.push(error);
     });
+
+        //alert dialog
+        $rootScope.showDialog = function (title, message) {
+            $mdDialog.show(
+                $mdDialog.alert()
+                .parent(angular.element(document.querySelector('#main')))
+                .clickOutsideToClose(true)
+                .title(title)
+                .textContent(message)
+                .ariaLabel('Alert Dialog')
+                .ok('close')
+            );
+        };
 
     //we check if user is authenticated
     if (sessionStorage.getItem('Authorization') === null) {

@@ -9,7 +9,18 @@ app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
     $scope.showPic = false;
     $scope.pic = 'pictures/1.jpg';
     const displayTime = 60 * 1000; //60 sec za load listo
-    const picTime = 5 * 1000; //5 sec za reklame 
+    //const picTime = 5 * 1000; //5 sec za reklame 
+    var i = -1;
+
+    //load advertising json daata
+    function loadAdvertisingData() {
+        apiService.getData('config/advertising.json', null, false)
+            .then(function (data) {
+                $scope.advertising = data;
+            });
+    };
+
+    loadAdvertisingData();
 
     //call swap after displayTime 
     setTimeout(swap, displayTime);
@@ -19,11 +30,20 @@ app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
         $scope.$apply(function () {
             $scope.showPic = !$scope.showPic;
             $scope.showLoadList = !$scope.showLoadList;
+            if ($scope.showPic) {
+                if ($scope.advertising) {
+                    i++;
+                    if ($scope.advertising.length == i) {
+                        i = 0;
+                    }
+                    $scope.pic = $scope.advertising[i].Src;
+                    var time = $scope.advertising[i].Time;
+                    setTimeout(swap, time);
+                }
+            } else {
+                setTimeout(swap, displayTime);
+            }
         });
-        if ($scope.showPic)
-            setTimeout(swap, picTime);
-        else
-            setTimeout(swap, displayTime);
     };
 
     //getLoadList after init
@@ -60,7 +80,7 @@ app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
     connection.on('messageReceived', function (data) {
         $scope.$apply(function () {
             $scope.loads = data.DataList;
-            updateMinutesLeft();
+            //updateMinutesLeft();
         });
     });
 
@@ -138,23 +158,29 @@ app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
     $scope.init = function () {
         getLoadList();
 
-        document.body.onkeydown = function (e) { BodyOnKeyDown(e); };
+        document.body.onkeydown = function (e) {
+            BodyOnKeyDown(e);
+        };
         // send D: default
-        BodyOnKeyDown({ which: 68 });
+        BodyOnKeyDown({
+            which: 68
+        });
 
         // po 10 sekundah se gumb help skrije
         setTimeout(fadeHelp, 10 * 1000);
     };
 
+
     function updateMinutesLeft() {
         try {
             angular.forEach($scope.loads, function (value, key) {
                 if (value.DateDeparted) {
-                    value.MinutesLeft = getTimeDiffInMInutes(value.DateDeparted);
+                    value.DepartureMinutesLeft = getTimeDiffInMInutes(value.DateDeparted);
                 }
             });
-        } catch (err) { }
+        } catch (err) {}
     };
+
 
     //update minutes left for depart load every 15 sec
     $interval(updateMinutesLeft, 15 * 1000);
