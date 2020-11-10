@@ -29,7 +29,7 @@ app.controller('mainCtrl', function ($rootScope, $scope, $state, config) {
             skipNegotiation: true,
             transport: signalR.HttpTransportType.WebSockets,
             accessTokenFactory: () => {
-                return sessionStorage.getItem('Authorization') //Auth token we need fo success connect to signalr hub
+                return sessionStorage.getItem('Authorization') //Auth token we need for success connect to signalr hub
             }
         }).build();
 

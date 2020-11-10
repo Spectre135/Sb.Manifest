@@ -18,12 +18,14 @@ namespace sb.manifest.api.Controllers
     public class LoadController : ControllerBase
     {
         private readonly IConfiguration config;
-        private readonly IHubContext<DisplayHub> hubContext;
+        private readonly IHubContext<DisplayHub> displayHubContext;
+        private readonly IHubContext<AlertHub> alertHubContext;
 
-        public LoadController(IConfiguration configuration, IHubContext<DisplayHub> _hubContext)
+        public LoadController(IConfiguration configuration, IHubContext<DisplayHub> _displayHubContext, IHubContext<AlertHub> _alertHubContext)
         {
             config = configuration;
-            hubContext = _hubContext;
+            displayHubContext = _displayHubContext;
+            alertHubContext = _alertHubContext;
         }
 
         /// <summary>
@@ -53,7 +55,7 @@ namespace sb.manifest.api.Controllers
             try
             {
                 LoadService service = new LoadService();
-                return Ok(service.GetLoadList(config, hubContext));
+                return Ok(service.GetLoadList(config, displayHubContext));
 
             }
             catch (Exception ex)
@@ -114,12 +116,12 @@ namespace sb.manifest.api.Controllers
         /// </summary>
         /// <param name="mLoad">Model MLoad with values</param>
         [HttpPost("load/depart/save")]
-        public IActionResult SaveDepart([FromBody] MLoad mLoad)
+        public IActionResult SaveDeparture([FromBody] MLoad mLoad)
         {
             try
             {
                 LoadService service = new LoadService();
-                service.SaveDepart(config, mLoad);
+                service.SaveDeparture(config, alertHubContext, mLoad);
                 return Ok();
 
             }
