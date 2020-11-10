@@ -198,6 +198,23 @@ namespace sb.manifest.api.DAO
                 return 0;
             }
         }
+        public static string GetTableName<T>() where T : class, new()
+        {
+
+            Type objType = typeof(T);
+            foreach (PropertyInfo p in objType.GetProperties())
+            {
+                foreach (TableNameAttribute a in p.GetCustomAttributes(typeof(TableNameAttribute), false))
+                {
+                    if (a.TableName != null)
+                        return a.TableName;
+                }
+
+            }
+
+            return null;
+
+        }
         #endregion
 
         #region GetData,SaveData
@@ -314,6 +331,26 @@ namespace sb.manifest.api.DAO
                                 ) t
                     WHERE
                     RowNum > {3} AND RowNum <= {4}", query, (string.IsNullOrEmpty(order) ? "NULL" : AppUtils.RemoveFirstChar("-",order)), (asc ? "ASC" : "DESC"), from, to);
+        }
+        #endregion
+
+        #region Sequences
+        public int GetSeqNextValue<T>(IDbConnection connection) where T : class, new()
+        {
+            int seqval=0;
+            List<KeyValuePair<string, object>> alParmValues = new List<KeyValuePair<string, object>>
+            {
+                new KeyValuePair<string, object>("@TableName", GetTableName<T>())
+            };
+
+            IDbCommand command = CreateCommand(connection, alParmValues, SQLBuilder.GetSequenceValueSQL());
+            using SqliteDataReader reader = (SqliteDataReader)command.ExecuteReader();
+
+            if (reader.Read())
+                seqval = reader.GetInt32(0);
+
+            return seqval++;
+
         }
         #endregion
 

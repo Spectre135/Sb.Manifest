@@ -6,6 +6,8 @@ namespace sb.manifest.api.Model
     //Transaction model
     public class MPost
     {
+        [TableName("Post")] //Database table name (needed if we use seqnextvalue)
+
         [DataField("Id")]
         public long Id { get; set; }
 

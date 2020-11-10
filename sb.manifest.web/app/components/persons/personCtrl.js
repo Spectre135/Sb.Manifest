@@ -39,7 +39,7 @@ app.controller('personCtrl', function ($scope, $state, $mdDialog, apiService, co
             targetEvent: $event,
             clickOutsideToClose: false
         }).then(function () {
-            $scope.getpersonList();
+            $scope.getPersonList();
         }).catch(function () {});;
     };
 
@@ -73,7 +73,7 @@ app.controller('personCtrl', function ($scope, $state, $mdDialog, apiService, co
             targetEvent: $event,
             clickOutsideToClose: false
         }).then(function () {
-            $scope.getpersonList();
+            $scope.getPersonList();
         }).catch(function () {});
     };
 

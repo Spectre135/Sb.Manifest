@@ -60,7 +60,7 @@
                                     </md-button>
                                 </md-menu-item>
                                 <md-menu-item>
-                                    <md-button ng-click="confirmLoad($event,l)">
+                                    <md-button ng-disabled="l.SlotsLeft<0" ng-click="confirmLoad($event,l)">
                                         <span><i class="fas fa-check-square"></i></span>
                                         &nbsp;&nbsp;Confirm
                                     </md-button>
@@ -95,8 +95,8 @@
                                     <div layout="row" class="passenger">
                                         <div flex="70">
                                             <span class="name"><span class="group-placeholder">
-                                                    <span ng-if="p.IdPersonalGroup"
-                                                        ng-class="getGroupClass(p.IdPersonalGroup)">{{p.IdPersonalGroup}}</span></span>{{p.Passenger}}</span>
+                                                    <span ng-if="g.IdPersonalGroup"
+                                                        ng-class="getGroupClass(g.IdPersonalGroup)">{{g.IdPersonalGroup}}</span></span>{{p.Passenger}}</span>
                                         </div>
                                         <div flex="30" style="text-align: end;">
                                             <span class="tickets" ng-if="p.AvailableTickets > 0">

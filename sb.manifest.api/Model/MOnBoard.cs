@@ -5,6 +5,8 @@ namespace sb.manifest.api.Model
     //Passengers on load
     public class MOnBoard
     {
+        [TableName("OnLoad")] //Database table name (needed if we use seqnextvalue)
+
         [DataField("IdPerson")]
         [ParamField("IdPerson")]
         public long IdPerson { get; set; }

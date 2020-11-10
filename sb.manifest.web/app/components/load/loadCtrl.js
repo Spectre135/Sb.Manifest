@@ -31,6 +31,26 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
         return promise;
     };
 
+    //delete Load
+    $scope.deleteLoad = function ($event, dto) {
+        $rootScope.confirmDialog('Confirm delete', 'Would you like to delete load No. ' + dto.Number + ' ' + dto.AircraftName + ' ?', 'Delete', 'Cancel')
+            .then(function onSuccess(result) {
+                var url = config.manifestApi + '/load/delete';
+                apiService.postData(url, dto, true).then(function () {
+                    $scope.getLoadList();
+                });
+            });
+    };
+        //confirm Load
+        $scope.confirmLoad = function ($event, dto) {
+            $rootScope.confirmDialog('Confirm load', 'Would you like to confirm load No. ' + dto.Number + ' ' + dto.AircraftName + ' ?', 'Confirm', 'Cancel')
+                .then(function onSuccess(result) {
+                    var url = config.manifestApi + '/load/confirm';
+                    apiService.postData(url, dto, true).then(function () {
+                        $scope.getLoadList();
+                    });
+                });
+        };
     //init
     $scope.init = function () {
         $scope.getLoadList().then(function () {
@@ -66,7 +86,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () { });
+        }).catch(function () {});
     };
 
     //departure load
@@ -87,7 +107,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () { });
+        }).catch(function () {});
     };
 
     //add/edit Load
@@ -109,7 +129,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () { });;
+        }).catch(function () {});;
     };
 
     //check if passenger is already in load  
@@ -124,7 +144,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
                 });
             });
             return response;
-        } catch (err) { }
+        } catch (err) {}
     };
 
     //before drop item we show confirmation dialog
@@ -141,7 +161,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
         if (item == -1) {
             $scope.moved.IdLoadFrom = $scope.loadMoveId;
             $rootScope.confirmDialog('Confirm remove',
-                'You will remove ' + $scope.PassengerMove + '\n\rfrom Load ' + $scope.loadMove, 'Remove', 'Cancel')
+                    'You will remove ' + $scope.PassengerMove + '\n\rfrom Load ' + $scope.loadMove, 'Remove', 'Cancel')
                 .then(function onSuccess(result) {
                     return deferred.resolve();
                 });
@@ -167,7 +187,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
                 //check if persons exists in load
                 if (isInLoad(item, $scope.personsInGroup)) {
                     $rootScope.confirmDialog('Move',
-                        'Whole group can not be moved, people already in load ' + item.Number + ' !\nMove only ' + $scope.PassengerMove + ' ?', 'yes', 'no')
+                            'Whole group can not be moved, people already in load ' + item.Number + ' !\nMove only ' + $scope.PassengerMove + ' ?', 'yes', 'no')
                         .then(function (result) {
                             return deferred.resolve();
                         }).finally(function () {
@@ -175,7 +195,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
                         });
                 } else {
                     $rootScope.confirmDialog('Move',
-                        'What would you like to move ?', 'group', 'person')
+                            'What would you like to move ?', 'group', 'person')
                         .then(function (result) {
                             $scope.moved.IdPerson = $scope.personsInGroup;
                         }).finally(function () {
@@ -206,7 +226,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
         loadBin.addClass('visible');
     };
 
-    $scope.stopCallback = function (event, ui,) {
+    $scope.stopCallback = function (event, ui, ) {
         var loadBin = angular.element('.load-bin.visible');
         loadBin.removeClass('visible');
     };
@@ -375,8 +395,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
             if ($scope.selectedGroup > 0 && personModel.IdPersonalGroup != $scope.selectedGroup) {
                 $scope.groups[index].IdGroup = idGroup;
                 g.html('<span class="group g' + $scope.selectedGroup + '">' + $scope.selectedGroup + '</span>');
-            }
-            else {
+            } else {
                 $scope.groups[index].IdGroup = 0;
                 g.html('');
             }
@@ -437,7 +456,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
                 return 'no-drag';
             }
 
-        } catch (err) { }
+        } catch (err) {}
     };
 
     function checkForOthersInGroup(idLoad) {
@@ -494,7 +513,7 @@ app.controller('departureLoadCtrl', function ($scope, $mdDialog, dataToPass, pre
     var self = this;
     $scope.dto = angular.copy(dataToPass); //data from parent ctrl
     $scope.prevLoad = prevLoad;
-    $scope.minTime=getDateHHss(new Date());
+    $scope.minTime = getDateHHss(new Date());
 
     function getMinTime() {
         if ($scope.prevLoad) {
@@ -502,11 +521,11 @@ app.controller('departureLoadCtrl', function ($scope, $mdDialog, dataToPass, pre
                 var d = new Date($scope.prevLoad.DateDeparted);
                 //add rotation time
                 d.setMinutes(d.getMinutes() + $scope.prevLoad.RotationTime);
-                $scope.minTime=getDateHHss(d);
+                $scope.minTime = getDateHHss(d);
                 return $scope.minTime;
             }
         }
-        $scope.minTime=getDateHHss(new Date());
+        $scope.minTime = getDateHHss(new Date());
         return $scope.minTime;
     };
 
