@@ -155,26 +155,25 @@
                 <md-progress-circular md-mode="indeterminate"></md-progress-circular>
             </div>
 
-            <md-card class="slot-card data-drag-on" ng-class="getClassLoadHelperPerson(g)"
-                data-drag="(persons[$index].AvailableFunds>0 || persons[$index].AvailableTickets>0)"
-                data-jqyoui-options="dragOptions" ng-repeat="g in persons | filter:searchText track by $index"
-                ng-model="g[$index]"
-                jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallbackAdd(g)', containment:'position'}">
+            <md-card class="slot-card data-drag-on" ng-repeat="p in persons | filter:searchText track by $index"
+                ng-class="hasFundsOrTickets(p) ? '' : 'no-drag'" data-drag="hasFundsOrTickets(p)"
+                data-jqyoui-options="dragOptions" ng-model="p[$index]"
+                jqyoui-draggable="{index: {{$index}},animate:true,onStart:'startCallbackAdd(p)', containment:'position'}">
                 <md-card-content>
-                    <div class="slot" data-idperson="{{g.Id}}" ng-dblclick="selectPerson(g.Id)">
+                    <div class="slot" data-idperson="{{p.Id}}" ng-dblclick="selectPerson(p.Id)">
                         <div layout="row" class="passenger">
                             <div flex="70">
-                                <span class="name">{{g.Name}}</span>
+                                <span class="name">{{p.Name}}</span>
                                 <div class="slot-name">
-                                    <span style="display: inline-block;" ng-show="g.AvailableTickets">Tickets:
-                                        {{g.TicketName}} ({{g.AvailableTickets}})</span>
-                                    <span style="display: inline-block;" ng-show="g.AvailableFunds">Available funds:
-                                        {{g.AvailableFunds | currency}}</span>
+                                    <span style="display: inline-block;" ng-show="p.AvailableTickets">Tickets:
+                                        {{p.TicketName}} ({{p.AvailableTickets}})</span>
+                                    <span style="display: inline-block;" ng-show="p.AvailableFunds">Available funds:
+                                        {{p.AvailableFunds | currency}}</span>
                                 </div>
                             </div>
                             <div flex="30" style="text-align: end;">
-                                <span class="tickets" ng-if="!g.Profit && g.AvailableTickets > 0">
-                                    <small>TK</small> {{g.AvailableTickets}}
+                                <span class="tickets" ng-if="!p.Profit && p.AvailableTickets > 0">
+                                    <small>TK</small> {{p.AvailableTickets}}
                                 </span>
                             </div>
                         </div>

@@ -450,13 +450,10 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
         }
     };
 
-    $scope.getClassLoadHelperPerson = function (p) {
+    $scope.hasFundsOrTickets = function (p) {
         try {
-            if ((p.AvailableFunds <= 0 || p.AvailableFunds == null) && (p.AvailableTickets == null || p.AvailableTickets == 0)) {
-                return 'no-drag';
-            }
-
-        } catch (err) {}
+            return (p.AvailableFunds > 0 || p.AvailableTickets > 0)
+        } catch (err) { }
     };
 
     function checkForOthersInGroup(idLoad) {
@@ -501,11 +498,11 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
                     value.MinutesLeft = getTimeDiffInMInutes(value.DateDeparted);
                 }
             });
-        } catch (err) {}
+        } catch (err) { }
     };
 
-    //update minutes left for depart load every minut
-    $interval(updateMinutesLeft, 60000);
+    //update minutes left for depart load every 15 sec
+    $interval(updateMinutesLeft, 15 * 1000);
 
 });
 
@@ -553,7 +550,7 @@ app.controller('editLoadCtrl', function ($scope, $state, $filter, $mdDialog, $wi
     var self = this;
     $scope.warning = null;
     $scope.load = dataToPass;
-    $scope.label = $scope.load == null ? 'Add new load' : 'Edit ' + $scope.load.Name;
+    $scope.label = $scope.load == null ? 'Add new load' : $scope.load.AircraftName + ' ' + $scope.load.Number;
 
     self.cancel = function ($event) {
         $mdDialog.cancel();
