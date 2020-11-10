@@ -93,7 +93,7 @@ app.controller('mainCtrl', function ($rootScope, $scope, $state, config) {
     };
 
     function filterAlertLoads() {
-        // pogažemo samo tiste, ki še niso v listi loadAlertsDismissed z enakimi podatki (Id, DismissedSecondAlarm)
+        // pokažemo samo tiste, ki še niso v listi loadAlertsDismissed z enakimi podatki (Id, DismissedSecondAlarm)
         $rootScope.alertLoads = $rootScope.alertLoads.filter(f =>
             $rootScope.loadAlertsDismissed.findIndex(l => l.Id == f.Id && l.DismissedSecondAlarm == secondAlarm(f)) == -1);
     }
