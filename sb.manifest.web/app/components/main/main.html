@@ -17,17 +17,11 @@
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
     </div>
     <div class="loads-alert">
-
-        <div class="loads-alert-load second-alarm">
-            <span class="loads-alert-name">Test load</span>
-            <span class="loads-alert-number">1</span>
-            <div class="loads-alert-time-left"><span class="value">5</span> min</div>
-        </div>
-
-        <div ng-repeat="l in alertLoads" class="loads-alert-load" ng-class="l.MinutesLeft <= 5 ? 'second-alarm':''">
+        <div ng-repeat="l in alertLoads" class="loads-alert-load" ng-class="l.MinutesLeft <= 5 ? 'second-alarm':''"
+            ng-click="dismissAlert(l)">
             <span class="loads-alert-name">{{l.AircraftName}}</span>
             <span class="loads-alert-number">{{l.Number}}</span>
-            <div class="loads-alert-time-left"><span class="value">{{l.DepartureMinutesLeft}}</span> min</div>
+            <div class="loads-alert-time-left"><span class="value">{{l.MinutesLeft}}</span> min</div>
         </div>
     </div>
     <span style="float:right; margin-top:-16px;" ng-style="{'color': 'white', 'opacity': connected ? 1 : .2}">
