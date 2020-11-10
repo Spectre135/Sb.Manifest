@@ -8,10 +8,10 @@
                         <span class="value">{{l.SlotsLeft}}</span>
                         <span class="label-small">slots</span>
                     </div>
-                    <div flex="65" class="time-left" ng-class="($index % 2 == 1) ? 'refuel' : ''">
+                    <div flex="65" class="time-left" ng-class="l.Refuel ? 'refuel' : ''">
                         <div class="time">
                             <i class="fas fa-gas-pump btn-refuel"></i>
-                            <span class="value">{{l.IdAircraft * 2 + l.Number * 20}}</span>
+                            <span class="value">{{l.MinutesLeft}}</span>
                             <span class="label-small">min</span>
                         </div>
                     </div>
