@@ -6,7 +6,9 @@ app.controller('mainCtrl', function ($rootScope, $scope, $state, config) {
     $scope.appName = config.appName;
     $rootScope.user = GetUser();
     $rootScope.alertLoads;
-    $rootScope.connected=false;
+    $rootScope.connected = false;
+
+    $rootScope.loadAlertsDismissed = [];
 
     //Logout/Login
     $rootScope.logout = function (response) {
@@ -45,7 +47,7 @@ app.controller('mainCtrl', function ($rootScope, $scope, $state, config) {
 
     //check connection status
     connection.onreconnecting(error => {
-        if (connection.state === signalR.HubConnectionState.Reconnecting){
+        if (connection.state === signalR.HubConnectionState.Reconnecting) {
             $scope.$apply(function () {
                 $rootScope.connected = false;
             });
@@ -53,7 +55,7 @@ app.controller('mainCtrl', function ($rootScope, $scope, $state, config) {
     });
 
     connection.onreconnected(connectionId => {
-        if (connection.state === signalR.HubConnectionState.Connected){
+        if (connection.state === signalR.HubConnectionState.Connected) {
             $scope.$apply(function () {
                 $rootScope.connected = true;
             });
@@ -65,14 +67,40 @@ app.controller('mainCtrl', function ($rootScope, $scope, $state, config) {
         $scope.$apply(function () {
             $rootScope.alertLoads = data.DataList;
             try {
-                angular.forEach( $rootScope.alertLoads, function (value, key) {
+                angular.forEach($rootScope.alertLoads, function (value, key) {
                     if (value.DateDeparted) {
                         value.MinutesLeft = getTimeDiffInMInutes(value.DateDeparted);
                     }
                 });
             } catch (err) { }
+            filterAlertLoads();
         });
     });
+
+    $rootScope.dismissAlert = function (load) {
+        const index = $rootScope.loadAlertsDismissed.findIndex(l => l.Id == load.Id);
+        // če ga še ni v listi ga vpišemo
+        if (index == -1)
+            $rootScope.loadAlertsDismissed.push({
+                Id: load.Id,
+                DismissedSecondAlarm: secondAlarm(load)
+            });
+        // če je že v listi nastavimo DismissedSecondAlarm
+        else
+            $rootScope.loadAlertsDismissed[index].DismissedSecondAlarm = secondAlarm(load);
+
+        filterAlertLoads();
+    };
+
+    function filterAlertLoads() {
+        // pogažemo samo tiste, ki še niso v listi loadAlertsDismissed z enakimi podatki (Id, DismissedSecondAlarm)
+        $rootScope.alertLoads = $rootScope.alertLoads.filter(f =>
+            $rootScope.loadAlertsDismissed.findIndex(l => l.Id == f.Id && l.DismissedSecondAlarm == secondAlarm(f)) == -1);
+    }
+
+    function secondAlarm(load) {
+        return load.MinutesLeft <= 5;
+    }
 
     //mora bit noter če en ne dela menu
     jQuery(function ($) {
@@ -169,7 +197,7 @@ app.controller('mainCtrl', function ($rootScope, $scope, $state, config) {
             if (pinned == 'true') {
                 $('#pin-sidebar').click();
             }
-        } catch (error) {}
+        } catch (error) { }
 
         //set side bar toggled if we have small display
         if ($('#toggle-sidebar').is(":visible")) {

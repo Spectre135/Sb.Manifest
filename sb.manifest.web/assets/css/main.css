@@ -1434,22 +1434,28 @@ span.item-color {
 }
 
 .loads-alert {
-  display  : flex;
-  font-size: 14px;
-  line-height: 1.2;
-  margin-right    : 8px;
+  display     : flex;
+  font-size   : 14px;
+  line-height : 1.2;
+  margin-right: 8px;
 }
 
 .loads-alert-load {
-  background-color: rgba(255, 255, 255, .5);
+  background-color   : rgba(255, 255, 255, .5);
   /* background-color: rgb(147 178 222); */
-  margin-right    : 8px;
-  padding         : 2px 8px 2px;
-  border-radius   : 4px;
-  text-align      : center;
+  margin-right       : 8px;
+  padding            : 2px 8px 2px;
+  border-radius      : 4px;
+  text-align         : center;
+  outline            : none;
 }
 
-.loads-alert-load.second-alarm{
+.loads-alert-load:hover {
+  opacity: .75;
+  cursor : pointer;
+}
+
+.loads-alert-load.second-alarm {
   background-color: #fff59d;
 }
 
