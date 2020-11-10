@@ -9,15 +9,31 @@
         <span class="menu-collapsed">
             <div id="hit-logo">
                 <a ui-sref="page">
-                    <div id="app-txt">Skydive Bovec <b>Manifest</b></div>
+                    <div id="app-txt"><span class="screen-small-hide">Skydive Bovec </span><b>Manifest</b></div>
                 </a>
             </div>
         </span>
     </div>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
     </div>
-    <span style="float:right;" ng-style="connected && {'color':'white'}||{'color':'gray'}">
-        <i class="fas fa-wifi font18"></i>
+    <div class="loads-alert">
+
+        <div class="loads-alert-load second-alarm">
+            <span class="loads-alert-name">Test load</span>
+            <span class="loads-alert-number">1</span>
+            <div class="loads-alert-time-left"><span class="value">5</span> min</div>
+        </div>
+
+        <div ng-repeat="l in alertLoads" class="loads-alert-load" ng-class="l.MinutesLeft <= 5 ? 'second-alarm':''">
+            <span class="loads-alert-name">{{l.AircraftName}}</span>
+            <span class="loads-alert-number">{{l.Number}}</span>
+            <div class="loads-alert-time-left"><span class="value">{{l.MinutesLeft}}</span> min</div>
+        </div>
+    </div>
+    <span style="float:right; margin-top:-16px;" ng-style="{'color': 'white', 'opacity': connected ? 1 : .2}">
+        <i class="fas fa-fw fa-desktop screen-small-hide"></i>
+        <i class="fas fa-fw fa-exchange-alt"></i>
+        <i class="fas fa-fw fa-server screen-small-hide"></i>
     </span>
 </nav><!-- NavBar END -->
 

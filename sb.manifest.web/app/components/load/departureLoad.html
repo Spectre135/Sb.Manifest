@@ -2,7 +2,7 @@
   <md-toolbar>
     <div class="md-toolbar-tools">
       <span><i class="fas fa-plane-departure"></i></span>
-      <h2>&nbsp;&nbsp;Load {{dto.Number}} {{dto.AircraftName}} {{dto.AircraftRegistration}}</h2>
+      <h2>&nbsp;&nbsp;{{dto.AircraftName}}  <b>{{dto.Number}}</b> <span style="font-size: .66em; opacity: .66;">{{dto.AircraftRegistration}}</span></h2>
       <span flex></span>
       <md-button class="md-icon-button" ng-click="ctrl.cancel()">
         <i class="fas fa-times"></i>
@@ -14,14 +14,13 @@
     <div class="md-dialog-content">
       <form name="form" ng-submit="$event.preventDefault()">
 
-
         <md-input-container class="md-block">
-          <label>Schedule</label>
-          <input ng-model="dto.DateDeparted" type="time" name="scheduled" placeholder="HH:mm" ng-required="true" greater-to="minTime">
+          <label>Scheduled time</label>
+          <input ng-model="dto.DateDeparted" type="datetime-local" name="scheduled" placeholder="dd. MM. yyyy HH:mm" ng-required="true" greater-to="minTime">
           <div ng-messages="form.scheduled.$error" role="alert" style="padding-bottom: 5px;">
             <div ng-message="required">Departure time is required</div>
             <div ng-message="time">Time is not valid</div>
-            <div ng-message="greaterTo">Scheduled time must be greater !</div>
+            <div ng-message="greaterTo">Scheduled time must be greater!</div>
           </div>
         </md-input-container>
 
