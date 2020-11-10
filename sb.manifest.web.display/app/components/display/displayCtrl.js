@@ -155,4 +155,7 @@ app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
             });
         } catch (err) { }
     };
+
+    //update minutes left for depart load every 15 sec
+    $interval(updateMinutesLeft, 15 * 1000);
 });
