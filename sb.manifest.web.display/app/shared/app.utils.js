@@ -281,3 +281,10 @@ function convertLocalDate(date) {
     date = new Date(date);
     return date;
 };
+
+function getTimeDiffInMInutes(date){
+    var now =new Date();
+    var scheduled = new Date(date);
+    var diff = scheduled-now;
+    return Math.floor(diff / 60000);
+};

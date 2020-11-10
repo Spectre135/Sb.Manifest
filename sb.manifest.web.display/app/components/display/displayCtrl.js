@@ -33,6 +33,7 @@ app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
         var promise = apiService.getData(url, params, true)
             .then(function (data) {
                 $scope.loads = data.DataList;
+                updateMinutesLeft();
             });
         return promise;
     };
@@ -59,6 +60,7 @@ app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
     connection.on('messageReceived', function (data) {
         $scope.$apply(function () {
             $scope.loads = data.DataList;
+            updateMinutesLeft();
         });
     });
 
@@ -142,5 +144,15 @@ app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
 
         // po 10 sekundah se gumb help skrije
         setTimeout(fadeHelp, 10 * 1000);
+    };
+
+    function updateMinutesLeft() {
+        try {
+            angular.forEach($scope.loads, function (value, key) {
+                if (value.DateDeparted) {
+                    value.MinutesLeft = getTimeDiffInMInutes(value.DateDeparted);
+                }
+            });
+        } catch (err) { }
     };
 });
