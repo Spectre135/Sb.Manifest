@@ -282,13 +282,13 @@ function convertLocalDate(date) {
     return date;
 };
 
-function getDateHHss(d) {
+function getDateStrHHmm(d) {
     try {
         if (d) {
-            return new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes());
+            return d.getHours() + ':' +  d.getMinutes();
         } else {
             var d = new Date();
-            return new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes());
+            return d.getHours() + ':' +  d.getMinutes();
         }
     } catch (err) {
         return null;
@@ -302,5 +302,14 @@ function formatDateToString(d) {
         return  d.getFullYear() + '-' + ('00'+month).slice(-2) + '-' + d.getDate();
     } catch (err) {
         return null;
+    }
+};
+
+function addHHmmToDate(d,hhmm){
+    try {
+        const chars = hhmm.split(':');
+        return convertLocalDate(new Date(d.getFullYear(), d.getMonth(), d.getDate(), chars[0], chars[1]));
+    } catch (err) {
+        return d;
     }
 };

@@ -522,9 +522,7 @@ app.controller('departureLoadCtrl', function ($rootScope, $scope, $mdDialog, dat
     var self = this;
     $scope.dto = angular.copy(dataToPass); //data from parent ctrl
     $scope.prevLoad = prevLoad;
-    $scope.minTime = getDateHHss($rootScope.getDate());
-    $scope.minDate = formatDateToString($rootScope.getDate())+'T00:00';
-    $scope.maxDate = formatDateToString($rootScope.getDate())+'T23:00';
+    $scope.minTime = getDateStrHHmm($rootScope.getDate());
 
     function getMinTime() {
         if ($scope.prevLoad) {
@@ -532,14 +530,14 @@ app.controller('departureLoadCtrl', function ($rootScope, $scope, $mdDialog, dat
                 var d = new Date($scope.prevLoad.DateDeparted);
                 //add rotation time
                 d.setMinutes(d.getMinutes() + $scope.prevLoad.RotationTime);
-                $scope.minTime = getDateHHss(d);
+                $scope.minTime = getDateStrHHmm(d);
                 return $scope.minTime;
             } else {
-                $scope.minTime = getDateHHss($rootScope.getDate());
+                $scope.minTime = getDateStrHHmm($rootScope.getDate());
                 return $scope.minTime;
             }
         } else {
-            return getDateHHss(new Date($scope.dto.DateDeparted));
+            return getDateStrHHmm(new Date($scope.dto.DateDeparted));
         }
     };
 
@@ -550,9 +548,8 @@ app.controller('departureLoadCtrl', function ($rootScope, $scope, $mdDialog, dat
     };
 
     self.save = function ($event) {
-        //convert to local time gmt+1
         var dto = angular.copy($scope.dto);
-        dto.DateDeparted = convertLocalDate($scope.dto.DateDeparted);
+        dto.DateDeparted = addHHmmToDate($rootScope.getDate(),$scope.dto.DateDeparted);
         var url = config.manifestApi + '/load/depart/save';
         apiService.postData(url, dto, true)
             .then(function () {
