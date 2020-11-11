@@ -103,23 +103,21 @@ namespace sb.manifest.api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                /*
+                
                 app.UseSwagger();
-
-                // specifying the Swagger JSON endpoint.
                 app.UseSwaggerUI(c =>
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Skydive Bovec Manifest API");
                 });
-                */
             }
-
-            app.UseSwagger();
-
-            app.UseSwaggerUI(c =>
+            else
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Skydive Bovec Manifest API");
-            });
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "Skydive Bovec Manifest API");
+                });
+            }
 
             app.UseCors("CorsPolicy");
 
