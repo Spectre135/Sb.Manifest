@@ -57,7 +57,9 @@ app.controller('personCtrl', function ($scope, $state, $mdDialog, apiService, co
             parent: angular.element(document.body),
             targetEvent: $event,
             clickOutsideToClose: false
-        }).then(function () {}).catch(function () {});
+        }).then(function () {
+            $scope.getPersonList();
+        }).catch(function () {});
     };
 
     //add/edit person
