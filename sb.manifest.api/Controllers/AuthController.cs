@@ -36,7 +36,7 @@ namespace sb.manifest.api.Controllers
                 if (AuthService.IsUserAuthenticated(user))             
                     return Ok(JwtManager.GenerateToken(user));
 
-                return StatusCode(StatusCodes.Status401Unauthorized, "Bad username or password.");
+                return StatusCode(StatusCodes.Status401Unauthorized, "Wrong username or password.");
             }
             catch (Exception ex)
             {
