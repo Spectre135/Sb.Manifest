@@ -104,6 +104,7 @@ app.factory('apiService', function ($q, $http) {
         return deferred.promise;
     };
 
+    
     //error message handling
     function writeError(response) {
         //Remove errors

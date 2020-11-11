@@ -5,10 +5,10 @@ using sb.manifest.api.Filter;
 using sb.manifest.api.Model;
 using sb.manifest.api.SQL;
 using sb.manifest.api.Utils;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 #endregion
@@ -17,21 +17,10 @@ namespace sb.manifest.api.DAO
 {
     public abstract class AbstractDAO : IDisposable
     {
-        private IDbConnection connection;
         private IDbTransaction transaction;
         private IDbCommand command;
 
-        #region Connection,Command
-        public IDbConnection GetConnection(IConfiguration config)
-        {
-            if (connection == null)
-                connection = new SqliteConnection(Config.GetDatabasePath(config));
-
-            if (connection.State != ConnectionState.Open)
-                connection.Open();
-
-            return connection;
-        }
+        #region Command
         public IDbCommand CreateCommand(IDbConnection connection, List<KeyValuePair<string, object>> alParmValues, string sql)
         {
 
@@ -44,7 +33,8 @@ namespace sb.manifest.api.DAO
             }
             catch (Exception ex)
             {
-                connection.Close();
+                connection.Dispose();
+                command.Dispose();
                 throw new Exception("Error at CreateCommand", ex);
             }
 
@@ -225,7 +215,7 @@ namespace sb.manifest.api.DAO
 
             try
             {
-                using var connection = GetConnection(config);
+                using var connection = Connection.GetConnection(config);
                 IDbCommand command = CreateCommand(connection, alParmValues, sql);
                 using SqliteDataReader reader = (SqliteDataReader)command.ExecuteReader();
 
@@ -238,7 +228,7 @@ namespace sb.manifest.api.DAO
             }
             catch (Exception ex)
             {
-                connection.Close();
+                Connection.Close();
                 throw new Exception("Error Get Data" + ex.Message, ex.InnerException);
             }
 
@@ -265,7 +255,7 @@ namespace sb.manifest.api.DAO
                 }
 
                 string finalSQL = GetPagingQuery(_sql.ToString(), from, to, orderby, asc);
-                using var connection = GetConnection(config);
+                using var connection = Connection.GetConnection(config);
                 IDbCommand command = CreateCommand(connection, alParmValues, finalSQL);
                 using SqliteDataReader reader = (SqliteDataReader)command.ExecuteReader();
 
@@ -281,7 +271,7 @@ namespace sb.manifest.api.DAO
             }
             catch (Exception ex)
             {
-                connection.Close();
+                Connection.Close();
                 throw new Exception("Error Get Paging Data" + ex.Message, ex.InnerException);
             }
 
@@ -291,7 +281,7 @@ namespace sb.manifest.api.DAO
         {
             try
             {               
-                using var connection = GetConnection(config);
+                using var connection = Connection.GetConnection(config);
 
                 transaction = connection.BeginTransaction();
 
@@ -311,7 +301,7 @@ namespace sb.manifest.api.DAO
             catch (Exception ex)
             {              
                 transaction.Rollback();
-                connection.Close();
+                Connection.Close();
                 throw new Exception("Error in saving data" + ex.Message, ex.InnerException);
             }
         }
@@ -356,13 +346,10 @@ namespace sb.manifest.api.DAO
 
         public void Dispose()
         {
-            /*
-                If you use connection object one time, use Dispose.
-                If connection object must be reused, use Close method.
-            */
             try
             {
-                connection.Close();
+                command.Dispose();
+                Connection.Dispose();
             }
             catch (Exception) { }
 

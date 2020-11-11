@@ -16,7 +16,7 @@
 
         <md-input-container class="md-block">
           <label>Scheduled time</label>
-          <input ng-model="dto.DateDeparted" type="datetime-local" name="scheduled" ng-required="true" greater-to="minTime">
+          <input ng-model="dto.DateDeparted" type="datetime-local" min="{{minDate}}" max="{{maxDate}}" name="scheduled" ng-required="true" greater-to="minTime">
           <div ng-messages="form.scheduled.$error" role="alert" style="padding-bottom: 5px;">
             <div ng-message="required">Departure time is required</div>
             <div ng-message="time">Time is not valid</div>

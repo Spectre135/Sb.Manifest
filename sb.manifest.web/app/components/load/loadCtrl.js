@@ -41,16 +41,16 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
                 });
             });
     };
-        //confirm Load
-        $scope.confirmLoad = function ($event, dto) {
-            $rootScope.confirmDialog('Confirm load', 'Would you like to confirm load No. ' + dto.Number + ' ' + dto.AircraftName + ' ?', 'Confirm', 'Cancel')
-                .then(function onSuccess(result) {
-                    var url = config.manifestApi + '/load/confirm';
-                    apiService.postData(url, dto, true).then(function () {
-                        $scope.getLoadList();
-                    });
+    //confirm Load
+    $scope.confirmLoad = function ($event, dto) {
+        $rootScope.confirmDialog('Confirm load', 'Would you like to confirm load No. ' + dto.Number + ' ' + dto.AircraftName + ' ?', 'Confirm', 'Cancel')
+            .then(function onSuccess(result) {
+                var url = config.manifestApi + '/load/confirm';
+                apiService.postData(url, dto, true).then(function () {
+                    $scope.getLoadList();
                 });
-        };
+            });
+    };
     //init
     $scope.init = function () {
         $scope.getLoadList().then(function () {
@@ -453,7 +453,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
     $scope.hasFundsOrTickets = function (p) {
         try {
             return (p.AvailableFunds > 0 || p.AvailableTickets > 0)
-        } catch (err) { }
+        } catch (err) {}
     };
 
     function checkForOthersInGroup(idLoad) {
@@ -495,10 +495,22 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
         try {
             angular.forEach($scope.loads, function (value, key) {
                 if (value.DateDeparted) {
-                    value.MinutesLeft = getTimeDiffInMInutes(value.DateDeparted);
+                    //if we have value from alertLoads read from this
+                    // to have minutes left equals
+                    try{
+                        var _DepartureMinutesLeft = $filter('filter')($rootScope.alertLoads, function (item) {
+                        return item.Id == value.Id;
+                        })[0].DepartureMinutesLeft;
+                    }catch(err){}
+                    
+                    if (_DepartureMinutesLeft) {
+                        value.DepartureMinutesLeft = _DepartureMinutesLeft
+                    } else {
+                        value.DepartureMinutesLeft = $rootScope.getTimeDiffInMInutes(value.DateDeparted);
+                    }
                 }
             });
-        } catch (err) { }
+        } catch (err) {}
     };
 
     //update minutes left for depart load every 15 sec
@@ -506,11 +518,13 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
 
 });
 
-app.controller('departureLoadCtrl', function ($scope, $mdDialog, dataToPass, prevLoad, apiService, config) {
+app.controller('departureLoadCtrl', function ($rootScope, $scope, $mdDialog, dataToPass, prevLoad, apiService, config) {
     var self = this;
     $scope.dto = angular.copy(dataToPass); //data from parent ctrl
     $scope.prevLoad = prevLoad;
-    $scope.minTime = getDateHHss(new Date());
+    $scope.minTime = getDateHHss($rootScope.getDate());
+    $scope.minDate = formatDateToString($rootScope.getDate())+'T00:00';
+    $scope.maxDate = formatDateToString($rootScope.getDate())+'T23:00';
 
     function getMinTime() {
         if ($scope.prevLoad) {
@@ -520,14 +534,16 @@ app.controller('departureLoadCtrl', function ($scope, $mdDialog, dataToPass, pre
                 d.setMinutes(d.getMinutes() + $scope.prevLoad.RotationTime);
                 $scope.minTime = getDateHHss(d);
                 return $scope.minTime;
+            } else {
+                $scope.minTime = getDateHHss($rootScope.getDate());
+                return $scope.minTime;
             }
+        } else {
+            return getDateHHss(new Date($scope.dto.DateDeparted));
         }
-        $scope.minTime = getDateHHss(new Date());
-        return $scope.minTime;
     };
 
-    $scope.dto.DateDeparted = $scope.dto.DateDeparted == null ? getMinTime() : getDateHHss(new Date($scope.dto.DateDeparted));
-
+    $scope.dto.DateDeparted = getMinTime();
 
     self.cancel = function ($event) {
         $mdDialog.cancel();
@@ -545,7 +561,7 @@ app.controller('departureLoadCtrl', function ($scope, $mdDialog, dataToPass, pre
     };
 });
 
-app.controller('editLoadCtrl', function ($scope, $state, $filter, $mdDialog, $window, dataToPass, apiService, config) {
+app.controller('editLoadCtrl', function ($scope, $filter, $mdDialog, dataToPass, apiService, config) {
 
     var self = this;
     $scope.warning = null;

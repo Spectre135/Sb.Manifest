@@ -282,13 +282,25 @@ function convertLocalDate(date) {
     return date;
 };
 
-function getDateHHss(d){
-    return new Date(d.getFullYear(),d.getMonth(),d.getDate(),d.getHours(),d.getMinutes());
+function getDateHHss(d) {
+    try {
+        if (d) {
+            return new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes());
+        } else {
+            var d = new Date();
+            return new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes());
+        }
+    } catch (err) {
+        return null;
+    }
+
 };
 
-function getTimeDiffInMInutes(date){
-    var now =new Date();
-    var scheduled = new Date(date);
-    var diff = scheduled-now;
-    return Math.floor(diff / 60000);
+function formatDateToString(d) {
+    try {
+        var month = d.getMonth()+1;
+        return  d.getFullYear() + '-' + ('00'+month).slice(-2) + '-' + d.getDate();
+    } catch (err) {
+        return null;
+    }
 };
