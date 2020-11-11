@@ -27,7 +27,7 @@ app.factory('RequestsErrorHandler', function ($q, $rootScope) {
                     rejection.status != 404 &&
                     rejection.status != 406 &&
                     rejection.status != 401) {
-                    $rootScope.showDialog('ERROR', 'Prišlo je do napake. Poizkusite kasneje.\n\nZa napako se opravičujemo !');
+                    $rootScope.showDialog('ERROR', 'Prišlo je do napake. Poskusite kasneje.\n\nZa napako se opravičujemo!');
 
                 } else if (rejection.status == 403) {
                     //we check if user is authenticated

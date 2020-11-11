@@ -175,7 +175,7 @@ app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
         try {
             angular.forEach($scope.loads, function (value, key) {
                 if (value.DateDeparted) {
-                    value.DepartureMinutesLeft = getTimeDiffInMInutes(value.DateDeparted);
+                    value.MinutesLeft = getTimeDiffInMInutes(value.DateDeparted);
                 }
             });
         } catch (err) {}
