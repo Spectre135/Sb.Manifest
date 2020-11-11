@@ -4,6 +4,7 @@ var gulp = require("gulp");
 var gutil = require("gulp-util");
 var concat = require("gulp-concat");
 var htmlreplace = require('gulp-html-replace');
+var replace = require('gulp-replace');
 var uglify = require('gulp-uglify-es').default; //require('gulp-uglify');
 var ngAnnotate = require('gulp-ng-annotate');
 //var pipeline = require('readable-stream').pipeline;
@@ -26,15 +27,7 @@ var jsAssets = [
     'app/min/app.utils.js',
     'app/min/prijavaCtrl.js',
     'app/min/mainCtrl.js',
-    'app/min/homeCtrl.js',
-    'app/min/loadCtrl.js',
-    'app/min/personCtrl.js',
-    'app/min/addSlotCtrl.js',
-    'app/min/paymentsCtrl.js',
-    'app/min/invoiceCtrl.js',
-    'app/min/purchaseCtrl.js',
-    'app/min/settingsCtrl.js',
-    'app/min/reportCtrl.js'
+    'app/min/displayCtrl.js'
 ];
 
 // seznam css datotek po pravilnem vrstnem redu
@@ -45,7 +38,6 @@ var cssAssets = [
     'assets/css/min/template.css',
     'assets/css/min/angular-material.min.css',
     'assets/css/min/md-data-table.min.css',
-    'assets/css/intlTelInput.min.css',
     'assets/css/min/sidebar-themes.css',
     'assets/css/min/main.css',
     'assets/css/min/prijava.css',
@@ -108,6 +100,7 @@ gulp.task('preimenuj', function () {
             'css': 'assets/css/' + prodCssMin,
             'app': prodJSMin
         }))
+        .pipe(replace('Refresh(1234567899)', 'Refresh(' + timeStamp +')'))
         .pipe(strip())
         .pipe(gulp.dest('dist/'));
 });
