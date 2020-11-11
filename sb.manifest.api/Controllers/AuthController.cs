@@ -9,6 +9,7 @@ using sb.manifest.api.Model;
 using sb.manifest.api.Services;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 #endregion
 
 namespace sb.manifest.api.Controllers
@@ -43,6 +44,16 @@ namespace sb.manifest.api.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex);
             }
 
+        }
+
+        /// <summary>
+        /// Get server time
+        /// </summary>
+        [AllowAnonymous]
+        [HttpGet("server/time")]
+        public IActionResult GetServerTime()
+        {
+            return Ok(DateTime.Now);
         }
 
     }

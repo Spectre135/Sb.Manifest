@@ -66,13 +66,7 @@ app.controller('mainCtrl', function ($rootScope, $scope, $state, config) {
     connection.on('messageReceived', function (data) {
         $scope.$apply(function () {
             $rootScope.alertLoads = data.DataList;
-            try {
-                angular.forEach($rootScope.alertLoads, function (value, key) {
-                    if (value.DateDeparted) {
-                        value.MinutesLeft = getTimeDiffInMInutes(value.DateDeparted);
-                    }
-                });
-            } catch (err) { }
+            console.log($rootScope.alertLoads);
             filterAlertLoads();
         });
     });

@@ -67,7 +67,7 @@ namespace sb.manifest.api.DAO
                 List<KeyValuePair<string, object>> alParmValues = new List<KeyValuePair<string, object>>();
                 IDbCommand command;
 
-                using var connection = GetConnection(config);
+                using var connection = Connection.GetConnection(config);
                 transaction = connection.BeginTransaction();
                 //idGroup za skupine ali tandeme da imamo skupaj osebe, če jih premikamo med loadi
                 //int idGroup = int.Parse(DateTime.Now.ToString("mmssff"));
@@ -99,7 +99,7 @@ namespace sb.manifest.api.DAO
                 List<KeyValuePair<string, object>> alParmValues = new List<KeyValuePair<string, object>>();
                 IDbCommand command;
 
-                using var connection = GetConnection(config);
+                using var connection = Connection.GetConnection(config);
                 transaction = connection.BeginTransaction();
 
                 foreach (int idPerson in mMove.IdPerson)
@@ -132,7 +132,7 @@ namespace sb.manifest.api.DAO
                 List<KeyValuePair<string, object>> alParmValues = new List<KeyValuePair<string, object>>();
                 IDbCommand command;
 
-                using var connection = GetConnection(config);
+                using var connection = Connection.GetConnection(config);
                 transaction = connection.BeginTransaction();
 
                 //update load status to 1 = confirmed //TODO šifrant statusov

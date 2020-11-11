@@ -2,12 +2,12 @@
 
 var app = angular.module('SbManifest');
 
-app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
+app.controller('displayCtrl', function ($rootScope,$scope, $interval, config, apiService) {
     $scope.loads;
     $scope.connected = false;
     $scope.showLoadList = true;
     $scope.showPic = false;
-    $scope.pic = 'pictures/1.jpg';
+    //$scope.pic = 'pictures/1.jpg';
     const displayTime = 60 * 1000; //60 sec za load listo
     //const picTime = 5 * 1000; //5 sec za reklame 
     var i = -1;
@@ -80,7 +80,7 @@ app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
     connection.on('messageReceived', function (data) {
         $scope.$apply(function () {
             $scope.loads = data.DataList;
-            //updateMinutesLeft();
+            updateMinutesLeft();
         });
     });
 
@@ -175,7 +175,7 @@ app.controller('displayCtrl', function ($scope, $interval, config, apiService) {
         try {
             angular.forEach($scope.loads, function (value, key) {
                 if (value.DateDeparted) {
-                    value.MinutesLeft = getTimeDiffInMInutes(value.DateDeparted);
+                    value.DepartureMinutesLeft = $rootScope.getTimeDiffInMInutes(value.DateDeparted);
                 }
             });
         } catch (err) {}

@@ -17,7 +17,7 @@
                         <div class="time">
                             <i class="fas fa-gas-pump btn-refuel" ng-click="refuel($event,l,false)"></i>
                             <div class="time-or-clock" ng-click="departureLoad($event,l)">
-                                <span ng-if="l.DateDeparted" class="value">{{l.MinutesLeft}}
+                                <span ng-if="l.DateDeparted" class="value">{{l.DepartureMinutesLeft}}
                                     <span class="label-small">min</span></span>
                                 <span ng-if="!l.DateDeparted"><i class="far fa-clock"></i></span>
                             </div>
