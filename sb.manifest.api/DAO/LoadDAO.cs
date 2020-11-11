@@ -14,14 +14,15 @@ namespace sb.manifest.api.DAO
 {
     public class LoadDAO : AbstractDAO
     {
-        public MResponse GetLoads(IConfiguration config, int status=0,bool alert=false)
+        public MResponse GetLoads(IConfiguration config, int status = 0, bool alert = false)
         {
             string sql = SQLBuilder.GetLoadSQL();
             sql += " and Status = @Status";
 
             //filter za alarme na loade kateri so v 15min časovnem oknu
             if (alert)
-                sql += " and DateDeparted between datetime('now','localtime', '-15 Minute') and datetime('now','localtime', '+15 Minute')  ";
+                //sql += " and DateDeparted between datetime('now','localtime', '-15 Minute') and datetime('now','localtime', '+15 Minute')  ";
+                sql += " and DateDeparted <= datetime('now','localtime', '+15 Minute')  ";
 
             List<KeyValuePair<string, object>> alParmValues = new List<KeyValuePair<string, object>>
             {
@@ -88,7 +89,7 @@ namespace sb.manifest.api.DAO
                 transaction.Rollback();
                 throw new Exception("Error AddPassengers to load " + ex.Message, ex.InnerException);
             }
-            
+
         }
         public void MoveSlot(IConfiguration config, MMove mMove)
         {
@@ -106,7 +107,7 @@ namespace sb.manifest.api.DAO
 
                     alParmValues = LoadParametersValue<MMove>(mMove);
                     alParmValues.Add(new KeyValuePair<string, object>("@IdPerson", idPerson));
-                    command = CreateCommand(connection, alParmValues, mMove.IdLoadTo==0 ? SQLBuilder.GetRemoveSlotSQL():SQLBuilder.GetMoveSlotSQL());
+                    command = CreateCommand(connection, alParmValues, mMove.IdLoadTo == 0 ? SQLBuilder.GetRemoveSlotSQL() : SQLBuilder.GetMoveSlotSQL());
                     command.ExecuteNonQuery();
                 }
 
