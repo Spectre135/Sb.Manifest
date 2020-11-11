@@ -24,7 +24,6 @@ namespace sb.manifest.api.Tasks
             config = configuration;
             hubContext = _hubContext;
         }
-
         public void Dispose()
         {
             timer?.Dispose();
