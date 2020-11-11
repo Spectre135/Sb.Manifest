@@ -33,7 +33,7 @@
                             ng-style="{'background-color': g.BackgroundColor}">
                             <md-card-content>
                                 <div class="slot" ng-repeat="p in g.LoadList | orderBy: 'ProductSlotName'"
-                                    ng-class="getGroupClass(p.IdPersonalGroup)">
+                                    ng-class="getGroupClass(g.IdPersonalGroup)">
                                     <div class="passenger">
                                         <div class="slot-name">
                                             {{p.ProductSlotName}}
