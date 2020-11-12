@@ -4,6 +4,7 @@ var app = angular.module('SbManifest');
 
 app.controller('settingsCtrl', function ($scope, $rootScope, $state, $mdDialog, apiService, config) {
 
+    $rootScope.page='Settings | ';
     $scope.list = $state.params.list;
     $scope.myPage = $state.params.page;
     $scope.myLimit = $state.params.limit;

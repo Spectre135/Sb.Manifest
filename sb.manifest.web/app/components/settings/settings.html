@@ -123,6 +123,7 @@
                                                 <th md-column md-order-by="Description"><span>Description</span></th>
                                                 <th md-column md-order-by="Account"><span>Account</span></th>
                                                 <th md-column md-order-by="IsStaffJob"><span>Staff job</span></th>
+                                                <th md-column md-order-by="IsCanopy"><span>Is Canopy</span></th>
                                                 <th md-column md-numeric right md-order-by="Income"><span>Income</span>
                                                 </th>
                                                 <th md-column md-numeric right md-order-by="Outcome">
@@ -142,6 +143,11 @@
                                                 <td md-cell>
                                                     <md-checkbox ng-disabled="true" aria-label="Staff job"
                                                         ng-model="p.IsStaffJob">
+                                                    </md-checkbox>
+                                                </td>
+                                                <td md-cell>
+                                                    <md-checkbox ng-disabled="true" aria-label="Is canopy"
+                                                        ng-model="p.IsCanopy">
                                                     </md-checkbox>
                                                 </td>
                                                 <td md-cell right ng-style="p.Income  > 0 && {'color':'green'}">
@@ -214,6 +220,7 @@
                                                 <th md-column md-order-by="Slots"><span>Maximum Slots</span></th>
                                                 <th md-column md-order-by="MinSlots"><span>Minimum slots</span></th>
                                                 <th md-column md-order-by="RotationTime"><span>Rotation time</span></th>
+                                                <th md-column md-order-by="RefuelTime"><span>Refuel time</span></th>
                                                 <th md-column md-order-by="Active"><span>Active</span></th>
                                                 <th md-column></th>
                                             </tr>
@@ -232,6 +239,7 @@
                                                 <td md-cell>{{p.MaxSlots}}</td>
                                                 <td md-cell>{{p.MinSlots}}</td>
                                                 <td md-cell>{{p.RotationTime}}</td>
+                                                <td md-cell>{{p.RefuelTime}}</td>
                                                 <td md-cell>
                                                     <md-checkbox ng-disabled="true" aria-label="Aircraft active"
                                                         ng-model="p.Active"></md-checkbox>

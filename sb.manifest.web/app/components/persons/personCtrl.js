@@ -2,7 +2,9 @@
 
 var app = angular.module('SbManifest');
 
-app.controller('personCtrl', function ($scope, $state, $mdDialog, apiService, config) {
+app.controller('personCtrl', function ($rootScope, $scope, $state, $mdDialog, apiService, config) {
+
+    $rootScope.page='Persons | '; //page title
     $scope.list = $state.params.list;
     $scope.query = $state.params.query;
     $scope.rows = $state.params.rows;

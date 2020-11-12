@@ -66,7 +66,6 @@ app.controller('mainCtrl', function ($rootScope, $scope, $state, config) {
     connection.on('messageReceived', function (data) {
         $scope.$apply(function () {
             $rootScope.alertLoads = data.DataList;
-            console.log($rootScope.alertLoads);
             filterAlertLoads();
         });
     });

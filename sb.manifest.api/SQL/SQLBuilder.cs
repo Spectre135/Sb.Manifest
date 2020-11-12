@@ -455,8 +455,8 @@ namespace sb.manifest.api.SQL
         }
         public static string GetInsertProductSlotSQL()
         {
-            return @"INSERT INTO ProductSlot(IdProduct,Name,Description,Income,Outcome,IdAccount,IsStaffJob,EquipmentWeight) 
-                                      VALUES(@IdProduct,@Name, @Description, @Income,@Outcome, @IdAccount,@IsStaffJob,@EquipmentWeight)";
+            return @"INSERT INTO ProductSlot(IdProduct,Name,Description,Income,Outcome,IdAccount,IsStaffJob,EquipmentWeight,IsCanopy) 
+                                      VALUES(@IdProduct,@Name, @Description, @Income,@Outcome, @IdAccount,@IsStaffJob,@EquipmentWeight,@IsCanopy)";
         }
         public static string GetSaveProductSlotSQL()
         {
@@ -468,7 +468,8 @@ namespace sb.manifest.api.SQL
                                idaccount = @IdAccount, 
                                idproduct = @IdProduct, 
                                isstaffjob = @IsStaffJob,
-                               equipmentweight = @EquipmentWeight
+                               equipmentweight = @EquipmentWeight,
+                               iscanopy = @IsCanopy
                         WHERE  id = @Id ";
         }
         public static string GetDeleteProductSlotSQL()
@@ -484,8 +485,8 @@ namespace sb.manifest.api.SQL
         }
         public static string GetInsertAircraftSQL()
         {
-            return @"INSERT INTO Aircraft(Registration,Type,Name,MaxSlots,MinSlots,RotationTime,Active,BackgroundColor) 
-                                      VALUES(upper(@Registration),@Type,@Name,@MaxSlots,@MinSlots,@RotationTime,@Active,@BackgroundColor)";
+            return @"INSERT INTO Aircraft(Registration,Type,Name,MaxSlots,MinSlots,RotationTime,RefuelTime,Active,BackgroundColor) 
+                                      VALUES(upper(@Registration),@Type,@Name,@MaxSlots,@MinSlots,@RotationTime,@RefuelTime,@Active,@BackgroundColor)";
         }
         public static string GetSaveAircraftSQL()
         {
@@ -496,6 +497,7 @@ namespace sb.manifest.api.SQL
                                     MaxSlots = @MaxSlots,
                                     MinSlots = @MinSlots, 
                                     RotationTime= @RotationTime, 
+                                    RefuelTime = @RefuelTime,
                                     Active = @Active,
                                     BackgroundColor=@BackgroundColor
                     WHERE Id = @Id";
