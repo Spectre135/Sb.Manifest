@@ -523,7 +523,6 @@ app.controller('departureLoadCtrl', function ($rootScope, $scope, $mdDialog, dat
                 $scope.scheduledTime = new Date(data);
                 return $scope.scheduledTime;
             });
-
         }
     };
 
@@ -539,9 +538,9 @@ app.controller('departureLoadCtrl', function ($rootScope, $scope, $mdDialog, dat
 
     $scope.getOriginalMinutesLeft = function () {
         if ($scope.dto.DepartureSecondsLeft)
-            return Math.floor(($scope.dto.DepartureSecondsLeft ?? 0) / 60);
+            return Math.floor((isNaN($scope.dto.DepartureSecondsLeft) ? 0 : $scope.dto.DepartureSecondsLeft) / 60);
         else if ($scope.prevLoad && $scope.prevLoad.DateDeparted)
-            return Math.floor(($scope.prevLoad.DepartureSecondsLeft ?? 0) / 60) + $scope.prevLoad.RotationTime;
+            return Math.floor((isNaN($scope.dto.DepartureSecondsLeft) ? 0 : $scope.dto.DepartureSecondsLeft) / 60) + $scope.prevLoad.RotationTime;
         else
             return 0;
     };
