@@ -18,7 +18,7 @@
           <md-input-container class="md-block" style="width: 100%;">
             <label>Product</label>
             <md-select ng-required ng-model="dto.IdProduct" name="product" ng-change="sum()">
-              <md-option ng-repeat="item in productList | filter:{IsStaffJob:false}" value="{{item.Id}}">
+              <md-option ng-repeat="item in productList" value="{{item.Id}}">
                 {{item.Name}} </br>
                 <span class="font12 gray">
                   {{item.Description}}

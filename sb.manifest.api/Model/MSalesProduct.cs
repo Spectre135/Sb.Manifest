@@ -23,9 +23,16 @@ namespace sb.manifest.api.Model
         [ParamField("IsProductSlot")]
         public bool IsProductSlot { get; set; }
 
-        [DataField("Price")]
-        [ParamField("Price")]
-        public decimal Price { get; set; }
+        [DataField("Income")]
+        [ParamField("Income")]
+        public decimal? Income { get; set; }
+
+        [DataField("IdAccount")]
+        [ParamField("IdAccount")]
+        public int IdAccount { get; set; }
+
+        [DataField("AccountDescription")]
+        public string AccountDescription { get; set; }
 
         [DataField("IsFavorite")]
         [ParamField("IsFavorite")]

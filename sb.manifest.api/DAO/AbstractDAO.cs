@@ -17,13 +17,11 @@ namespace sb.manifest.api.DAO
 {
     public abstract class AbstractDAO : IDisposable
     {
-        private IDbTransaction transaction;
-        private IDbCommand command;
 
         #region Command
         public IDbCommand CreateCommand(IDbConnection connection, List<KeyValuePair<string, object>> alParmValues, string sql)
         {
-
+            IDbCommand command = null;
             try
             {
                 command = connection.CreateCommand();          
@@ -215,8 +213,7 @@ namespace sb.manifest.api.DAO
 
             try
             {
-                using var connection = Connection.GetConnection(config);
-                using IDbCommand command = CreateCommand(connection, alParmValues, sql);
+                using IDbCommand command = CreateCommand(Connection.GetConnection(config), alParmValues, sql);
                 using SqliteDataReader reader = (SqliteDataReader)command.ExecuteReader();
                 while (reader.Read())
                     list.Add(LoadObject<T>(reader));
@@ -227,7 +224,7 @@ namespace sb.manifest.api.DAO
             }
             catch (Exception ex)
             {
-                Connection.Close();
+                Connection.Dispose();
                 throw new Exception("Error Get Data" + ex.Message, ex.InnerException);
             }
 
@@ -270,7 +267,7 @@ namespace sb.manifest.api.DAO
             }
             catch (Exception ex)
             {
-                Connection.Close();
+                Connection.Dispose();
                 throw new Exception("Error Get Paging Data" + ex.Message, ex.InnerException);
             }
 
@@ -278,13 +275,14 @@ namespace sb.manifest.api.DAO
         }
         public void SaveData(IConfiguration config, string sql, List<KeyValuePair<string, object>> alParmValues)
         {
+            IDbTransaction transaction = null;
             try
             {               
                 using var connection = Connection.GetConnection(config);
 
                 transaction = connection.BeginTransaction();
 
-                command = CreateCommand(connection, alParmValues, sql);
+                IDbCommand command = CreateCommand(connection, alParmValues, sql);
                 command.ExecuteNonQuery();
 
                 transaction.Commit();
@@ -292,6 +290,9 @@ namespace sb.manifest.api.DAO
             }
             catch (SqliteException ex)
             {
+                transaction.Rollback();
+                Connection.Dispose();
+
                 if (ex.SqliteErrorCode== 19) // FOREIGN KEY exception
                     throw new SQLConstraintsException("Can't delete Foreign key!",ex);
 
@@ -300,7 +301,7 @@ namespace sb.manifest.api.DAO
             catch (Exception ex)
             {              
                 transaction.Rollback();
-                Connection.Close();
+                Connection.Dispose();
                 throw new Exception("Error in saving data" + ex.Message, ex.InnerException);
             }
         }
@@ -345,13 +346,7 @@ namespace sb.manifest.api.DAO
 
         public void Dispose()
         {
-            try
-            {
-                command.Dispose();
-                Connection.Dispose();
-            }
-            catch (Exception) { }
-
+            Connection.Close();
         }
     }
 }

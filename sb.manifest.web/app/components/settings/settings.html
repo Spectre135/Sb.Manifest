@@ -34,7 +34,7 @@
                                                         slot</span>
                                                 </th>
                                                 <th md-column md-order-by="IsFavorite"><span>Is favorite</span></th>
-                                                <th md-column md-numeric right md-order-by="Price"><span>Price</span>
+                                                <th md-column md-numeric right md-order-by="Income"><span>Income</span>
                                                 </th>
                                                 <th md-column></th>
                                             </tr>
@@ -57,7 +57,7 @@
                                                     <md-checkbox ng-disabled="true" aria-label="Is favorite"
                                                         ng-model="p.IsFavorite"></md-checkbox>
                                                 </td>
-                                                <td md-cell right>{{p.Price | currency}}</td>
+                                                <td md-cell right>{{p.Income | currency}}</td>
                                                 <td md-cell style="padding: 0; min-width: 52px;">
                                                     <md-menu class="td-menu showme">
                                                         <md-button aria-label="Open menu" class="md-icon-button"

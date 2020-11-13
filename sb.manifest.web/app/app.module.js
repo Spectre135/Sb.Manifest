@@ -15,7 +15,7 @@ var app = angular.module('SbManifest', [
     'angular-inview'
 ]);
 
-app.run(function ($state, $rootScope, $q, $mdDialog, apiService, config, $interval) {
+app.run(function ($state, $rootScope, $q, $mdDialog, apiService, $interval) {
 
     window.myAppErrorLog = [];
     //load messages for app

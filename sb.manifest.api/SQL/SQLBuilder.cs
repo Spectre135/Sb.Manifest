@@ -413,7 +413,7 @@ namespace sb.manifest.api.SQL
         #region Product
         public static string GetSalesProductSQL()
         {
-            return "SELECT * FROM Product order by id";
+            return "SELECT * FROM V_Product order by id";
         }
         public static string GetInsertSalesProductSQL()
         {
@@ -422,13 +422,15 @@ namespace sb.manifest.api.SQL
                                  description, 
                                  backgroundcolor, 
                                  isproductslot, 
-                                 price,
+                                 income,
+                                 idaccount,
                                  isfavorite) 
                     VALUES     (@Name, 
                                 @Description, 
                                 @BackgroundColor, 
                                 @IsProductSlot, 
-                                @Price,
+                                @Income,
+                                @IdAccount,
                                 @IsFavorite)";
         }
         public static string GetSaveSalesProductSQL()
@@ -438,7 +440,8 @@ namespace sb.manifest.api.SQL
                             description = @Description, 
                             backgroundcolor = @BackgroundColor, 
                             isproductslot = @IsProductSlot, 
-                            price = @Price,
+                            income = @Income,
+                            idaccount = @IdAccount
                             isfavorite =  @IsFavorite
                      WHERE  id = @Id ";
         }
