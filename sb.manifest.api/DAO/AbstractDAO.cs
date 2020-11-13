@@ -216,9 +216,8 @@ namespace sb.manifest.api.DAO
             try
             {
                 using var connection = Connection.GetConnection(config);
-                IDbCommand command = CreateCommand(connection, alParmValues, sql);
+                using IDbCommand command = CreateCommand(connection, alParmValues, sql);
                 using SqliteDataReader reader = (SqliteDataReader)command.ExecuteReader();
-
                 while (reader.Read())
                     list.Add(LoadObject<T>(reader));
 
@@ -255,10 +254,10 @@ namespace sb.manifest.api.DAO
                 }
 
                 string finalSQL = GetPagingQuery(_sql.ToString(), from, to, orderby, asc);
-                using var connection = Connection.GetConnection(config);
-                IDbCommand command = CreateCommand(connection, alParmValues, finalSQL);
-                using SqliteDataReader reader = (SqliteDataReader)command.ExecuteReader();
 
+                using var connection = Connection.GetConnection(config);
+                using IDbCommand command = CreateCommand(connection, alParmValues, finalSQL);
+                using SqliteDataReader reader = (SqliteDataReader)command.ExecuteReader();
                 while (reader.Read())
                 {
                     list.Add(LoadObject<T>(reader));

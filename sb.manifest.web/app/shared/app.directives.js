@@ -75,7 +75,10 @@ app.directive('greaterTo', function () {
         link: function (scope, element, attributes, ngModel) {
             try {
                 ngModel.$validators.greaterTo = function (modelValue) {
-                    return modelValue >= scope.otherModelValue;
+                    var val1 = modelValue.replace(':', '');
+                    var val2 = scope.otherModelValue.replace(':', '');
+                    //return modelValue >= scope.otherModelValue;
+                    return val1 >= val2;
                 };
 
                 scope.$watch('otherModelValue', function () {
@@ -202,3 +205,80 @@ app.directive('formatCurrency', ['$filter', '$locale', function ($filter, $local
         }
     };
 }]);
+
+//Directive for custom validation of Time(hh:mm:ss)
+app.directive('timeOnly', function() {
+  return {
+    require: 'ngModel',
+    link: function(scope, ele, attr, ctrl) {
+      ctrl.$parsers.push(function(inputValue) {
+        var pattern = new RegExp(/(^[0-9]{2})(:{1})([0-9]{2})$/, 'g');
+        var newInput;
+
+        //Default condition
+        if (inputValue == '') {
+          return '';
+        }
+
+        //Should not start with ":"
+        if (/^[:]/g.test(inputValue)) {
+          ctrl.$setViewValue('');
+          ctrl.$render();
+        }
+
+        //Should only contain Digits or ":" 
+        newInput = inputValue.replace(/[^0-9:]/g, '');
+        if (inputValue != newInput) {
+          ctrl.$setViewValue(newInput);
+          ctrl.$render();
+        }
+
+        //******************************************
+        //***************Note***********************
+        /*** If a same function call made twice,****
+         *** erroneous result is to be expected ****/
+        //****example: pattern.test(inputValue)*****
+        //******************************************
+        var inputLength = inputValue.length;
+        var patternResult = pattern.test(inputValue);
+        var colonCount;
+
+        colonCount = newInput.split(".").length - 1; // count of colon present
+        if (patternResult == false) { //if Pattern False
+          if (inputLength > 5) {
+            newInput = newInput.slice(0, 5);
+            ctrl.$setViewValue(newInput);
+            ctrl.$render();
+          } else {
+            //Restrict "hh" to 2 digit with auto ":" sufixed; 
+            if (inputLength == 2) {
+              colonCount = newInput.split('.').length - 1; // count of colon present
+              if (inputValue >= 24) { /*Automatic  TypeCasting from String to Integer*/
+                /* "hh" value if >=24, should be replaced with 23*/
+                newInput = 23 + ':';
+              } else {
+                newInput = (newInput.slice(0, inputLength)) + ':';
+              }
+              ctrl.$setViewValue(newInput);
+              ctrl.$render();
+            }
+            //Restrict "mm" to 2 digit with auto ":" sufixed;
+            if (inputLength == 5) {
+              colonCount = newInput.split(".").length - 1; // count of colon present
+              console.log('mm');
+              if (inputValue.substr(3, 2) >= 60) { /* "mm" value if >=60, should be replaced with 59*/
+                newInput = newInput.substr(0, 3) + 59 + ':'
+              } else {
+                newInput = (newInput.slice(0, inputLength)) + ':';
+              }
+              ctrl.$setViewValue(newInput);
+              ctrl.$render();
+            }
+          }
+        }
+
+        return newInput;
+      });
+    }
+  }
+});

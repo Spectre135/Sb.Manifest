@@ -69,6 +69,8 @@ app.controller('addSlotCtrl', function ($rootScope, $scope, $mdDialog, $filter, 
       }).length > 0) {
       self.warning = $rootScope.messages.duplicatePassengerInLoad;
     }
+    //check if already have person with same idProductSlot then replace with new
+    $scope.addPassengerList = $scope.addPassengerList.filter(({ IdProductSlot }) => IdProductSlot !== o.IdProductSlot); 
     $scope.addPassengerList.push(o);
     self.searchText = null;
 

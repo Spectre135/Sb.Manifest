@@ -31,6 +31,10 @@ namespace sb.manifest.api.Model
         [ParamField("RotationTime")]
         public int RotationTime { get; set; }
 
+        [DataField("RefuelTime")]
+        [ParamField("RefuelTime")]
+        public int RefuelTime { get; set; }
+
         [DataField("Active")]
         [ParamField("Active")]
         public bool Active{ get; set; }

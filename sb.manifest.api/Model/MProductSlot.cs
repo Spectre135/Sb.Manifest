@@ -45,5 +45,9 @@ namespace sb.manifest.api.Model
         [ParamField("EquipmentWeight")]
         public int EquipmentWeight { get; set; }
 
+        [DataField("IsCanopy")]
+        [ParamField("IsCanopy")]
+        public bool IsCanopy { get; set; }
+
     }
 }

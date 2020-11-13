@@ -4,7 +4,7 @@
       <span><i class="fas fa-edit"></i></span>
       <h2>&nbsp;&nbsp;{{label}}</h2>
       <span flex></span>
-      <md-button class="md-icon-button" ng-click="ctrl.cancel()">
+      <md-button aria-label="cancel" class="md-icon-button" ng-click="ctrl.cancel()">
         <i class="fas fa-times"></i>
       </md-button>
     </div>
@@ -19,7 +19,7 @@
             <label>Aircraft</label>
             <md-select ng-required ng-model="load.IdAircraft" name="aircraft" md-on-open="getAircrafts()"
               ng-change="getLoadNumber(load.IdAircraft)" ng-init="setAircraft(load)">
-              <md-option class="separator" ng-repeat="item in aircraftList" value="{{item.Id}}">
+              <md-option class="separator" ng-repeat="item in aircraftList | filter:{ Active: true }" value="{{item.Id}}">
                 <b>{{item.Name}}</b> <small>{{item.Type}} <b>{{item.Registration}}</b></small>
               </md-option>
             </md-select>
@@ -53,7 +53,6 @@
   </md-dialog-content>
 
   <md-dialog-actions>
-    <md-button aria-label="Save" class="md-primary" ng-disabled="form.$invalid" ng-click="ctrl.save($event)">Save
-    </md-button>
+    <md-button aria-label="save" class="md-primary" ng-disabled="form.$invalid" ng-click="ctrl.save($event)">Save</md-button>
   </md-dialog-actions>
 </md-dialog>

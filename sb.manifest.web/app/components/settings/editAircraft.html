@@ -67,6 +67,14 @@
             </div>
           </md-input-container>
 
+          <md-input-container class="md-icon-float md-block">
+            <label>Refuel time</label>
+            <input type="number" step="any" name="refueltime" ng-model="dto.RefuelTime" ng-pattern="/^[0-9]/" />
+            <div ng-messages="form.refueltime.$error" role="alert">
+              <div ng-message="required">Refuel time is required.</div>
+            </div>
+          </md-input-container>
+
         </div>
 
         <md-input-container class="md-icon-float md-block animate-show-hide" style="width: 100%;">

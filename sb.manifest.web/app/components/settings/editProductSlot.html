@@ -49,10 +49,18 @@
             <label>Outcome</label>
             <input type="text" format-currency name="outcome" ng-model="dto.Outcome" />
           </md-input-container>
-          <md-input-container class="md-icon-float md-block" style="width: 100%;margin-top:5px">
+        </div>
+
+        <div layout-gt-sm="row">
+                    <md-input-container class="md-icon-float md-block" style="width: 100%;margin-top:5px">
             <label></label>
             <label ng-style="dto.IsStaffJob == 1 && {'color':'black'}">Staff job</label>
             <md-switch ng-model="dto.IsStaffJob"></md-switch>
+          </md-input-container>
+          <md-input-container class="md-icon-float md-block" style="width: 100%;margin-top:5px">
+            <label></label>
+            <label ng-style="dto.IsCanopy == 1 && {'color':'black'}">Is canopy</label>
+            <md-switch ng-model="dto.IsCanopy"></md-switch>
           </md-input-container>
         </div>
 

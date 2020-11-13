@@ -8,7 +8,7 @@
         <span style="font-size: .66em;"><span style="opacity: .66;">rotation time:</span> {{dto.RotationTime}}
           min</span></h2>
       <span flex></span>
-      <md-button class="md-icon-button" ng-click="ctrl.cancel()">
+      <md-button aria-label="cancel" class="md-icon-button" ng-click="ctrl.cancel()">
         <i class="fas fa-times"></i>
       </md-button>
     </div>
@@ -17,20 +17,20 @@
   <md-dialog-content ng-cloak style="min-width: 500px" class="md-dialog-content">
 
     <div layout="row" style="margin-bottom: .5em; color: rgba(0,0,0,.5);">
-      <div flex="65">
+      <div flex="70">
         Scheduled: <b>{{getOriginalMinutesLeft()}} min</b>
       </div>
-      <div flex="35" style="text-align: end;">
+      <div flex="30" style="text-align: end;">
         <small>{{originalScheduledTime | date:'dd. MM. yyyy HH:mm'}}</small>
       </div>
     </div>
 
     <div layout="row" style="margin-bottom: 1em;">
-      <div flex="65">
+      <div flex="70">
         Reschedule:<span style="font-size: 1.5em;"> {{addedTime>0?'+':''}}{{addedTime}} =
           <b>{{getOriginalMinutesLeft() + addedTime}} min</b></span>
       </div>
-      <div flex="35" style="text-align: end; padding-top: .5em;">
+      <div flex="30" style="text-align: end; padding-top: .5em;">
         <small>{{scheduledTime | date:'dd. MM. yyyy HH:mm'}}</small>
       </div>
     </div>
@@ -51,14 +51,14 @@
       <small
         style="display:block; margin-bottom: .5em;">{{prevLoad ? 'Previous load:' : 'No previous loads scheduled  for ' + dto.AircraftName + '.'}}</small>
       <div layout="row" ng-if="prevLoad">
-        <div flex="65">
+        <div flex="70">
           {{prevLoad.AircraftName}} {{prevLoad.Number}}
           &nbsp;&nbsp;
           {{prevLoad.DepartureMinutesLeft}} min
           &nbsp;&nbsp;
           gap: <b>{{getGap()}} min</b>
         </div>
-        <div flex="35" style="text-align: end;">
+        <div flex="30" style="text-align: end;">
           <small>{{prevLoad.DateDeparted | date:'dd. MM. yyyy HH:mm'}}</small>
         </div>
       </div>

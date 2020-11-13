@@ -290,3 +290,12 @@ function formatDateToString(d) {
         return null;
     }
 };
+
+function addHHmmToDate(d,hhmm){
+    try {
+        const chars = hhmm.split(':');
+        return convertLocalDate(new Date(d.getFullYear(), d.getMonth(), d.getDate(), chars[0], chars[1]));
+    } catch (err) {
+        return d;
+    }
+};

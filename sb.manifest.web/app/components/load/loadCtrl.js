@@ -4,6 +4,7 @@ var app = angular.module('SbManifest');
 
 app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog, $interval, apiService, config) {
 
+    $rootScope.page = 'Loads | ';
     $scope.loads;
     $scope.rows;
     $scope.moved = {}; //array when we move passengers between loads
@@ -112,14 +113,10 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
 
     //add/edit Load
     $scope.editLoad = function ($event, dto) {
-        //init if null to pass the loads array for get max load number
-        if (!dto) {
-            dto = {};
-        }
-        dto.Loads = $scope.loads;
         $mdDialog.show({
             locals: {
-                dataToPass: dto
+                dataToPass: dto,
+                loads: $scope.loads
             },
             controller: 'editLoadCtrl',
             controllerAs: 'ctrl',
@@ -550,7 +547,7 @@ app.controller('departureLoadCtrl', function ($rootScope, $scope, $mdDialog, dat
     };
 
     $scope.getGap = function () {
-        return new Date($scope.scheduledTime - new Date(prevLoad.DateDeparted)).getMinutes();
+        return Math.floor(($scope.scheduledTime - new Date(prevLoad.DateDeparted)) / 1000 / 60);
     };
 
     self.cancel = function ($event) {
@@ -558,7 +555,6 @@ app.controller('departureLoadCtrl', function ($rootScope, $scope, $mdDialog, dat
     };
 
     self.save = function ($event) {
-        //convert to local time gmt+1
         var dto = angular.copy($scope.dto);
         dto.DateDeparted = convertLocalDate($scope.scheduledTime);
         var url = config.manifestApi + '/load/depart/save';
@@ -569,11 +565,12 @@ app.controller('departureLoadCtrl', function ($rootScope, $scope, $mdDialog, dat
     };
 });
 
-app.controller('editLoadCtrl', function ($scope, $filter, $mdDialog, dataToPass, apiService, config) {
+app.controller('editLoadCtrl', function ($scope, $filter, $mdDialog, dataToPass, loads, apiService, config) {
 
     var self = this;
     $scope.warning = null;
-    $scope.load = dataToPass;
+    $scope.load = dataToPass == null ? {} : angular.copy(dataToPass);
+    $scope.loads = angular.copy(loads);
     $scope.label = $scope.load == null ? 'Add new load' : $scope.load.AircraftName + ' ' + $scope.load.Number;
 
     self.cancel = function ($event) {
@@ -581,14 +578,11 @@ app.controller('editLoadCtrl', function ($scope, $filter, $mdDialog, dataToPass,
     };
 
     self.save = function ($event) {
-        //before save we clean Loads array if not we have error TypeError: cyclic object value
-        $scope.load.Loads = null;
         var url = config.manifestApi + '/load/save';
         apiService.postData(url, $scope.load, true)
             .then(function () {
                 $mdDialog.hide();
             });
-
     };
 
     $scope.getAircrafts = function () {
@@ -601,18 +595,30 @@ app.controller('editLoadCtrl', function ($scope, $filter, $mdDialog, dataToPass,
     };
 
     $scope.setAircraft = function (dto) {
-        if (dto) {
+        if (dto.IdAircraft) {
             $scope.aircraftList = [{
                 Id: dto.IdAircraft,
                 Registration: dto.AircraftRegistration,
-                Type: dto.AircraftType
+                Type: dto.AircraftType,
+                Active: true //always true if user deactivate aircraft we must show previous data
             }];
-            $scope.getLoadNumber(dto.IdAircraft);
+        } else {
+            var url = config.manifestApi + '/settings/aircraft';
+            apiService.getData(url, null, false)
+                .then(function (data) {
+                    try {
+                        $scope.aircraftList = data.DataList;
+                        $scope.load.IdAircraft = $filter('filter')(data.DataList, function (item) {
+                            return item.Active == true;
+                        })[0].Id;
+                    } catch (err) { }
+                });
+            getLoadNumber($scope.load.IdAircraft);
         }
     };
 
-    $scope.getLoadNumber = function (idAircraft) {
-        var array = $scope.load.Loads;
+    function getLoadNumber(idAircraft) {
+        var array = $scope.loads;
         if (idAircraft) {
             var array = $filter('filter')(array, function (item) {
                 return item.IdAircraft == idAircraft;
