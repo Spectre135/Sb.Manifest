@@ -15,22 +15,14 @@ var app = angular.module('SbManifest', [
     'angular-inview'
 ]);
 
-app.run(function ($state, $rootScope, $q, $mdDialog, apiService, config) {
+app.run(function ($state, $rootScope, $q, $mdDialog, apiService, config, $interval) {
 
     window.myAppErrorLog = [];
-    $rootScope.timeDiffServer = 0;
     //load messages for app
     apiService.getData('messages/messages.json', null, false)
         .then(function (data) {
             $rootScope.messages = data;
         });
-
-    // //load server time
-    // apiService.getData(config.manifestApi + '/server/time', null, false).then(function (data) {
-    //     $rootScope.timeDiffServer = new Date(data) - new Date();
-    //     console.log('Server time: ' + new Date(data));
-    //     console.log('Server time difference in miliseconds: ' + $rootScope.timeDiffServer);
-    // });
 
     $state.defaultErrorHandler(function (error) {
         // This is a naive example of how to silence the default error handler.
@@ -105,6 +97,10 @@ app.run(function ($state, $rootScope, $q, $mdDialog, apiService, config) {
         hoverClass: 'drop-hover'
     };
 
+    //broadcast tick every second
+    $interval(function () {
+        $rootScope.$broadcast('tick')
+    }, 1000);
 });
 
 app.config(function ($mdDateLocaleProvider, $mdThemingProvider) {

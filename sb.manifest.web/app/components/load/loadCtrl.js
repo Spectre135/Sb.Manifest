@@ -2,7 +2,7 @@
 
 var app = angular.module('SbManifest');
 
-app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog, $interval, apiService, config) {
+app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog, apiService, config) {
 
     $rootScope.page = 'Loads | ';
     $scope.loads;
@@ -66,7 +66,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
             apiService.getData(url, null, true)
                 .then(function (data) {
                     $scope.productList = $filter('filter')(data.DataList, function (item) {
-                        return item.IsFavorite == true;
+                        return item.IsFavorite === true;
                     });
                 });
         }
@@ -499,7 +499,9 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
     };
 
     //update time left for load depart every second
-    $interval(updateTimeLeft, 1000);
+    $scope.$on('tick', function(){
+        updateTimeLeft();
+    });
 });
 
 app.controller('departureLoadCtrl', function ($rootScope, $scope, $mdDialog, dataToPass, prevLoad, apiService, config) {
@@ -608,7 +610,7 @@ app.controller('editLoadCtrl', function ($scope, $filter, $mdDialog, dataToPass,
                     try {
                         $scope.aircraftList = data.DataList;
                         $scope.load.IdAircraft = $filter('filter')(data.DataList, function (item) {
-                            return item.Active == true;
+                            return item.Active === true;
                         })[0].Id;
                     } catch (err) { }
                 });

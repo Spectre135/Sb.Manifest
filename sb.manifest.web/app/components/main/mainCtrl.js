@@ -2,7 +2,7 @@
 
 var app = angular.module('SbManifest');
 
-app.controller('mainCtrl', function ($rootScope, $scope, $interval, $state, config) {
+app.controller('mainCtrl', function ($rootScope, $scope, $state, config) {
     $scope.appName = config.appName;
     $rootScope.user = GetUser();
     $rootScope.alertLoads;
@@ -107,10 +107,12 @@ app.controller('mainCtrl', function ($rootScope, $scope, $interval, $state, conf
         } catch (err) { }
     };
 
-    //update time left for load depart load second
-    $interval(updateTimeLeft, 1000);
+     //update time left for load depart every second
+    $scope.$on('tick', function(){
+        updateTimeLeft();
+    });
 
-    //mora bit noter če en ne dela menu
+    //mora bit noter če ne ne dela menu
     jQuery(function ($) {
 
         // Dropdown menu
