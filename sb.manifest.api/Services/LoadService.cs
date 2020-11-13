@@ -16,12 +16,19 @@ namespace sb.manifest.api.Services
 {
     public class LoadService
     {
-        public MResponse GetLoads(IConfiguration config)
-        {
-            using LoadDAO dao = new LoadDAO();
-            return dao.GetLoads(config);
+        //public MResponse GetLoads(IConfiguration config)
+        //{
+        //    using LoadDAO dao = new LoadDAO();
+        //    MResponse mResponse = dao.GetLoads(config);
+        //    var loads = mResponse.DataList.ToList();
 
-        }
+        //    foreach (MLoad l in loads)
+        //        l.DepartureSecondsLeft = l.DateDeparted.HasValue ? (int)((TimeSpan)(l.DateDeparted - DateTime.Now)).TotalSeconds : (int?)null;
+
+        //    mResponse.DataList = loads;
+        //    return mResponse;
+        //}
+
         public MResponse GetLoadList(IConfiguration config, IHubContext<DisplayHub> hubContext)
         {
             MResponse mResponse = new MResponse();
@@ -45,8 +52,8 @@ namespace sb.manifest.api.Services
                 if (i != load.Id)
                 {
                     i = load.Id;
-                    decimal profit=0,_profit = 0;
-                    decimal weight=0,_weight = 0;
+                    decimal profit = 0, _profit = 0;
+                    decimal weight = 0, _weight = 0;
                     int slots = 0;
                     //grupe za posamezen load da jih potem pravilno razvrstimo v objekt Group=>LoadListe
                     List<MGroup> mGroups = JsonConvert.DeserializeObject<List<MGroup>>(JsonConvert.SerializeObject(list.Where(l => l.Id == load.Id)));
@@ -62,16 +69,17 @@ namespace sb.manifest.api.Services
                             CalculateLoadParam(gr.LoadList, out _profit, out _weight);
                             weight += _weight;
                             profit += _profit;
-                            slots  += gr.LoadList.Count;
+                            slots += gr.LoadList.Count;
                         }
                     }
                     loadlist.Add(load);
                     load.TotalWeight = weight;
                     load.Profit = profit;
                     load.SlotsLeft = load.MaxSlots - slots;
+                    load.DepartureSecondsLeft = load.DateDeparted.HasValue ? (int)((TimeSpan)(load.DateDeparted - DateTime.Now)).TotalSeconds : (int?)null;
                 }
             }
-            
+
             mResponse.DataList = loadlist;
 
             HubService.SendLoadList(mResponse, hubContext);
@@ -132,7 +140,7 @@ namespace sb.manifest.api.Services
         public void SaveLoad(IConfiguration config, MLoad mLoad)
         {
             using LoadDAO dao = new LoadDAO();
-                dao.SaveLoad(config, mLoad);
+            dao.SaveLoad(config, mLoad);
 
         }
         public void DeleteLoad(IConfiguration config, MLoad mLoad)

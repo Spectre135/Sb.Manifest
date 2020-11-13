@@ -66,6 +66,7 @@ app.controller('mainCtrl', function ($rootScope, $scope, $state, config) {
     connection.on('messageReceived', function (data) {
         $scope.$apply(function () {
             $rootScope.alertLoads = data.DataList;
+            updateTimeLeft();
             filterAlertLoads();
         });
     });
@@ -92,10 +93,26 @@ app.controller('mainCtrl', function ($rootScope, $scope, $state, config) {
     }
 
     function secondAlarm(load) {
-        return load.MinutesLeft <= 5;
+        return load.DepartureMinutesLeft <= 5;
     }
 
-    //mora bit noter če en ne dela menu
+    function updateTimeLeft() {
+        try {
+            angular.forEach($scope.alertLoads, function (value, key) {
+                if (!isNaN(value.DepartureSecondsLeft))
+                    value.DepartureMinutesLeft = Math.floor(--value.DepartureSecondsLeft / 60);
+                else
+                    value.DepartureMinutesLeft = '???';
+            });
+        } catch (err) { }
+    };
+
+     //update time left for load depart every second
+    $scope.$on('tick', function(){
+        updateTimeLeft();
+    });
+
+    //mora bit noter če ne ne dela menu
     jQuery(function ($) {
 
         // Dropdown menu

@@ -17,7 +17,7 @@
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
     </div>
     <div class="loads-alert">
-        <div ng-repeat="l in alertLoads" class="loads-alert-load" ng-class="l.MinutesLeft <= 5 ? 'second-alarm':''"
+        <div ng-repeat="l in alertLoads | orderBy: 'DepartureMinutesLeft'" class="loads-alert-load" ng-class="l.DepartureMinutesLeft <= 5 ? 'second-alarm':''"
             ng-click="dismissAlert(l)">
             <span class="loads-alert-name">{{l.AircraftName}}</span>
             <span class="loads-alert-number">{{l.Number}}</span>

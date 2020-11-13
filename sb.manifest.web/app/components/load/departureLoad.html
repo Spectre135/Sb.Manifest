@@ -2,8 +2,11 @@
   <md-toolbar>
     <div class="md-toolbar-tools">
       <span><i class="fas fa-plane-departure"></i></span>
-      <h2>&nbsp;&nbsp;{{dto.AircraftName}} <b>{{dto.Number}}</b> <span
-          style="font-size: .66em; opacity: .66;">{{dto.AircraftRegistration}}</span></h2>
+      <h2>&nbsp;&nbsp;{{dto.AircraftName}} <b>{{dto.Number}}</b>
+        <span style="font-size: .66em; opacity: .66;">{{dto.AircraftRegistration}}</span>
+        &nbsp;
+        <span style="font-size: .66em;"><span style="opacity: .66;">rotation time:</span> {{dto.RotationTime}}
+          min</span></h2>
       <span flex></span>
       <md-button aria-label="cancel" class="md-icon-button" ng-click="ctrl.cancel()">
         <i class="fas fa-times"></i>
@@ -11,31 +14,58 @@
     </div>
   </md-toolbar>
 
-  <md-dialog-content ng-cloak style="min-width: 500px">
-    <div class="md-dialog-content">
-      <form name="form" ng-submit="$event.preventDefault()">
+  <md-dialog-content ng-cloak style="min-width: 500px" class="md-dialog-content">
 
-        <md-input-container class="md-block">
-          <label>Scheduled time</label>
-          <input type="text" class="form-control" time-only ng-model="dto.DateDeparted" name="scheduled" ng-required="true" greater-to="minTime"
-            ng-pattern="/(^[0-9]{2})(:{1})([0-9]{2})$/" />
-          <div ng-messages="form.scheduled.$error" role="alert" style="padding-bottom: 5px;">
-            <div ng-message="required">Departure time is required</div>
-            <div ng-message="time">Time is not valid</div>
-            <div ng-message="greaterTo">Scheduled time must be greater!</div>
-          </div>
-        </md-input-container>
-
-        <div layout="row">
-          <span><i class="fas fa-plane-departure"></i></span>
-          <label>&nbsp;&nbsp;Number {{prevLoad.Number}} {{prevLoad.AircraftName}}
-            {{prevLoad.DateDeparted | date:'HH:mm'}}</label>
-        </div>
-
-        <div class="alert">{{warning}}</div>
-
-      </form>
+    <div layout="row" style="margin-bottom: .5em; color: rgba(0,0,0,.5);">
+      <div flex="70">
+        Scheduled: <b>{{getOriginalMinutesLeft()}} min</b>
+      </div>
+      <div flex="30" style="text-align: end;">
+        <small>{{originalScheduledTime | date:'dd. MM. yyyy HH:mm'}}</small>
+      </div>
     </div>
+
+    <div layout="row" style="margin-bottom: 1em;">
+      <div flex="70">
+        Reschedule:<span style="font-size: 1.5em;"> {{addedTime>=0?'+':''}}{{addedTime}} =
+          <b>{{getOriginalMinutesLeft() + addedTime}} min</b></span>
+      </div>
+      <div flex="30" style="text-align: end; padding-top: .5em;">
+        <small>{{scheduledTime | date:'dd. MM. yyyy HH:mm'}}</small>
+      </div>
+    </div>
+
+    <div class="addTime">
+      <div>
+        <a ng-repeat="b in addButtons" href="#" onclick="return false;" ng-click="add(b)">+{{b}}</a>
+      </div>
+      <div class="negative">
+        <a ng-repeat="b in addButtons" href="#" onclick="return false;" ng-click="add(-b)">-{{b}}</a>
+      </div>
+    </div>
+    <div style="margin-bottom: 1em;">
+      <a href="#" onclick="return false;" ng-click="reset()">reset</a>
+    </div>
+
+    <div style="padding-top: .5em; border-style: solid; border-width: 1px 0 0 0; border-color: #ddd;">
+      <small
+        style="display:block; margin-bottom: .5em;">{{prevLoad ? 'Previous load:' : 'No previous loads scheduled  for ' + dto.AircraftName + '.'}}</small>
+      <div layout="row" ng-if="prevLoad">
+        <div flex="70">
+          {{prevLoad.AircraftName}} {{prevLoad.Number}}
+          &nbsp;&nbsp;
+          {{prevLoad.DepartureMinutesLeft}} min
+          &nbsp;&nbsp;
+          <span style="{{getGap() < dto.RotationTime ? 'color: #d32f2f;':''}}">gap: <b>{{getGap()}} min</b></span>
+        </div>
+        <div flex="30" style="text-align: end;">
+          <small>{{prevLoad.DateDeparted | date:'dd. MM. yyyy HH:mm'}}</small>
+        </div>
+      </div>
+    </div>
+
+    <div ng-if="warning" class="alert">{{warning}}</div>
+
   </md-dialog-content>
 
   <md-dialog-actions>

@@ -59,8 +59,8 @@ namespace sb.manifest.api.Model
         [DataField("DateDeparted")]
         public DateTime? DateDeparted { get; set; }
 
-        //[DataField("DepartureMinutesLeft")]
-        //public int? DepartureMinutesLeft { get; set; }
+        [DataField("DepartureSecondsLeft")]
+        public int? DepartureSecondsLeft { get; set; }
 
         [DataField("DateOnLoad")]
         public DateTime? DateOnLoad { get; set; }

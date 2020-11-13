@@ -80,7 +80,7 @@ function GetUser() {
             var user = JSON.parse(decode);
             return user;
         };
-    } catch (error) {}
+    } catch (error) { }
 };
 
 function buildLocaleProvider(formatString) {
@@ -109,125 +109,12 @@ function Refresh(key) {
         } else {
             window.localStorage.setItem('versionHrDoc', key);
         }
-    } catch (error) {}
+    } catch (error) { }
 };
 
 function pad(str, max) {
     str = str.toString();
     return str.length < max ? pad('0' + str, max) : str;
-};
-
-function addDays(datum, days) {
-    try {
-
-        if (datum) {
-            var d1 = new Date(datum);
-            d1.setDate(d1.getDate() + days);
-            return d1;
-        }
-
-        return datum;
-
-    } catch (error) {
-        return datum;
-    }
-};
-
-function getChartValues(array, key) {
-    var result = [];
-    try {
-        array.forEach(function (item) {
-            if (item.hasOwnProperty(key)) {
-                result.push(item[key]);
-            }
-        });
-    } catch (err) {}
-    return result;
-};
-
-function getDoughnutChart(cdata, labelData, dataX, dataY, title) {
-
-    var data = {
-        type: 'doughnut',
-        data: {
-            labels: getChartValues(cdata, labelData),
-            datasets: [{
-                label: dataY,
-                backgroundColor: getChartValues(cdata, dataX),
-                data: getChartValues(cdata, dataY)
-            }]
-        },
-        options: {
-            responsive: true,
-            legend: {
-                display: false
-            },
-            title: {
-                display: true,
-                text: title,
-                fontFamily: 'Montserrat',
-                fontSize: 14
-            }
-        }
-    };
-
-    return data;
-};
-
-function getLineChart(labels, labelData1, data1, labelData2, data2, title) {
-
-    var data = {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [{
-                    label: labelData1,
-                    data: data1,
-                    fill: false,
-                    borderColor: '#3A75D7',
-                },
-                {
-                    label: labelData2,
-                    data: data2,
-                    fill: false,
-                    borderColor: '#D73A75',
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            legend: {
-                display: false
-            },
-            title: {
-                display: true,
-                text: title,
-                fontFamily: 'Montserrat',
-                fontSize: 14
-            },
-            scales: {
-                xAxes: [{
-                    ticks: {
-                        fontFamily: 'Montserrat',
-                        fontSize: 14
-                    }
-                }],
-                yAxes: [{
-                    ticks: {
-                        fontFamily: 'Montserrat',
-                        fontSize: 14
-                    }
-                }]
-            }
-        }
-    };
-
-    return data;
-};
-
-Date.prototype.addMinutes = function (minutes) {
-    var copiedDate = new Date(this.getTime());
-    return new Date(copiedDate.getTime() + minutes * 60000);
 };
 
 function noDuplicates(arr) {
@@ -268,23 +155,4 @@ function noDuplicatesId(arr) {
     } catch (err) {
         return arr;
     }
-};
-
-function convertLocalDate(date) {
-    date = new Date(date);
-    //Local time converted to UTC
-    var localOffset = date.getTimezoneOffset() * 60000;
-    var localTime = date.getTime();
-
-    date = localTime - localOffset;
-
-    date = new Date(date);
-    return date;
-};
-
-function getTimeDiffInMInutes(date){
-    var now =new Date();
-    var scheduled = new Date(date);
-    var diff = scheduled-now;
-    return Math.floor(diff / 60000);
 };

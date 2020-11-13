@@ -2,7 +2,7 @@
 
 var app = angular.module('SbManifest');
 
-app.controller('displayCtrl', function ($rootScope,$scope, $interval, config, apiService) {
+app.controller('displayCtrl', function ($rootScope, $scope, $interval, config, apiService) {
     $scope.loads;
     $scope.connected = false;
     $scope.showLoadList = true;
@@ -53,7 +53,7 @@ app.controller('displayCtrl', function ($rootScope,$scope, $interval, config, ap
         var promise = apiService.getData(url, params, true)
             .then(function (data) {
                 $scope.loads = data.DataList;
-                updateMinutesLeft();
+                updateTimeLeft();
             });
         return promise;
     };
@@ -80,7 +80,7 @@ app.controller('displayCtrl', function ($rootScope,$scope, $interval, config, ap
     connection.on('messageReceived', function (data) {
         $scope.$apply(function () {
             $scope.loads = data.DataList;
-            updateMinutesLeft();
+            updateTimeLeft();
         });
     });
 
@@ -170,18 +170,17 @@ app.controller('displayCtrl', function ($rootScope,$scope, $interval, config, ap
         setTimeout(fadeHelp, 10 * 1000);
     };
 
-
-    function updateMinutesLeft() {
+    function updateTimeLeft() {
         try {
             angular.forEach($scope.loads, function (value, key) {
-                if (value.DateDeparted) {
-                    value.DepartureMinutesLeft = $rootScope.getTimeDiffInMInutes(value.DateDeparted);
-                }
+                if (!isNaN(value.DepartureSecondsLeft))
+                    value.DepartureMinutesLeft = Math.floor(--value.DepartureSecondsLeft / 60);
+                else
+                    value.DepartureMinutesLeft = '???';
             });
-        } catch (err) {}
+        } catch (err) { }
     };
 
-
-    //update minutes left for depart load every 15 sec
-    $interval(updateMinutesLeft, 15 * 1000);
+    //update time left for load depart every second
+    $interval(updateTimeLeft, 1000);
 });

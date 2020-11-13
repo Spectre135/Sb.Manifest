@@ -84,7 +84,7 @@ app.directive('greaterTo', function () {
                 scope.$watch('otherModelValue', function () {
                     ngModel.$validate();
                 });
-            } catch (err) {console.log(err);}
+            } catch (err) { console.log(err); }
         }
     };
 });

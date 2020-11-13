@@ -31,20 +31,20 @@ namespace sb.manifest.api.Controllers
         /// <summary>
         /// Get all loads list
         /// </summary>
-        [HttpGet("load")]
-        public IActionResult GetLoads()
-        {
-            try
-            {
-                LoadService service = new LoadService();
-                return Ok(service.GetLoads(config));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
-            }
+        //[HttpGet("load")]
+        //public IActionResult GetLoads()
+        //{
+        //    try
+        //    {
+        //        LoadService service = new LoadService();
+        //        return Ok(service.GetLoads(config));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(StatusCodes.Status500InternalServerError, ex);
+        //    }
 
-        }
+        //}
 
         /// <summary>
         /// Get skydivers in load

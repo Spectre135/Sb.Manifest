@@ -54,8 +54,8 @@ namespace sb.manifest.api.Model
         [ParamField("Refuel")]
         public Boolean? Refuel { get; set; }
 
-        [DataField("DepartureMinutesLeft")]
-        public int? DepartureMinutesLeft { get; set; }
+        [DataField("DepartureSecondsLeft")]
+        public int? DepartureSecondsLeft { get; set; }
 
     }
 }
