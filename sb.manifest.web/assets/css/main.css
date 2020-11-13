@@ -1632,3 +1632,7 @@ span.item-color {
 .bgwhite {
   background-color: white;
 }
+.search-icon{
+  margin-left: 15px;
+  cursor:pointer
+}

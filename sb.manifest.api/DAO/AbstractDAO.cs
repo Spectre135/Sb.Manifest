@@ -333,7 +333,7 @@ namespace sb.manifest.api.DAO
                 new KeyValuePair<string, object>("@TableName", GetTableName<T>())
             };
 
-            IDbCommand command = CreateCommand(connection, alParmValues, SQLBuilder.GetSequenceValueSQL());
+            using IDbCommand command = CreateCommand(connection, alParmValues, SQLBuilder.GetSequenceValueSQL());
             using SqliteDataReader reader = (SqliteDataReader)command.ExecuteReader();
 
             if (reader.Read())

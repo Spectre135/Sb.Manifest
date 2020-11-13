@@ -142,9 +142,7 @@ namespace sb.manifest.api.DAO
                 command.ExecuteNonQuery();
 
                 //insert DEBIT transakcije v POST tabelo
-                //id transaction sestavimo iz mmssff
                 alParmValues = new List<KeyValuePair<string, object>>();
-                //long idTransaction = long.Parse(DateTime.Now.ToString("mmssff"));
                 long idTransaction = GetSeqNextValue<MPost>(connection);
                 alParmValues.Add(new KeyValuePair<string, object>("@IdTransaction", idTransaction));
                 alParmValues.Add(new KeyValuePair<string, object>("@IdCompany", 1));

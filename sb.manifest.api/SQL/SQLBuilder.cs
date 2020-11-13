@@ -313,22 +313,26 @@ namespace sb.manifest.api.SQL
                                      credit) --Odpremo terjatev do kupca konto 120/760   
                         SELECT ( @IdTransaction 
                                  || @IdPerson ), 
-                               120, 
-                               1, 
+                               t.DAccount, 
+                               1, --Company Aviofun
                                @IdPerson, 
                                @Details, 
                                @Price  Income, 
                                0       Outcome 
+                        FROM TAccount t 
+                        Where t.OpenDebitTransaction = 1 
                         UNION ALL
                         SELECT ( @IdTransaction 
                                  || @IdPerson ), 
-                               760, 
+                               t.CAccount, 
                                1, 
                                @IdPerson, 
                                @Details, 
                                0   Income, 
                                @Price Outcome
-                        -- Zapremo transakcijo s plačilom
+                        FROM TAccount t 
+                        Where t.OpenDebitTransaction = 1 
+                        -- Zapremo transakcijo s plačilom če nimamo izbrane možnosti da ostane transakcija odprta
                         UNION ALL
                         SELECT ( @IdTransaction 
                                  || @IdPerson ), 
@@ -340,6 +344,7 @@ namespace sb.manifest.api.SQL
                                @Price Outcome
                         FROM   taccount acc1 
                         WHERE  acc1.id = @IdPayMethod 
+                        AND acc1.IsOpenTransaction = 0
                         UNION ALL
                         SELECT ( @IdTransaction 
                                  || @IdPerson ), 
@@ -350,7 +355,22 @@ namespace sb.manifest.api.SQL
                                @Price Income,
                                0  Outcome
                         FROM   taccount acc1 
-                        WHERE acc1.id = @IdPayMethod ";
+                        WHERE acc1.id = @IdPayMethod 
+                        AND acc1.IsOpenTransaction = 0
+                        --Če imamo dobropis oziroma prenos denarja na račun stranke
+                        UNION ALL
+                        SELECT ( @IdTransaction 
+                                 || @IdPerson ), 
+                               acc1.daccount, 
+                               1, 
+                               @IdPerson, 
+                               @Details, 
+                               0  Income,            
+                               @Price Outcome
+                        FROM   Product p 
+                        INNER JOIN taccount acc1 ON acc1.Id = p.IdAccount
+                        WHERE p.Id=@IdProduct
+                        AND acc1.IsOpenTransaction = 0";
         }
         #endregion
 
@@ -377,7 +397,7 @@ namespace sb.manifest.api.SQL
                     1 DTickets
                     FROM OnLoad pl 
                     INNER JOIN ProductSlot ps ON ps.Id = pl.IdProductSlot 
-                    INNER JOIN v_AvailableTickets t ON t.IdPerson = pl.IdPerson                 
+                    INNER JOIN v_AvailableTickets t ON t.IdPerson = pl.IdPerson and t.IdProductSlot = ps.Id                 
                     where pl.IdLoad = @IdLoad";
         }
         public static string GetTicketPostListSQL()

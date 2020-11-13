@@ -83,8 +83,6 @@ namespace sb.manifest.api.DAO
 
                 //insert DEBIT transakcijo v POST tabelo
                 List<KeyValuePair<string, object>> alParmValues = LoadParametersValue<MBuy>(mBuy);
-                //id transaction sestavimo iz mmssff
-                //long idTransaction = long.Parse(DateTime.Now.ToString("mmssff"));
                 long idTransaction = GetSeqNextValue<MPost>(connection);
                 alParmValues.Add(new KeyValuePair<string, object>("@IdTransaction", idTransaction));
                 IDbCommand command = CreateCommand(connection, alParmValues, SQLBuilder.InsertPostBuyTransactionSQL());
