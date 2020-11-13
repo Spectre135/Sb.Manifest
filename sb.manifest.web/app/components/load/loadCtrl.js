@@ -512,6 +512,8 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
     };
 
     function setEditing(l) {
+        if (!l)
+            return;
         $scope.editingLoadId = l.Id;
         updateEditing();
     };
