@@ -20,12 +20,12 @@ app.run(function ($state, $rootScope, $mdDialog, apiService, config) {
     $rootScope.showDialog = function (title, message) {
         $mdDialog.show(
             $mdDialog.alert()
-            .parent(angular.element(document.querySelector('#main')))
-            .clickOutsideToClose(true)
-            .title(title)
-            .textContent(message)
-            .ariaLabel('Alert Dialog')
-            .ok('close')
+                .parent(angular.element(document.querySelector('#main')))
+                .clickOutsideToClose(true)
+                .title(title)
+                .textContent(message)
+                .ariaLabel('Alert Dialog')
+                .ok('close')
         );
     };
 
@@ -33,5 +33,4 @@ app.run(function ($state, $rootScope, $mdDialog, apiService, config) {
     if (sessionStorage.getItem('Authorization') === null) {
         $state.go('prijava'); // go to login
     }
-
 });

@@ -98,11 +98,11 @@ app.controller('mainCtrl', function ($rootScope, $scope, $state, config) {
 
     function updateTimeLeft() {
         try {
-            angular.forEach($scope.alertLoads, function (value, key) {
-                if (!isNaN(value.DepartureSecondsLeft))
-                    value.DepartureMinutesLeft = Math.floor(--value.DepartureSecondsLeft / 60);
+            angular.forEach($scope.alertLoads, function (l) {
+                if (!isNaN(l.DepartureSecondsLeft))
+                    l.DepartureMinutesLeft = Math.floor(--l.DepartureSecondsLeft / 60);
                 else
-                    value.DepartureMinutesLeft = '???';
+                    l.DepartureMinutesLeft = '???';
             });
         } catch (err) { }
     };

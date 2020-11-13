@@ -4,7 +4,7 @@
         style="min-height: calc(100vh - 60px);">
         <div flex-xs class="load-flex-container" layout="column" ng-repeat="l in loads | orderBy: 'DepartureMinutesLeft' track by $index">
             <md-card in-view-options="{offset:[0, '-50%', 0, '-75%']}" in-view="setInview($index,$inview)" class="load"
-                ng-class="[l.SlotsLeft > 0 ? '' : l.SlotsLeft == 0 ? 'full' : 'overbooked', canDrop($index)? '' : 'no-drop']"
+                ng-class="[l.SlotsLeft > 0 ? '' : l.SlotsLeft == 0 ? 'full' : 'overbooked', canDrop($index)? '' : 'no-drop', l.editing ? 'editing' : '']"
                 data-drop="canDrop($index)" data-jqyoui-options="dropOptions" ng-model="l.GroupList"
                 jqyoui-droppable="{onDrop:'dropCallback()', beforeDrop:'beforeDrop(l)', multiple:true}">
                 <div layout="row" class="load-top">
@@ -24,7 +24,7 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <md-card-title style="padding: 8px;">
                     <md-card-title-text>
                         <div class="md-headline blue">{{l.AircraftName}} <b>{{l.Number}}</b>
