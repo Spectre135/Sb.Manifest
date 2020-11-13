@@ -16,7 +16,7 @@
 
         <md-input-container class="md-block" style="padding-bottom: 25px;">
           <label>Product</label>
-          <md-select ng-required ng-model="dto.IdProduct" name="product">
+          <md-select ng-required ng-model="dto.IdProduct" name="product" md-on-open="getProducts()">
             <md-option ng-repeat="item in productList" value="{{item.Id}}">
               {{item.Name}}
             </md-option>
@@ -74,7 +74,7 @@
 
         <md-input-container class="md-block">
           <label>Account</label>
-          <md-select ng-required ng-model="dto.IdAccount" name="account">
+          <md-select ng-required ng-model="dto.IdAccount" name="account" md-on-open="getAccounts()">
             <md-option ng-repeat="acc in accountList" value="{{acc.Id}}">
               <span>{{acc.Name}}</span>
             </md-option>

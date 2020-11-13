@@ -15,10 +15,10 @@ var app = angular.module('SbManifest', [
     'angular-inview'
 ]);
 
-app.run(function ($state, $rootScope, $q, $mdDialog, apiService,config) {
+app.run(function ($state, $rootScope, $q, $mdDialog, apiService, config) {
 
     window.myAppErrorLog = [];
-    $rootScope.newDateServerTime=0;
+    $rootScope.newDateServerTime = 0;
     //load messages for app
     apiService.getData('messages/messages.json', null, false)
         .then(function (data) {
@@ -27,22 +27,22 @@ app.run(function ($state, $rootScope, $q, $mdDialog, apiService,config) {
 
     //load server time
     apiService.getData(config.manifestApi + '/server/time', null, false).then(function (data) {
-        $rootScope.newDateServerTime = new Date(data) - new Date();     
+        $rootScope.newDateServerTime = new Date(data) - new Date();
         console.log('Server time ' + new Date(data));
         console.log('Time diff from server in miliseconds ' + $rootScope.newDateServerTime);
     });
 
     //to get Date from server
-    $rootScope.getDate = function(){
+    $rootScope.getDate = function () {
         var copiedDate = new Date();
         return new Date(copiedDate.getTime() + $rootScope.newDateServerTime);
     };
     //calculate diff time from server and client
-    $rootScope.getTimeDiffInMInutes = function(date){
+    $rootScope.getTimeDiffInMInutes = function (date) {
         var copiedDate = new Date();
         var now = new Date(copiedDate.getTime() + $rootScope.newDateServerTime);
         var scheduled = new Date(date);
-        var diff = scheduled-now;
+        var diff = scheduled - now;
         return Math.floor(diff / 60000);
     };
 

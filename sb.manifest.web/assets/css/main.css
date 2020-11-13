@@ -389,6 +389,7 @@ md-tooltip {
   z-index           : 999;
   -webkit-transition: left .3s ease, width .3s ease;
   transition        : left .3s ease, width .3s ease;
+  transition-delay: .4s;
 }
 
 .sidebar-wrapper ul {

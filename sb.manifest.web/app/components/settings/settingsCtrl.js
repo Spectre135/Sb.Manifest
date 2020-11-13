@@ -4,7 +4,7 @@ var app = angular.module('SbManifest');
 
 app.controller('settingsCtrl', function ($scope, $rootScope, $state, $mdDialog, apiService, config) {
 
-    $rootScope.page='Settings | ';
+    $rootScope.page = 'Settings | ';
     $scope.list = $state.params.list;
     $scope.myPage = $state.params.page;
     $scope.myLimit = $state.params.limit;
@@ -124,7 +124,7 @@ app.controller('settingsCtrl', function ($scope, $rootScope, $state, $mdDialog, 
 
     //delete Aircraft
     $scope.deleteAircraft = function ($event, dto) {
-        $rootScope.confirmDialog('Confirm delete', 'Would you like to delete Aircraft ' + dto.Registration + ' ' +  dto.Name + '?', 'Delete', 'Cancel')
+        $rootScope.confirmDialog('Confirm delete', 'Would you like to delete Aircraft ' + dto.Registration + ' ' + dto.Name + '?', 'Delete', 'Cancel')
             .then(function onSuccess(result) {
                 var url = config.manifestApi + '/settings/aircraft/delete';
                 apiService.postData(url, dto, true).then(function () {
@@ -154,6 +154,27 @@ app.controller('editProductCtrl', function ($scope, $mdDialog, dataToPass, apiSe
         $mdDialog.cancel();
     };
 
+    $scope.getAccounts = function () {
+        var url = config.manifestApi + '/settings/account';
+        var promise = apiService.getData(url, null, true)
+            .then(function (data) {
+                $scope.accountList = data.DataList;
+            });
+        return promise;
+    };
+
+
+    $scope.init = function () {
+        if ($scope.dto) {
+            if ($scope.dto.IdAccount) {
+                $scope.accountList = [{
+                    'Id': $scope.dto.IdAccount,
+                    'Name': $scope.dto.AccountDescription
+                }];
+            }
+        }
+    };
+
     self.save = function ($event) {
         var url = config.manifestApi + '/settings/sales/product/save';
         apiService.postData(url, $scope.dto, true)
@@ -170,6 +191,7 @@ app.controller('editProductSlotCtrl', function ($scope, $mdDialog, dataToPass, a
     $scope.dto = dataToPass;
     $scope.label = $scope.dto == null ? 'Add new ' : $scope.dto.Name;
 
+
     self.cancel = function ($event) {
         $mdDialog.cancel();
     };
@@ -182,26 +204,41 @@ app.controller('editProductSlotCtrl', function ($scope, $mdDialog, dataToPass, a
             });
     };
 
-    function getProducts() {
+    $scope.getProducts = function () {
         var url = config.manifestApi + '/settings/sales/product';
         apiService.getData(url, null, true)
             .then(function (data) {
                 $scope.productList = data.DataList;
-                getAccounts();
             })
     };
 
-    function getAccounts() {
+    $scope.getAccounts = function () {
         var url = config.manifestApi + '/settings/account';
-        apiService.getData(url, null, true)
+        var promise = apiService.getData(url, null, true)
             .then(function (data) {
                 $scope.accountList = data.DataList;
-            })
+            });
+        return promise;
     };
 
     //init
     $scope.init = function () {
-        getProducts();
+
+        if ($scope.dto) {
+            if ($scope.dto.IdProduct) {
+                $scope.productList = [{
+                    'Id': $scope.dto.IdProduct,
+                    'Name': $scope.dto.ProductName
+                }];
+            }
+
+            if ($scope.dto.IdAccount) {
+                $scope.accountList = [{
+                    'Id': $scope.dto.IdAccount,
+                    'Name': $scope.dto.AccountDescription
+                }];
+            }
+        }
     };
 });
 

@@ -6,24 +6,40 @@ app.controller('purchaseCtrl', function ($scope, $filter, $mdDialog, dataToPass,
     var self = this;
     $scope.working = false;
     $scope.dto = dataToPass;
-    $scope.dto.IdPayMethod=1; //default Cash
-    $scope.dto.Quantity=1; //default Quantity
-    
-    function getProducts() {
+    $scope.dto.IdPayMethod = 1; //default Cash
+    $scope.dto.Quantity = 1; //default Quantity
+
+    function getProductsSlot() {
         var url = config.manifestApi + '/settings/sales/product/slot';
-        apiService.getData(url, null, true)
+        var promise = apiService.getData(url, null, true)
             .then(function (data) {
-                $scope.productList = data.DataList;
+                $scope.productList = $filter('filter')(data.DataList, function (item) {
+                    return item.IsStaffJob == false && item.Income > 0
+                });
+                getProducts();
+            })
+        return promise;
+    };
+
+    function getProducts() {
+        var url = config.manifestApi + '/settings/sales/product';
+        var promise = apiService.getData(url, null, true)
+            .then(function (data) {
+                $scope.productList = $scope.productList.concat($filter('filter')(data.DataList, function (item) {
+                    return item.IsProductSlot == false;
+                }));
                 getPayMethod();
             })
+        return promise;
     };
 
     function getPayMethod() {
         var url = config.manifestApi + '/settings/paymethod';
-        apiService.getData(url, null, true)
+        var promise = apiService.getData(url, null, true)
             .then(function (data) {
                 $scope.payMethodList = data.DataList;
             })
+        return promise;
     };
 
     self.save = function ($event) {
@@ -38,22 +54,22 @@ app.controller('purchaseCtrl', function ($scope, $filter, $mdDialog, dataToPass,
         $mdDialog.cancel();
     };
 
-    $scope.init=function(){
-        getProducts();
+    $scope.init = function () {
+        getProductsSlot();
     };
 
-    $scope.sum = function(){
+    $scope.sum = function () {
         try {
             var array = $filter('filter')($scope.productList, function (item) {
                 return item.Id == $scope.dto.IdProduct;
             });
-            $scope.dto.Price =  (array[0].Income  * $scope.dto.Quantity);
+            $scope.dto.Price = (array[0].Income * $scope.dto.Quantity);
             //populate details from product for post table
             //TODO input text with more text if needed
-            $scope.dto.Details =array[0].Name + ' ' + array[0].Description ;
+            $scope.dto.Details = array[0].Name + ' ' + array[0].Description;
 
         } catch (error) {
-            
+
         }
     };
 });

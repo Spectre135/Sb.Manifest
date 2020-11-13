@@ -28,25 +28,36 @@
           <input type="text" ng-model="dto.Description" name="description" />
         </md-input-container>
 
-        <md-input-container class="md-icon-float md-block" style="width: 100%;">
-          <label ng-style="dto.IsProductSlot == 1 && {'color':'black'}">Show in product slot</label>
-          <md-switch ng-model="dto.IsProductSlot"></md-switch>
-        </md-input-container>
+        <div layout-gt-sm="row">
+          <md-input-container class="md-icon-float md-block" style="width: 100%;">
+            <label ng-style="dto.IsProductSlot == 1 && {'color':'black'}">Show in product slot</label>
+            <md-switch ng-model="dto.IsProductSlot"></md-switch>
+          </md-input-container>
+
+          <md-input-container class="md-icon-float md-block" style="width: 100%;">
+            <label ng-style="dto.IsFavorite == 1 && {'color':'black'}">Is favorite</label>
+            <md-switch ng-model="dto.IsFavorite"></md-switch>
+          </md-input-container>
+        </div>
 
         <md-input-container class="md-icon-float md-block animate-show-hide" ng-show="!dto.IsProductSlot">
-          <label>Price</label>
-          <input type="text" format-currency name="price" ng-model="dto.Price" />
+          <label>Income</label>
+          <input type="text" format-currency name="price" ng-model="dto.Income" />
         </md-input-container>
 
+        <md-input-container class="md-block" ng-show="!dto.IsProductSlot">
+          <label>Account</label>
+          <md-select ng-model="dto.IdAccount" name="account" md-on-open="getAccounts()">
+            <md-option ng-repeat="acc in accountList" value="{{acc.Id}}">
+              <span>{{acc.Name}}</span>
+            </md-option>
+          </md-select>
+        </md-input-container>
 
-        <md-input-container class="md-icon-float md-block animate-show-hide" style="width: 100%;" ng-if="dto.IsProductSlot">
+        <md-input-container class="md-icon-float md-block animate-show-hide" style="width: 100%;"
+          ng-if="dto.IsProductSlot">
           <label>Background color</label>
           <div flex md-color-picker random="true" ng-model="dto.BackgroundColor" open-on-input="true"></div>
-        </md-input-container>
-
-        <md-input-container class="md-icon-float md-block" style="width: 100%;">
-          <label ng-style="dto.IsFavorite == 1 && {'color':'black'}">Is favorite</label>
-          <md-switch ng-model="dto.IsFavorite"></md-switch>
         </md-input-container>
 
         <div class="alert">{{warning}}</div>
@@ -60,3 +71,4 @@
     </md-button>
   </md-dialog-actions>
 </md-dialog>
+<div ng-init="init()"></div>

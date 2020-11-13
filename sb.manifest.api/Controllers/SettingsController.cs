@@ -6,7 +6,6 @@ using sb.manifest.api.Filter;
 using sb.manifest.api.Model;
 using sb.manifest.api.Services;
 using System;
-using System.Collections.Generic;
 #endregion
 
 namespace sb.manifest.api.Controllers

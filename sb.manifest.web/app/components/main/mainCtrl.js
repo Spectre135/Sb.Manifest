@@ -129,7 +129,7 @@ app.controller('mainCtrl', function ($rootScope, $scope, $state, config) {
         //Pin sidebar
         $('#pin-sidebar').click(function () {
             if ($('.page-wrapper').hasClass('pinned')) {
-                window.localStorage.setItem('hop.hit.si.pinned', false);
+                window.localStorage.setItem('sb.manifest.pinned', false);
                 $('#pin-icon').addClass('fa-angle-double-left');
                 $('#pin-icon').removeClass('fa-thumbtack');
                 // unpin sidebar when hovered
@@ -137,7 +137,7 @@ app.controller('mainCtrl', function ($rootScope, $scope, $state, config) {
                 $('.page-wrapper').removeClass('sidebar-hovered');
                 $('#sidebar').unbind('mouseenter mouseleave');
             } else {
-                window.localStorage.setItem('hop.hit.si.pinned', true);
+                window.localStorage.setItem('sb.manifest.pinned', true);
                 $('.page-wrapper').addClass('pinned');
 
                 $('#pin-icon').removeClass('fa-angle-double-left');
