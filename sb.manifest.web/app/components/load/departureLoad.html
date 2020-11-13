@@ -56,7 +56,7 @@
           &nbsp;&nbsp;
           {{prevLoad.DepartureMinutesLeft}} min
           &nbsp;&nbsp;
-          gap: <b>{{getGap()}} min</b>
+          <span style="{{getGap() < dto.RotationTime ? 'color: #d32f2f;':''}}">gap: <b>{{getGap()}} min</b></span>
         </div>
         <div flex="30" style="text-align: end;">
           <small>{{prevLoad.DateDeparted | date:'dd. MM. yyyy HH:mm'}}</small>
