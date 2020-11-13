@@ -443,9 +443,20 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
         var el = angular.element($event.currentTarget);
         var parent = el.parent().parent();
         parent.toggleClass('refuel');
+
+        if (dto.DateDeparted) {
+            let d = new Date(dto.DateDeparted);
+            d.setMinutes(d.getMinutes() + (dto.RefuelTime * (refuel ? 1 : -1)));
+            dto.DateDeparted = convertLocalDate(d);
+        }
         //save refuel to database
         dto.Refuel = refuel;
-        apiService.postData(config.manifestApi + '/load/save', dto, false);
+        apiService.postData(config.manifestApi + '/load/save', dto, false).then(function () {
+            var url = config.manifestApi + '/load/depart/save';
+            apiService.postData(url, dto, true).then(function () {
+                $scope.getLoadList();
+            });
+        });
     };
 
     $scope.setInview = function (index, inview) {
