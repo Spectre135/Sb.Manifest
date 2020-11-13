@@ -27,7 +27,7 @@
 
     <div layout="row" style="margin-bottom: 1em;">
       <div flex="70">
-        Reschedule:<span style="font-size: 1.5em;"> {{addedTime>0?'+':''}}{{addedTime}} =
+        Reschedule:<span style="font-size: 1.5em;"> {{addedTime>=0?'+':''}}{{addedTime}} =
           <b>{{getOriginalMinutesLeft() + addedTime}} min</b></span>
       </div>
       <div flex="30" style="text-align: end; padding-top: .5em;">
