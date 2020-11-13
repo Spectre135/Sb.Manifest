@@ -1127,6 +1127,15 @@ body.group-mode-on .slot-card {
   border-bottom-color: transparent;
 }
 
+.load{
+  outline: solid 2px rgba(0,0,0,0);
+  transition: outline .5s;
+}
+
+.load.editing {
+  outline-color:  rgba(0,0,0,1);  
+}
+
 .load.no-drop {
   opacity: .5;
 }
@@ -1487,7 +1496,7 @@ span.item-color {
 }
 
 .addTime .negative a {
-  color      : #d32f2f;
+  color: #d32f2f;
 }
 
 .addTime a:hover {

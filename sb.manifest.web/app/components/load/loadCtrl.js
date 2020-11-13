@@ -17,7 +17,8 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
     $scope.selectedGroup;
     $scope.dataDrag = true; //data drag flag 
     $scope.groups = [];
-    var visibleItems = []; //array of objects who are inview for drop disable 
+    let visibleItems = []; //array of objects who are inview for drop disable
+    $scope.editingLoadId;
 
     //getLoadList
     $scope.getLoadList = function () {
@@ -28,28 +29,39 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
                 $scope.loads = data.DataList;
                 //update minutes left for load depart
                 updateTimeLeft();
+                updateEditing();
+                $scope.editingLoadId = undefined;
+                setTimeout(updateEditing, 2000);
             });
         return promise;
     };
 
     //delete Load
     $scope.deleteLoad = function ($event, dto) {
+        setEditing(dto);
         $rootScope.confirmDialog('Confirm delete', 'Would you like to delete load No. ' + dto.Number + ' ' + dto.AircraftName + ' ?', 'Delete', 'Cancel')
             .then(function onSuccess(result) {
                 var url = config.manifestApi + '/load/delete';
                 apiService.postData(url, dto, true).then(function () {
                     $scope.getLoadList();
                 });
+            }).catch(function () {
+                $scope.editingLoadId = undefined;
+                updateEditing();
             });
     };
     //confirm Load
     $scope.confirmLoad = function ($event, dto) {
+        setEditing(dto);
         $rootScope.confirmDialog('Confirm load', 'Would you like to confirm load No. ' + dto.Number + ' ' + dto.AircraftName + ' ?', 'Confirm', 'Cancel')
             .then(function onSuccess(result) {
                 var url = config.manifestApi + '/load/confirm';
                 apiService.postData(url, dto, true).then(function () {
                     $scope.getLoadList();
                 });
+            }).catch(function () {
+                $scope.editingLoadId = undefined;
+                updateEditing();
             });
     };
     //init
@@ -74,6 +86,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
 
     //add people to load
     $scope.addPeople = function ($event, dto, idProduct) {
+        setEditing(dto);
         dto.IdProductSelected = idProduct;
         $mdDialog.show({
             locals: {
@@ -87,11 +100,15 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () { });
+        }).catch(function () {
+            $scope.editingLoadId = undefined;
+            updateEditing();
+        });
     };
 
     //departure load
     $scope.departureLoad = function ($event, dto) {
+        setEditing(dto);
         var prevLoad = $filter('filter')($scope.loads, function (item) {
             return item.IdAircraft == dto.IdAircraft && item.Number == (dto.Number - 1);
         })[0];
@@ -108,11 +125,15 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () { });
+        }).catch(function () {
+            $scope.editingLoadId = undefined;
+            updateEditing();
+        });
     };
 
     //add/edit Load
     $scope.editLoad = function ($event, dto) {
+        setEditing(dto);
         $mdDialog.show({
             locals: {
                 dataToPass: dto,
@@ -126,7 +147,10 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
             clickOutsideToClose: false
         }).then(function () {
             $scope.getLoadList();
-        }).catch(function () { });;
+        }).catch(function () {
+            $scope.editingLoadId = undefined;
+            updateEditing();
+        });
     };
 
     //check if passenger is already in load  
@@ -449,7 +473,7 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
 
     $scope.hasFundsOrTickets = function (p) {
         try {
-            return (p.AvailableFunds > 0 || p.AvailableTickets > 0)
+            return (p.AvailableFunds > 0 || p.AvailableTickets > 0);
         } catch (err) { }
     };
 
@@ -487,19 +511,32 @@ app.controller('loadCtrl', function ($rootScope, $scope, $q, $filter, $mdDialog,
         return response;
     };
 
+    function setEditing(l) {
+        $scope.editingLoadId = l.Id;
+        updateEditing();
+    };
+
+    function updateEditing() {
+        try {
+            angular.forEach($scope.loads, function (l) {
+                l.editing = l.Id == $scope.editingLoadId;
+            });
+        } catch (err) { }
+    };
+
     function updateTimeLeft() {
         try {
-            angular.forEach($scope.loads, function (value, key) {
-                if (!isNaN(value.DepartureSecondsLeft))
-                    value.DepartureMinutesLeft = Math.floor(--value.DepartureSecondsLeft / 60);
+            angular.forEach($scope.loads, function (l) {
+                if (!isNaN(l.DepartureSecondsLeft))
+                    l.DepartureMinutesLeft = Math.floor(--l.DepartureSecondsLeft / 60);
                 else
-                    value.DepartureMinutesLeft = '???';
+                    l.DepartureMinutesLeft = '???';
             });
         } catch (err) { }
     };
 
     //update time left for load depart every second
-    $scope.$on('tick', function(){
+    $scope.$on('tick', function () {
         updateTimeLeft();
     });
 });
@@ -564,6 +601,21 @@ app.controller('departureLoadCtrl', function ($rootScope, $scope, $mdDialog, dat
                 $mdDialog.hide();
             });
     };
+
+    //$scope.dto je kopija originalnega dto-ja, zato se čas ne popravlja samodejno
+    function updateTimeLeft() {
+        try {
+            if (!isNaN($scope.dto.DepartureSecondsLeft))
+                $scope.dto.DepartureMinutesLeft = Math.floor(--$scope.dto.DepartureSecondsLeft / 60);
+            else
+                $scope.dto.DepartureMinutesLeft = '???';
+        } catch (err) { }
+    };
+
+    //update time left for load depart every second
+    $scope.$on('tick', function () {
+        updateTimeLeft();
+    });
 });
 
 app.controller('editLoadCtrl', function ($scope, $filter, $mdDialog, dataToPass, loads, apiService, config) {
