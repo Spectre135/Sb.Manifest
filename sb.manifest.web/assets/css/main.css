@@ -1475,6 +1475,29 @@ span.item-color {
   font-size: 24px;
 }
 
+.addTime a {
+  display         : inline-block;
+  font-size       : 20px;
+  width           : 2.5em;
+  text-align      : center;
+  text-decoration : none;
+  margin          : 0 8px 8px 0;
+  background-color: #eee;
+  border-radius   : 4px;
+}
+
+.addTime .negative a {
+  color      : #d32f2f;
+}
+
+.addTime a:hover {
+  background-color: #ddd;
+}
+
+.addTime .negative a:hover {
+  color: #b71c1c;
+}
+
 .font16 {
   font-size: 16px;
 }

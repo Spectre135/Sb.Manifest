@@ -1033,13 +1033,16 @@ md-content {
 }
 
 .loads {
-  height: 100vh;
+  font-size: 16rem;
+  height  : 100vh;
+  overflow: hidden;
 }
 
 .load .md-subhead {
-  font-size: 14rem;
-  padding  : 0 !important;
-  color    : rgb(0 102 188 / 50%);
+  font-size  : 14rem;
+  line-height: 24rem;
+  padding    : 0 !important;
+  color      : rgb(0 102 188 / 50%);
 }
 
 #loads-main .load-flex-container {

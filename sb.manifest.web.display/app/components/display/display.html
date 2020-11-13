@@ -1,6 +1,6 @@
 <div ng-if="showLoadList" id="loads-main">
     <md-content class="loads" layout-xs="column" layout="row">
-        <div flex-xs class="load-flex-container" layout="column" ng-repeat="l in loads | orderBy: 'Id' track by $index">
+        <div flex-xs class="load-flex-container" layout="column" ng-repeat="l in loads | orderBy: 'DepartureMinutesLeft' track by $index">
             <md-card class="load" ng-class="l.SlotsLeft > 0 ? '' : l.SlotsLeft == 0 ? 'full' : 'overbooked'"
                 ng-model="l.GroupList">
                 <div layout="row" class="load-top">
@@ -17,7 +17,7 @@
                     </div>
                 </div>
 
-                <md-card-title style="padding: 8px;">
+                <md-card-title style="padding: 8rem;">
                     <md-card-title-text>
                         <div class="md-headline">{{l.AircraftName}} <b style="font-size: 1.5em;">{{l.Number}}</b>
                             <b style="display: block;">{{l.Description}}</b></div>

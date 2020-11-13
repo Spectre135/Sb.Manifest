@@ -2,7 +2,7 @@
 
 var app = angular.module('SbManifest');
 
-app.controller('mainCtrl', function ($rootScope, $scope, $state, config) {
+app.controller('mainCtrl', function ($rootScope, $scope, $interval, $state, config) {
     $scope.appName = config.appName;
     $rootScope.user = GetUser();
     $rootScope.alertLoads;
@@ -66,7 +66,7 @@ app.controller('mainCtrl', function ($rootScope, $scope, $state, config) {
     connection.on('messageReceived', function (data) {
         $scope.$apply(function () {
             $rootScope.alertLoads = data.DataList;
-            console.log($rootScope.alertLoads);
+            updateTimeLeft();
             filterAlertLoads();
         });
     });
@@ -93,8 +93,22 @@ app.controller('mainCtrl', function ($rootScope, $scope, $state, config) {
     }
 
     function secondAlarm(load) {
-        return load.MinutesLeft <= 5;
+        return load.DepartureMinutesLeft <= 5;
     }
+
+    function updateTimeLeft() {
+        try {
+            angular.forEach($scope.alertLoads, function (value, key) {
+                if (!isNaN(value.DepartureSecondsLeft))
+                    value.DepartureMinutesLeft = Math.floor(--value.DepartureSecondsLeft / 60);
+                else
+                    value.DepartureMinutesLeft = '???';
+            });
+        } catch (err) { }
+    };
+
+    //update time left for load depart load second
+    $interval(updateTimeLeft, 1000);
 
     //mora bit noter če en ne dela menu
     jQuery(function ($) {

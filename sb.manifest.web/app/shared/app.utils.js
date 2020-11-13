@@ -80,7 +80,7 @@ function GetUser() {
             var user = JSON.parse(decode);
             return user;
         };
-    } catch (error) {}
+    } catch (error) { }
 };
 
 function buildLocaleProvider(formatString) {
@@ -109,7 +109,7 @@ function Refresh(key) {
         } else {
             window.localStorage.setItem('versionSbManifest', key);
         }
-    } catch (error) {}
+    } catch (error) { }
 };
 
 function pad(str, max) {
@@ -141,7 +141,7 @@ function getChartValues(array, key) {
                 result.push(item[key]);
             }
         });
-    } catch (err) {}
+    } catch (err) { }
     return result;
 };
 
@@ -181,17 +181,17 @@ function getLineChart(labels, labelData1, data1, labelData2, data2, title) {
         data: {
             labels: labels,
             datasets: [{
-                    label: labelData1,
-                    data: data1,
-                    fill: false,
-                    borderColor: '#3A75D7',
-                },
-                {
-                    label: labelData2,
-                    data: data2,
-                    fill: false,
-                    borderColor: '#D73A75',
-                }
+                label: labelData1,
+                data: data1,
+                fill: false,
+                borderColor: '#3A75D7',
+            },
+            {
+                label: labelData2,
+                data: data2,
+                fill: false,
+                borderColor: '#D73A75',
+            }
             ]
         },
         options: {
@@ -282,24 +282,10 @@ function convertLocalDate(date) {
     return date;
 };
 
-function getDateHHss(d) {
-    try {
-        if (d) {
-            return new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes());
-        } else {
-            var d = new Date();
-            return new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes());
-        }
-    } catch (err) {
-        return null;
-    }
-
-};
-
 function formatDateToString(d) {
     try {
-        var month = d.getMonth()+1;
-        return  d.getFullYear() + '-' + ('00'+month).slice(-2) + '-' + d.getDate();
+        var month = d.getMonth() + 1;
+        return d.getFullYear() + '-' + ('00' + month).slice(-2) + '-' + d.getDate();
     } catch (err) {
         return null;
     }
